@@ -1,0 +1,22 @@
+{
+  "name": "boombox-jeb-cse416-f20",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billywongstuy/boombox-jeb-cse416-f20.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/billywongstuy/boombox-jeb-cse416-f20/issues"
+  },
+  "homepage": "https://github.com/billywongstuy/boombox-jeb-cse416-f20#readme",
+  "dependencies": {
+    "react": "^16.13.1"
+  }
+}

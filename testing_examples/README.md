@@ -1,0 +1,1 @@
+This directory should be used to testing samples that can be tested outside of React/Express
