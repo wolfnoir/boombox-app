@@ -1,0 +1,15 @@
+.UserDisplay {
+    width: 250px;
+    text-align: center;
+}
+
+.UserDisplay-picture {
+    width: 150px;
+    height: 150px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+
+.UserDisplay-name {
+    font-family: 'Roboto';
+    font-size: 18px;
+}

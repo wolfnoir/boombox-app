@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts build && cd express-server && npm start",
     "start-client": "react-scripts start",
-    "start-server": "cd express-server && npm-start",  
+    "start-server": "cd express-server && npm-start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
