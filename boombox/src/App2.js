@@ -1,10 +1,20 @@
 import React from 'react';
+import NavBar from './NavBar';
+import NavBarWrapper from './NavBarWrapper';
+
+function BodyStuff() {
+  return (
+    <div>
+      hello
+    </div>
+  )
+}
 
 function App2() {
   return (
-	  <div>
-	  My Testing thing
-    </div>
+    <NavBarWrapper>
+      <div>hello</div>
+    </NavBarWrapper>
   );
 }
 
