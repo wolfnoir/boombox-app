@@ -1,0 +1,50 @@
+#nav-bar {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#nav-bar-table {
+    width: 100%;
+    white-space: nowrap;
+    border: 1px;
+    background-color: yellow;
+    color: white;
+    font-size: 36px;
+    vertical-align: middle; /*this is not working*/
+}
+
+#nav-bar-table td {
+    vertical-align: middle; /*this is not working*/
+}
+
+#menu-icon {
+    cursor: pointer;
+}
+
+#settings-icon {
+    cursor: pointer;
+}
+
+
+
+#push-menu {
+    /*margin-top: 60px;*/
+    display: inline-block;
+    vertical-align: top;
+}
+
+#push-menu-table {
+    background-color: green;
+    color: white;
+    font-size: 36px;
+    vertical-align: middle; /*not working, also refer to td version*/
+    /*
+    border-width: 5px;
+    border-color: red;
+    border-style: solid;
+    */
+}
+
+#push-menu-table td {
+    vertical-align: middle; /*this is not working*/
+}
