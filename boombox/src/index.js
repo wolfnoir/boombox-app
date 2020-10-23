@@ -5,6 +5,7 @@ import App from './App';
 import App2 from './App2';
 import * as serviceWorker from './serviceWorker';
 import { Route,  Switch, BrowserRouter} from 'react-router-dom';
+import PlaylistTest from './PlaylistTest';
 
 /*
 ReactDOM.render(
@@ -23,6 +24,7 @@ class MyRouter extends React.Component {
 		<Route exact path="/" component={App} />
 		<Route path="/testnav" component={App} />
 		<Route path="/testnav2" component={App2} />
+		<Route path="/playlist-test" component={PlaylistTest} />
 		</Switch>
 		</div>
 		</Switch>

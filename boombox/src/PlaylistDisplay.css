@@ -1,0 +1,20 @@
+#playlist-display {
+    font-family: 'Roboto Condensed', sans-serif;
+    padding: 5px;
+}
+
+.playlist-cover {
+    width: 250px;
+    height: 250px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+.playlist-title {
+    font-size: 24px;
+    font-family: 'Orbitron';
+    font-weight: 600;
+}
+
+.playlist-info {
+    font-size: 18px;
+}
