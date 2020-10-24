@@ -18,10 +18,12 @@ function Login() {
 
                 <div className = "login-menu">
                     AAAAAAAAAAAAAAA <br/>
-                    <button>Log In</button>
+                    <button class="btn btn-primary btn-lg hoverable">Log In</button>
+                    
+                    <div>
+                    Not a user? Register <a className = "register-link" href='/register'>here.</a>
+                    </div>
                 </div>
-
-
               </center>
             </div>
               <a className = "freepix-attribution" href='https://www.freepik.com/vectors/background'>Background vector created by pikisuperstar - www.freepik.com</a>

@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import './PlaylistDisplay.css';
-import './css/bootstrap.min.css';
 
 class PlaylistDisplay extends React.Component{
     constructor(props){
