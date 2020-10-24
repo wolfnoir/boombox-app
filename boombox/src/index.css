@@ -5,6 +5,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-image: linear-gradient(#af93e6, #e6f8f9);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+  margin: 0;
 }
 
 code {
@@ -12,8 +18,6 @@ code {
     monospace;
 }
 
-html, body {
+html {
   height: 100%;
-  margin: 0;
-  padding: 0;
 }

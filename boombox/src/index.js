@@ -29,6 +29,7 @@ class MyRouter extends React.Component {
 		<Route path="/testnav" component={NavBarWrapper} />
 		<Route path="/playlist-test" component={PlaylistTest} />
 		<Route path="/login" component={Login} />
+		{/* <Route path="/register" component={Register} /> */}
 		<Route path="/navbar-test" component={NavBarTest} />
 		<Route 
 			path="/settings-test" 
