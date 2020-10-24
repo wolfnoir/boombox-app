@@ -64,40 +64,42 @@ app.post("/editPlaylist", (req, res) => {
 //should these be get, post, or both?
 
 app.get("/getBookmarks", (req, res) => {
-	return {'bookmarks': [{}, {}, {}]};
+	res.json({'bookmarks': [{}, {}, {}, {}]});
+	//res.json(["a", "b", "c"]);
+	//res.sendFile(path.join(__dirname, "..", "build", "index.html"));
 });
 
 app.get("/getFollowingNewPlaylists", (req, res) => {
-	return {}
+	res.json({})
 });
 
 app.get("/getRecommendedPlaylists", (req, res) => {
-	return {}
+	res.json({})
 });
 
 app.get("/getPlaylist/:playlistId", (req, res) => {
 	//req.params.playlistId
-	return {}
+	res.json({})
 });
 
 app.get("/getSearchResults", (req, res) => {
-	return {}
+	res.json({})
 });
 
 app.get("/getProfilePageData", (req, res) => {
-	return {}
+	res.json({})
 });
 
 app.get("/getFollowers", (req, res) => {
-	return {}
+	res.json({})
 });
 
 app.get("/getFollowing", (req, res) => {
-	return {}
+	res.json({})
 });
 
 app.get("/getUserPlaylists", (req, res) => {
-	return {}
+	res.json({})
 });
 
 

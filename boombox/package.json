@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "nodemon": "^2.0.6",
     "push-menu": "^2.0.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -16,7 +17,7 @@
   "scripts": {
     "start": "react-scripts build && cd express-server && npm start",
     "start-client": "react-scripts start",
-    "start-server": "cd express-server && npm-start",
+    "start-server": "cd express-server && nodemon index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
