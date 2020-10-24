@@ -7,6 +7,9 @@ import NavBarTest from './NavBarTest';
 import * as serviceWorker from './serviceWorker';
 import { Route,  Switch, BrowserRouter} from 'react-router-dom';
 import PlaylistTest from './PlaylistTest';
+import Login from './Login';
+import './css/bootstrap.min.css';
+import NavBarWrapper from './NavBarWrapper';
 
 /*
 ReactDOM.render(
@@ -23,8 +26,11 @@ class MyRouter extends React.Component {
 		<div>
 		<Switch>
 		<Route exact path="/" component={App} />
-		<Route path="/navbar-test" component={NavBarTest} />
+		<Route path="/testnav" component={NavBarWrapper} />
 		<Route path="/playlist-test" component={PlaylistTest} />
+		<Route path="/login" component={Login} />
+		{/* <Route path="/register" component={Register} /> */}
+		<Route path="/navbar-test" component={NavBarTest} />
 		<Route 
 			path="/settings-test" 
 			render={(props) => (

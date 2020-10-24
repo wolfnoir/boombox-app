@@ -1,0 +1,78 @@
+.loginScreen { 
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-image: url('./images/login-background.jpg');
+    display: table;
+    font-family: 'Roboto Condensed';
+    color: white;
+  }
+
+.register-link {
+    text-decoration: none;
+    color: #ff1f75;
+    transition: 0.3s;
+}
+
+.register-link:hover {
+    color: white;
+}
+
+.login-container {
+    display: table-cell;
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+.freepix-attribution{
+    font-size: 12px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-family: 'Orbitron';
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.freepix-attribution:hover {
+    color: #ff1f75;
+}
+
+.boombox-header {
+    font-family: 'Orbitron';
+    color: white;
+    font-size: 120px;
+    text-transform: lowercase;
+    text-shadow: 5px 5px 5px black;
+    font-weight: 600;
+}
+
+.boombox-subtitle {
+    font-family: 'Orbitron';
+    color: white;
+    font-size: 24px;
+    text-transform: lowercase;
+    margin-bottom: 50px;
+}
+
+.login-menu {
+    border-radius: 20px;
+    width: 30%;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    font-family: 'Orbitron';
+}
+
+.loginScreen btn-primary {
+    background-color: #fc639e !important;
+    border-color: #fc639e !important;
+    margin: 5px;
+}
+
+.loginScreen btn-primary:hover {
+    background-color: #ffdae8 !important;
+    border-color: #ffdae8 !important;
+}

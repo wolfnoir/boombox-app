@@ -18,7 +18,7 @@ class PlaylistDisplay extends React.Component{
         const albumCover = this.state.albumCover;
         return(
             <div id = "playlist-display">
-                <img className = "playlist-cover" src = {albumCover} />
+                <img className = "playlist-cover" src = {albumCover}/>
                 <div className = "playlist-title">{this.state.title}</div>
                 <div className = "playlist-info">
                     by {this.state.author} <br/>
