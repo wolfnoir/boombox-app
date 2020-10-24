@@ -1,0 +1,88 @@
+#nav-bar {
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+}
+
+#nav-bar-table {
+    width: 100%;
+    white-space: nowrap;
+    border: 1px;
+    background-color: black;
+    color: white;
+    font-size: 30px;
+    height: 65px;
+    padding-left: 5px;
+    /*
+    border-width: 5px;
+    border-color: red;
+    border-style: solid;
+    */
+}
+
+#nav-bar-table td > * {
+    vertical-align: middle;
+}
+
+#nav-bar-table td:nth-of-type(2) {
+    text-align: center;
+}
+
+#nav-bar-table td:nth-of-type(3), #nav-bar-table td:nth-of-type(4) {
+    text-align: right;
+}
+
+#menu-icon {
+    cursor: pointer;
+}
+
+#settings-icon {
+    cursor: pointer;
+}
+
+#search-bar, #search-bar:focus {
+    background-image: url('search-24px.svg');
+    background-repeat: no-repeat;
+    padding-left: 24px;
+    border: none;
+    border-radius: 250px;
+    outline: none;
+    font-size: 16px;
+}
+
+
+/*--------------------*/
+
+
+#push-menu {
+    /*margin-top: 60px;*/
+    display: inline-block;
+    vertical-align: top;
+    height: 100vh;
+    background-color: black;
+    /*overflow: hidden;*/
+}
+
+#push-menu-table {
+    color: white;
+    font-size: 30px;
+}
+
+#push-menu-table td {
+    padding: 5px 0px;
+    padding-right: 15px;
+    padding-left: 5px;
+}
+
+#push-menu-table td > * {
+    vertical-align: middle;
+}
+
+#close-menu-cell > * {
+    margin-left: 0px;
+}
+
+#close-menu-icon {
+    cursor: pointer;
+    padding: 10px 0px;
+}
