@@ -1,17 +1,12 @@
 import React from 'react';
 //import NavBar from './NavBar';
 import NavBarWrapper from './NavBarWrapper';
+import SettingsPane from './SettingsPane';
 
 function App2() {
   return (
     <NavBarWrapper>
-      <div>
-        helloaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
-        
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
-        
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-      </div>
+      <SettingsPane />
     </NavBarWrapper>
   );
 }
