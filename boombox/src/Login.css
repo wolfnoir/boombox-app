@@ -5,6 +5,7 @@
     height: 100%;
     background-size: cover;
     background-image: url('./images/login-background.jpg');
+    display: table;
   }
 
 .loginScreen a {
@@ -15,6 +16,11 @@
 
 .loginScreen a:hover {
     color: #ffa3d7;
+}
+
+.login-container {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .freepix-attribution{
@@ -39,10 +45,11 @@
     color: white;
     font-size: 24px;
     text-transform: lowercase;
+    margin-bottom: 50px;
 }
 
-
-.login-container {
+.login-menu {
+    border-radius: 20px;
     width: 30%;
     background: rgba(0, 0, 0, 0.5);
 }
