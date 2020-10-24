@@ -1,17 +1,10 @@
-/*.loginScreen {
-    background-image: url('./images/login-background.jpg'); 
+.loginScreen { 
+    position: fixed;
+    top: 0;
+    width: 100%;
     height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
     background-size: cover;
-}*/
-
-html { 
-    background: url(./images/login-background.jpg) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background-image: url('./images/login-background.jpg');
   }
 
 .loginScreen a {
@@ -30,4 +23,26 @@ html {
     bottom: 0;
     right: 0;
     font-family: 'Orbitron';
+}
+
+.boombox-header {
+    font-family: 'Orbitron';
+    color: white;
+    font-size: 120px;
+    text-transform: lowercase;
+    text-shadow: 5px 5px 5px black;
+    font-weight: 600;
+}
+
+.boombox-subtitle {
+    font-family: 'Orbitron';
+    color: white;
+    font-size: 24px;
+    text-transform: lowercase;
+}
+
+
+.login-container {
+    width: 30%;
+    background: rgba(0, 0, 0, 0.5);
 }
