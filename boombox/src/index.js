@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import App2 from './App2';
 import NavBar from './NavBar';
 import * as serviceWorker from './serviceWorker';
 import { Route,  Switch, BrowserRouter} from 'react-router-dom';
@@ -24,7 +23,6 @@ class MyRouter extends React.Component {
 		<Switch>
 		<Route exact path="/" component={App} />
 		<Route path="/testnav" component={NavBar} />
-		<Route path="/testnav2" component={App2} />
 		<Route path="/playlist-test" component={PlaylistTest} />
 		</Switch>
 		</div>

@@ -1,13 +1,13 @@
 import React from 'react';
-import menu_icon from './menu-24px.png';
-import search_icon from './search-24px.svg';
-import settings_icon from './settings-24px.png';
-import close_icon from './close-24px.png';
-import home_icon from './home-24px.png';
-import profile_icon from './account_circle-24px.png';
-import add_icon from './add_box-24px.png';
-import bookmark_icon from './bookmark-24px.png';
-import logout_icon from './exit_to_app-24px.png';
+import menu_icon from './images/menu-24px.png';
+import search_icon from './images/search-24px.svg';
+import settings_icon from './images/settings-24px.png';
+import close_icon from './images/close-24px.png';
+import home_icon from './images/home-24px.png';
+import profile_icon from './images/account_circle-24px.png';
+import add_icon from './images/add_box-24px.png';
+import bookmark_icon from './images/bookmark-24px.png';
+import logout_icon from './images/exit_to_app-24px.png';
 import './NavBar.css';
 
 class NavBar extends React.Component {

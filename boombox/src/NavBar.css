@@ -41,7 +41,7 @@
 }
 
 #search-bar, #search-bar:focus {
-    background-image: url('search-24px.svg');
+    background-image: url('images/search-24px.svg');
     background-repeat: no-repeat;
     padding-left: 24px;
     border: none;
