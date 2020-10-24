@@ -13,33 +13,32 @@ import './NavBar.css';
 class NavBar extends React.Component {
     constructor(props) {
         super(props);
+        this.iconSize = "30px";
         this.state = {
             pushMenuVisible: false
         }
     }
 
-    togglePushMenu = () => {
-        console.log("hi");
-        console.log(document.getElementById('wrapper').childNodes);
-        var children = document.getElementById('wrapper').childNodes;
-        /*
-        for (var i = 0; i < children.length; i++) {
-            children[i].style.marginLeft = "100px";
-            console.log(children[i].style.left);
-        }
-        */
-       var i;
-       var pushMenu = document.getElementById("push-menu");
+    openPushMenu = () => {
+        var children = document.getElementById("wrapper").childNodes;
+        console.log(children);
+        var pushMenu = document.getElementById("push-menu");
         if (!this.state.pushMenuVisible) {
-            for (i = 0; i < children.length; i++) {
-                children[i].style.marginLeft = pushMenu.offsetWidth + "px";
+            for (var i = 0; i < children.length; i++) {
+                children[i].style.marginLeft = pushMenu.offsetWidth + 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
             }
+            document.getElementById("menu-icon").style.display = "none";
             this.setState({pushMenuVisible: true});
         }
-        else {
-            for (i = 0; i < children.length; i++) {
+    }
+
+    closePushMenu = () => {
+        var children = document.getElementById("wrapper").childNodes;
+        if (this.state.pushMenuVisible) {
+            for (var i = 0; i < children.length; i++) {
                 children[i].style.marginLeft = "0px";
             }
+            document.getElementById("menu-icon").style.display = "block";
             this.setState({pushMenuVisible: false});
         }
     }
@@ -48,33 +47,42 @@ class NavBar extends React.Component {
         console.log(document.getElementById("push-menu").offsetWidth);
         var pushMenu = document.getElementById("push-menu");
         var navBar = document.getElementById("nav-bar");
-        pushMenu.style.marginLeft = -pushMenu.offsetWidth + "px";
-        navBar.style.width = document.getElementById("root").offsetWidth - pushMenu.offsetWidth;
+        pushMenu.style.marginLeft = -pushMenu.offsetWidth - 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
+        //navBar.style.width = document.getElementById("root").offsetWidth + "px";
     }
 
     render() {
+        /*
+        var pushMenu = document.getElementById("push-menu");
+        var navBar = document.getElementById("nav-bar");
+        var navBarWidth = document.getElementById("root").offsetWidth + "px";
+        if (this.state.pushMenuVisible) {
+            navBarWidth = document.getElementById("root").offsetWidth - pushMenu.offsetWidth + "px";
+        }
+        var navBarStyle = {"width": navBarWidth};
+        */
 	    return (
             <div>
                 <div id="push-menu">
                     <table id="push-menu-table">
                         <tbody>
-                            <tr height="60px">
-                                <td><img src={close_icon} alt="" width="48px" height="48px" /></td>
+                            <tr>
+                                <td id="close-menu-cell"><img id="close-menu-icon" src={close_icon} alt="" width={this.iconSize} height={this.iconSize} onClick={this.closePushMenu} /></td>
                             </tr>
                             <tr>
-                                <td><img src={home_icon} alt="" width="48px" height="48px" />dashboard</td>
+                                <td><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} />dashboard</td>
                             </tr>
                             <tr>
-                                <td><img src={profile_icon} alt="" width="48px" height="48px" />my profile</td>
+                                <td><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} />my profile</td>
                             </tr>
                             <tr>
-                                <td><img src={add_icon} alt="" width="48px" height="48px" />new playlist</td>
+                                <td><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} />new playlist</td>
                             </tr>
                             <tr>
-                                <td><img src={bookmark_icon} alt="" width="48px" height="48px" />bookmarks</td>
+                                <td><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} />bookmarks</td>
                             </tr>
                             <tr>
-                                <td><img src={logout_icon} alt="" width="48px" height="48px" />log out</td>
+                                <td><img src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} />log out</td>
                             </tr>
                         </tbody>
                     </table>
@@ -83,10 +91,10 @@ class NavBar extends React.Component {
                     <table id="nav-bar-table">
                         <tbody>
                             <tr>
-                                <td><img id="menu-icon" src={menu_icon} alt="Menu" width="48px" height="48px" onClick={this.togglePushMenu}/></td>
+                                <td><img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/></td>
                                 <td>boombox</td>
-                                <td><img id="search-icon" src={search_icon} alt="Search" width="48px" height="48px" /></td>
-                                <td><img id="settings-icon" src={settings_icon} alt="Settings" width="48px" height="48px" /></td>
+                                <td><input id="search-bar" placeholder="Search" type="text"></input></td>
+                                <td><img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} /></td>
                             </tr>
                         </tbody>
                     </table>

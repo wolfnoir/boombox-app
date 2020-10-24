@@ -1,19 +1,17 @@
 import React from 'react';
-import NavBar from './NavBar';
+//import NavBar from './NavBar';
 import NavBarWrapper from './NavBarWrapper';
-
-function BodyStuff() {
-  return (
-    <div>
-      hello
-    </div>
-  )
-}
 
 function App2() {
   return (
     <NavBarWrapper>
-      <div>hello</div>
+      <div>
+        helloaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+        
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+        
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      </div>
     </NavBarWrapper>
   );
 }
