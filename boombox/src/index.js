@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import NavBar from './NavBar';
+import SettingsPane from './SettingsPane';
+import NavBarTest from './NavBarTest';
 import * as serviceWorker from './serviceWorker';
 import { Route,  Switch, BrowserRouter} from 'react-router-dom';
 import PlaylistTest from './PlaylistTest';
@@ -22,8 +23,14 @@ class MyRouter extends React.Component {
 		<div>
 		<Switch>
 		<Route exact path="/" component={App} />
-		<Route path="/testnav" component={NavBar} />
+		<Route path="/navbar-test" component={NavBarTest} />
 		<Route path="/playlist-test" component={PlaylistTest} />
+		<Route 
+			path="/settings-test" 
+			render={(props) => (
+				<SettingsPane profile_image="" />
+			)}
+		/>
 		</Switch>
 		</div>
 		</Switch>
