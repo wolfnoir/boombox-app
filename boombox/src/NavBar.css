@@ -24,12 +24,22 @@
     vertical-align: middle;
 }
 
+
+#nav-bar-table td:nth-of-type(1) {
+    padding-left: 5px;
+}
+
 #nav-bar-table td:nth-of-type(2) {
     text-align: center;
 }
 
-#nav-bar-table td:nth-of-type(3), #nav-bar-table td:nth-of-type(4) {
+#nav-bar-table td:nth-of-type(3) {
     text-align: right;
+}
+
+#nav-bar-table td:nth-of-type(4) {
+    text-align: right;
+    padding-right: 5px;
 }
 
 #menu-icon {
@@ -85,4 +95,10 @@
 #close-menu-icon {
     cursor: pointer;
     padding: 10px 0px;
+}
+
+/*--------------------*/
+
+#nav-bar-main #settings-pane {
+    display: none;
 }

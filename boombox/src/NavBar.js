@@ -1,6 +1,6 @@
 import React from 'react';
 import menu_icon from './images/menu-24px.png';
-import search_icon from './images/search-24px.svg';
+//import search_icon from './images/search-24px.svg';
 import settings_icon from './images/settings-24px.png';
 import close_icon from './images/close-24px.png';
 import home_icon from './images/home-24px.png';
@@ -8,7 +8,11 @@ import profile_icon from './images/account_circle-24px.png';
 import add_icon from './images/add_box-24px.png';
 import bookmark_icon from './images/bookmark-24px.png';
 import logout_icon from './images/exit_to_app-24px.png';
+import SettingsPane from './SettingsPane';
 import './NavBar.css';
+
+//TODO: add sliding animation
+//reference: https://www.w3schools.com/howto/howto_js_animate.asp
 
 class NavBar extends React.Component {
     constructor(props) {
@@ -43,10 +47,18 @@ class NavBar extends React.Component {
         }
     }
 
+    openSettings = () => {
+        document.getElementById("settings-pane").style.display = "block";
+    }
+
+    closeSettings = () => {
+        document.getElementById("settings-pane").style.display = "none";
+    }
+
     componentDidMount() {
         console.log(document.getElementById("push-menu").offsetWidth);
         var pushMenu = document.getElementById("push-menu");
-        var navBar = document.getElementById("nav-bar");
+        //var navBar = document.getElementById("nav-bar");
         pushMenu.style.marginLeft = -pushMenu.offsetWidth - 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
         //navBar.style.width = document.getElementById("root").offsetWidth + "px";
     }
@@ -62,12 +74,12 @@ class NavBar extends React.Component {
         var navBarStyle = {"width": navBarWidth};
         */
 	    return (
-            <div>
+            <div id="nav-bar-main">
                 <div id="push-menu">
                     <table id="push-menu-table">
                         <tbody>
                             <tr>
-                                <td id="close-menu-cell"><img id="close-menu-icon" src={close_icon} alt="" width={this.iconSize} height={this.iconSize} onClick={this.closePushMenu} /></td>
+                                <td id="close-menu-cell"><img id="close-menu-icon" src={close_icon} alt="" width={this.iconSize} height="50px" onClick={this.closePushMenu} /></td>
                             </tr>
                             <tr>
                                 <td><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} />dashboard</td>
@@ -94,11 +106,16 @@ class NavBar extends React.Component {
                                 <td><img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/></td>
                                 <td>boombox</td>
                                 <td><input id="search-bar" placeholder="Search" type="text"></input></td>
-                                <td><img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} /></td>
+                                <td><img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} /></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="fixed-top">
+                    <SettingsPane 
+                        closeWindow={this.closeSettings}
+                    />
+                    </div>
             </div>
         );
     }
