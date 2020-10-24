@@ -1,12 +1,14 @@
 #playlist-display {
     font-family: 'Roboto Condensed', sans-serif;
-    padding: 5px;
+    padding: 10px;
+    display: inline-block;
 }
 
 .playlist-cover {
     width: 250px;
     height: 250px;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    padding-bottom: 5px;
 }
 
 .playlist-title {

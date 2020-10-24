@@ -11,7 +11,6 @@ function PlaylistTest() {
                 author = "Anonymous"
                 likes = "69" />
 
-            <br/>
 
             <PlaylistDisplay
                 albumCover = {logo}
