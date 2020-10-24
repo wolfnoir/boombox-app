@@ -66,13 +66,13 @@
     font-family: 'Orbitron';
 }
 
-.btn-primary {
+.loginScreen btn-primary {
     background-color: #fc639e !important;
     border-color: #fc639e !important;
     margin: 5px;
 }
 
-.btn-primary:hover {
+.loginScreen btn-primary:hover {
     background-color: #ffdae8 !important;
     border-color: #ffdae8 !important;
 }
