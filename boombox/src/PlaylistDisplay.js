@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import './PlaylistDisplay.css';
+import './css/bootstrap.min.css';
 
 class PlaylistDisplay extends React.Component{
     constructor(props){
@@ -18,7 +19,7 @@ class PlaylistDisplay extends React.Component{
         const albumCover = this.state.albumCover;
         return(
             <div id = "playlist-display">
-                <img className = "playlist-cover" src = {albumCover} />
+                <img className = "playlist-cover" src = {albumCover}/>
                 <div className = "playlist-title">{this.state.title}</div>
                 <div className = "playlist-info">
                     by {this.state.author} <br/>

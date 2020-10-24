@@ -7,8 +7,12 @@
 .playlist-cover {
     width: 250px;
     height: 250px;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
     padding-bottom: 5px;
+    transition: 0.3s;
+}
+
+.playlist-cover:hover{
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
 }
 
 .playlist-title {

@@ -1,0 +1,33 @@
+/*.loginScreen {
+    background-image: url('./images/login-background.jpg'); 
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}*/
+
+html { 
+    background: url(./images/login-background.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
+.loginScreen a {
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.loginScreen a:hover {
+    color: #ffa3d7;
+}
+
+.freepix-attribution{
+    font-size: 12px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-family: 'Orbitron';
+}
