@@ -7,7 +7,7 @@ import profile_icon from './images/account_circle-24px.png';
 class SettingsPane extends React.Component {
     constructor(props) {
         super(props);
-        this.props.closeWindow.bind(this);
+        //this.props.closeWindow.bind(this);
     }
 
     render() {
