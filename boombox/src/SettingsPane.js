@@ -2,7 +2,7 @@ import React from 'react'
 import './css/bootstrap.min.css';
 import './SettingsPane.css';
 import back_icon from './images/keyboard_backspace-24px.png'
-import profile_icon from './images/account_circle-24px.png';
+import profile_icon from './images/account_circle-24px.svg';
 
 class SettingsPane extends React.Component {
     constructor(props) {
@@ -10,11 +10,14 @@ class SettingsPane extends React.Component {
         //this.props.closeWindow.bind(this);
     }
 
-    render() {
-        var profile_image = profile_icon;
+    getProfileImage = () => {
         if (this.props.profile_image) {
-            profile_image = this.props.profile_image;
+            return <img id="profile-image" src={this.props.profile_image} width="256px" height="256px" alt=""/>
         }
+        return <img id="profile-image" src={profile_icon} width="256px" height="256px" style={{filter: 'invert(1)'}} alt=""/>
+    }
+
+    render() {
         return (
             <div className="container-fluid" id="settings-pane">
                 <div className="row" id="row1">
@@ -33,7 +36,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row" id="user-icon-row">
                                 <div className="col">
-                                <img id="profile-image" src={profile_image} width="256px" height="256px" alt=""/>
+                                    {this.getProfileImage()}
                                 </div>
                                 <div className="col" id="user-icon-right-side">
                                     <p><button id="change-icon-button" className="btn btn-primary" type="button">Change Icon</button></p>
