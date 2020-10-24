@@ -114,6 +114,7 @@ class NavBar extends React.Component {
                 <div class="fixed-top">
                     <SettingsPane 
                         closeWindow={this.closeSettings}
+                        profile_image={this.props.profile_image}
                     />
                     </div>
             </div>
