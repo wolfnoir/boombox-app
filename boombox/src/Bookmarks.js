@@ -70,7 +70,7 @@ class Bookmarks extends React.Component {
             <NavBarWrapper>
                 <div className="container" id="bookmarks-pane">
                     <div className="row" id="row1">
-                        <div className="col">
+                        <div className="col" id = "bookmarks-header">
                             <img src={bookmark_icon} width="30px" height="30px" alt="" /> bookmarks
                             {/*   <img src={require('./images/watermelon-wolf.jpg')} alt="" />   */}
                         </div>
