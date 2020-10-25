@@ -6,7 +6,14 @@ function RelayInfo() {
     useEffect(() => {}) replaces componentDidMount()
     */
     let { info } = useParams();
-    return <div>hello {info}</div>;
+    return <RelayInfoDisplay info={info} />;
 }
+
+class RelayInfoDisplay extends React.Component {
+    render() {
+        return <div>hello {this.props.info}</div>;
+    }
+}
+
 
 export default RelayInfo;
