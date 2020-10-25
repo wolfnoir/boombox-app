@@ -15,3 +15,8 @@
 #bookmarks-pane h1 {
     font-size: 30px;
 }
+
+#bookmarks-header {
+    font-family: 'Orbitron';
+    font-weight: 600;
+}
