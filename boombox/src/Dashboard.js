@@ -114,7 +114,7 @@ class Dashboard extends React.Component {
                     </div>
                     <div className="row" id="row3">
                         <div className="col">
-                            new playlists
+                            recommended playlists
                         </div>
                     </div>
                     <div className="row" id="row4">

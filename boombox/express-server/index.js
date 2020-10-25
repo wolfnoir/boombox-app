@@ -164,12 +164,6 @@ app.get("/getRecommendedPlaylists", (req, res) => {
 				author: "maltesefalcon",
 				num_likes: 54,
 				image_url: "./images/noir.jpg"
-			},
-			{
-				name: "wonderwall 10 hrs",
-				author: "smithman32",
-				num_likes: 69,
-				image_url: "./images/horse.png"
 			}
 		],
 		music_match: 57,
