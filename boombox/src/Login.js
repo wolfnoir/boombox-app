@@ -17,8 +17,21 @@ function Login() {
                 </div>
 
                 <div className = "login-menu">
-                    AAAAAAAAAAAAAAA <br/>
-                    <button class="btn btn-primary btn-lg hoverable">Log In</button>
+                <div className = "boombox-login-title">
+                    Log In
+                </div>
+
+                    <form className = "login-form"> 
+                      <div className = "form-group">
+                          <input type = "email" className = "form-control" id = "login-email" placeholder = "E-mail" />
+                      </div>
+
+                      <div className = "form-group">
+                          <input type = "password" className = "form-control" id = "login-password" placeholder = "Password" />
+                      </div>
+
+                      <button type = "submit" className = "btn btn-primary">Log In</button>
+                    </form>
                     
                     <div>
                     Not a user? Register <a className = "register-link" href='/register'>here.</a>

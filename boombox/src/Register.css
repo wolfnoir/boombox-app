@@ -1,4 +1,4 @@
-.loginScreen { 
+.registerScreen { 
     position: fixed;
     top: 0;
     width: 100%;
@@ -10,17 +10,17 @@
     color: white;
   }
 
-.register-link {
+.login-link {
     text-decoration: none;
     color: #ff1f75;
     transition: 0.3s;
 }
 
-.register-link:hover {
+.login-link:hover {
     color: white;
 }
 
-.login-container {
+.register-container {
     display: table-cell;
     vertical-align: middle;
     font-weight: 600;
@@ -58,7 +58,7 @@
     margin-bottom: 50px;
 }
 
-.login-menu {
+.register-menu {
     border-radius: 20px;
     width: 20%;
     background: rgba(0, 0, 0, 0.7);
@@ -66,24 +66,24 @@
     font-family: 'Orbitron';
 }
 
-.login-form {
+.registration-form {
     width: 80%;
     margin: 5px;
     margin-bottom: 20px;
 }
 
-.login-form btn-primary {
+.register-form btn-primary {
     background-color: #fc639e !important;
     border-color: #fc639e !important;
     margin: 5px;
 }
 
-.login-form btn-primary:hover {
+.register-form btn-primary:hover {
     background-color: #ffdae8 !important;
     border-color: #ffdae8 !important;
 }
 
-.boombox-login-title {
+.boombox-register-title {
     font-family: 'Orbitron';
     color: white;
     font-size: 24px;
