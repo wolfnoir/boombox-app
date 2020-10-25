@@ -8,6 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import { Route,  Switch, BrowserRouter} from 'react-router-dom';
 import PlaylistTest from './PlaylistTest';
 import Login from './Login';
+import Register from './Register';
 import './css/bootstrap.min.css';
 import NavBarWrapper from './NavBarWrapper';
 import Bookmarks from './Bookmarks';
@@ -53,7 +54,7 @@ class MyRouter extends React.Component {
 				<Route path="/playlist-test" component={PlaylistTest} />
 				<Route path="/login" component={Login} />
 				<Route path="/my-bookmarks" component={Bookmarks} />
-				{/* <Route path="/register" component={Register} /> */}
+				<Route path="/register" component={Register} />
 				<Route path="/navbar-test" component={NavBarTest} />
 				<Route path="/relay-info/:info" component={RelayInfo} />
 				<Route 
