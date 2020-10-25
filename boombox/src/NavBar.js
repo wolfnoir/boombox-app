@@ -117,8 +117,8 @@ class NavBar extends React.Component {
                     <table id="nav-bar-table">
                         <tbody>
                             <tr>
-                                <td>{menuIcon}</td>
-                                <td>boombox</td>
+                                <td><img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/></td>
+                                <td><a href = "/" id = "boombox-header">boombox</a></td>
                                 <td><input id="search-bar" placeholder="Search" type="text"></input></td>
                                 <td>{settingsIcon}</td>
                             </tr>

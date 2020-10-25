@@ -7,6 +7,7 @@
     display: inline-block;
     vertical-align: top;
     width: 100%;
+    font-family: 'Orbitron'
 }
 
 #nav-bar-table {
@@ -23,6 +24,15 @@
     border-color: red;
     border-style: solid;
     */
+}
+
+#boombox-header {
+    text-decoration: none;
+    color: white;
+}
+
+#boombox-header:hover {
+    color: #d3d3d3;
 }
 
 #nav-bar-table td > * {
@@ -62,6 +72,7 @@
 }
 
 #search-bar, #search-bar:focus {
+    font-family: 'Roboto Condensed';
     background-image: url('images/search-24px.svg');
     background-repeat: no-repeat;
     padding-left: 24px;
@@ -85,6 +96,7 @@
 }
 
 #push-menu-table {
+    /* font-family: 'Roboto Condensed'; */
     color: white;
     font-size: 30px;
 }
