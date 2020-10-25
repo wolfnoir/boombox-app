@@ -5,6 +5,17 @@ import './css/bootstrap.min.css'
 import './Bookmarks.css'
 import bookmark_icon from './images/bookmark-24px.svg';
 
+/*--------------------------------------------------*/
+/* TEMPORARY STATIC IMAGE IMPORTS                   */
+/*--------------------------------------------------*/
+import wolf_img from './images/watermelon-wolf.jpg';
+import mountain_img from "./images/mountain.jpg";
+import church_img from "./images/disco-church.png";
+import noir_img from "./images/noir.jpg";
+import leafy_img from "./images/leafy.jpg";
+import noir2_img from "./images/noir2.png";
+/*--------------------------------------------------*/
+
 class Bookmarks extends React.Component {
     constructor(props) {
         super(props);
@@ -20,6 +31,7 @@ class Bookmarks extends React.Component {
             console.log(obj);
             this.setState({bookmarks: obj.bookmarks})
         });
+
         for (var i = 0; i < this.state.bookmarks.length; i++) {
             this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
             this.state.bookmarks[i].key = "playlist" + i;
@@ -30,21 +42,21 @@ class Bookmarks extends React.Component {
         this.getBookmarks();
     }
 
-    /*
-    <PlaylistDisplay
-                albumCover = {logo}
-                title = "Lorem Ipsum"
-                author = "Anonymous"
-                likes = "69" />
-    */
-
     render() {
-        
-        var listofPlaylistDisplays = this.state.bookmarks.map((playlist) => {
+         /*--------------------------------------------------*/
+        /* TEMPORARY STATIC IMAGE IMPORTS                   */
+        /*--------------------------------------------------*/
+        var staticImages = [
+            wolf_img, mountain_img, church_img, noir2_img, leafy_img, noir2_img
+        ]
+        /*--------------------------------------------------*/
+
+        var listofPlaylistDisplays = this.state.bookmarks.map((playlist, i) => {
             //need to figure out how to load image
+            //albumCover={playlist.image} 
             return (
                 <PlaylistDisplay
-                    albumCover={playlist.image}
+                    albumCover={staticImages[i]} 
                     title={playlist.name}
                     author={playlist.author}
                     likes={playlist.num_likes} 
@@ -69,7 +81,6 @@ class Bookmarks extends React.Component {
                         </div>
                     </div>
                 </div>
-                
             </NavBarWrapper>
         )
     }

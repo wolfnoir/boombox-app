@@ -11,6 +11,7 @@ import Login from './Login';
 import './css/bootstrap.min.css';
 import NavBarWrapper from './NavBarWrapper';
 import Bookmarks from './Bookmarks';
+import RelayInfo from './RelayInfo';
 
 /*
 ReactDOM.render(
@@ -21,9 +22,8 @@ ReactDOM.render(
 );
 */
 
-class MyRouter extends React.Component {
-    render() {
-	return (<Switch>
+/*
+<Switch>
 		<div>
 		<Switch>
 		<Route exact path="/" component={App} />
@@ -31,7 +31,6 @@ class MyRouter extends React.Component {
 		<Route path="/playlist-test" component={PlaylistTest} />
 		<Route path="/login" component={Login} />
 		<Route path="/my-bookmarks" component={Bookmarks} />
-		{/* <Route path="/register" component={Register} /> */}
 		<Route path="/navbar-test" component={NavBarTest} />
 		<Route 
 			path="/settings-test" 
@@ -42,7 +41,30 @@ class MyRouter extends React.Component {
 		</Switch>
 		</div>
 		</Switch>
-	       );
+*/
+
+class MyRouter extends React.Component {
+    render() {
+	return (
+		<div>
+			<Switch>
+				<Route exact path="/" component={App} />
+				<Route path="/testnav" component={NavBarWrapper} />
+				<Route path="/playlist-test" component={PlaylistTest} />
+				<Route path="/login" component={Login} />
+				<Route path="/my-bookmarks" component={Bookmarks} />
+				{/* <Route path="/register" component={Register} /> */}
+				<Route path="/navbar-test" component={NavBarTest} />
+				<Route path="/relay-info/:info" component={RelayInfo} />
+				<Route 
+					path="/settings-test" 
+					render={(props) => (
+						<SettingsPane profile_image="" />
+					)}
+				/>	
+			</Switch>
+		</div>
+	    );
     }
 }
 
