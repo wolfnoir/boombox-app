@@ -103,7 +103,7 @@ class NavBar extends React.Component {
                         <tbody>
                             <tr>
                                 <td><img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/></td>
-                                <td>boombox</td>
+                                <td><a href = "/" id = "boombox-header">boombox</a></td>
                                 <td><input id="search-bar" placeholder="Search" type="text"></input></td>
                                 <td><img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} /></td>
                             </tr>
