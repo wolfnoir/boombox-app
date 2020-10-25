@@ -30,7 +30,7 @@ function Login() {
                           <input type = "password" className = "form-control" id = "login-password" placeholder = "Password" />
                       </div>
 
-                      <button type = "submit" className = "btn btn-primary">Log In</button>
+                      <a type = "submit" className = "btn btn-primary" role="button" href = "/">Log In</a>
                     </form>
                     
                     <div>

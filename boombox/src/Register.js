@@ -38,7 +38,7 @@ function Register() {
                           <input type = "password" className = "form-control" id = "register-confirm-password" placeholder = "Confirm Password" />
                       </div>
 
-                      <button type = "submit" className = "btn btn-primary">Register</button>
+                      <a type = "submit" className = "btn btn-primary" role="button" href = "/">Register</a>
                     </form>
                     
                     <div>
