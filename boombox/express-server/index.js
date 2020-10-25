@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const app = express(); // create express app
 
 // add middlewares
@@ -16,6 +17,8 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
+app.use(cookieParser());
+
 /*-----------------------------------------------------
 Non-React routes (take priority over React routes)
 -------------------------------------------------------*/
@@ -24,13 +27,21 @@ app.get("/helloworld", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
 });
 
-app.post("/loginUser", (req, res) => {
+app.get("/loginUser", (req, res) => {
     //request.session.loggedin = true;
-    //request.session.username = "";
+	//request.session.username = "";
+	console.log("current user: " + req.cookies.username);
+	res.cookie('username', 'test-user');
+	console.log('login test-user');
+	res.send("login test-user");
 });
 
-app.post("/logoutUser", (req, res) => {
-    //request.session.destroy();
+app.get("/logoutUser", (req, res) => {
+	//request.session.destroy();
+	var user = req.cookies.username;
+	console.log('logout: ' + user);
+	res.clearCookie('username');
+	res.send("logout " + user);
 });
 
 app.post("/editUsername", (req, res) => {

@@ -8,8 +8,10 @@ import profile_icon from './images/account_circle-24px.png';
 import add_icon from './images/add_box-24px.png';
 import bookmark_icon from './images/bookmark-24px.png';
 import logout_icon from './images/exit_to_app-24px.png';
+import Cookie from 'universal-cookie';
 import SettingsPane from './SettingsPane';
 import './NavBar.css';
+import Cookies from 'universal-cookie';
 
 //TODO: add sliding animation
 //reference: https://www.w3schools.com/howto/howto_js_animate.asp
@@ -18,6 +20,7 @@ class NavBar extends React.Component {
     constructor(props) {
         super(props);
         this.iconSize = "30px";
+        this.cookie = new Cookie();
         this.state = {
             pushMenuVisible: false
         }
@@ -60,6 +63,7 @@ class NavBar extends React.Component {
         //var navBar = document.getElementById("nav-bar");
         pushMenu.style.marginLeft = -pushMenu.offsetWidth - 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
         //navBar.style.width = document.getElementById("root").offsetWidth + "px";
+        console.log(this.cookie.get("username"));
     }
 
     render() {
@@ -72,6 +76,17 @@ class NavBar extends React.Component {
         }
         var navBarStyle = {"width": navBarWidth};
         */
+
+        var menuIcon = <img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/>;
+        var settingsIcon = <img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} />;
+        if (!this.cookie.get('username')) {
+            menuIcon = null;
+            settingsIcon = <div id="login-register-div">
+                            <div id="login-link"><a href="/login">Login</a></div>
+                            <div id="register-link"><a href="/register">Register</a></div>
+                        </div>;
+        }
+
 	    return (
             <div id="nav-bar-main">
                 <div id="push-menu">
@@ -81,19 +96,19 @@ class NavBar extends React.Component {
                                 <td id="close-menu-cell"><img id="close-menu-icon" src={close_icon} alt="" width={this.iconSize} height="50px" onClick={this.closePushMenu} /></td>
                             </tr>
                             <tr>
-                                <td><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} />dashboard</td>
+                                <td><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} /> dashboard</td>
                             </tr>
                             <tr>
-                                <td><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} />my profile</td>
+                                <td><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} /> my profile</td>
                             </tr>
                             <tr>
-                                <td><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} />new playlist</td>
+                                <td><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} /> new playlist</td>
                             </tr>
                             <tr>
-                                <td><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} />bookmarks</td>
+                                <td><a href="/my-bookmarks"><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} /> bookmarks</a></td>
                             </tr>
                             <tr>
-                                <td><img src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} />log out</td>
+                                <td><img src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} /> log out</td>
                             </tr>
                         </tbody>
                     </table>
@@ -105,7 +120,7 @@ class NavBar extends React.Component {
                                 <td><img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/></td>
                                 <td><a href = "/" id = "boombox-header">boombox</a></td>
                                 <td><input id="search-bar" placeholder="Search" type="text"></input></td>
-                                <td><img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} /></td>
+                                <td>{settingsIcon}</td>
                             </tr>
                         </tbody>
                     </table>

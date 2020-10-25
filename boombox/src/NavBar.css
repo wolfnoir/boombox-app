@@ -1,3 +1,8 @@
+#nav-bar-main a {
+    text-decoration: none;
+    color: white;
+}
+
 #nav-bar {
     display: inline-block;
     vertical-align: top;
@@ -36,7 +41,7 @@
 
 
 #nav-bar-table td:nth-of-type(1) {
-    padding-left: 5px;
+    padding-left: 15px;
 }
 
 #nav-bar-table td:nth-of-type(2) {
@@ -49,7 +54,13 @@
 
 #nav-bar-table td:nth-of-type(4) {
     text-align: right;
-    padding-right: 5px;
+    padding-right: 15px;
+}
+
+#login-link, #register-link {
+    display: inline-block;
+    font-size: 24px;
+    padding: 0px 10px;
 }
 
 #menu-icon {
@@ -93,7 +104,7 @@
 #push-menu-table td {
     padding: 5px 0px;
     padding-right: 15px;
-    padding-left: 5px;
+    padding-left: 15px;
 }
 
 #push-menu-table td > * {
