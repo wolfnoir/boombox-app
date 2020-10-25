@@ -47,6 +47,7 @@ class MyRouter extends React.Component {
 							<SettingsPane profile_image="" />
 						)}
 					/>	
+					<Route path="/playlist/:playlistId" component={NavBarTest} />
 				</Switch>
 			</div>
 	    );

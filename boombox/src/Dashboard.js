@@ -79,6 +79,7 @@ class Dashboard extends React.Component {
                     title={playlist.name}
                     author={playlist.author}
                     likes={playlist.num_likes} 
+                    url={playlist.url}
                     key={playlist.key}
                 />
             )
@@ -93,6 +94,7 @@ class Dashboard extends React.Component {
                     title={playlist.name}
                     author={playlist.author}
                     likes={playlist.num_likes} 
+                    url={playlist.url}
                     key={playlist.key}
                 />
             )

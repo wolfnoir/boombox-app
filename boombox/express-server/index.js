@@ -81,37 +81,43 @@ app.get("/getBookmarks", (req, res) => {
 				name: "joke playlist",
 				author: "smithman32",
 				num_likes: 32,
-				image_url: "./images/watermelon-wolf.jpg"
+				image_url: "./images/watermelon-wolf.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "o, my love",
 				author: "banishtheknight",
 				num_likes: 23,
-				image_url: "./images/mountain.jpg"
+				image_url: "./images/mountain.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "smallest church in the whole mysterious universe",
 				author: "tequilasunset",
 				num_likes: 653,
-				image_url: "./images/disco-church.png"
+				image_url: "./images/disco-church.png",
+				url: "/playlist/abc"
 			},
 			{
 				name: "creeping noir",
 				author: "maltesefalcon",
 				num_likes: 54,
-				image_url: "./images/noir.jpg"
+				image_url: "./images/noir.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "dreams of green",
 				author: "smithman32",
 				num_likes: 765,
-				image_url: "./images/leafy.jpg"
+				image_url: "./images/leafy.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "searching for you",
 				author: "sidneyfalco",
 				num_likes: 43,
-				image_url: "./images/noir2.png"
+				image_url: "./images/noir2.png",
+				url: "/playlist/abc"
 			}
 		]
 	};
@@ -125,25 +131,29 @@ app.get("/getNewPlaylists", (req, res) => {
 				name: "wonderwall 10 hrs",
 				author: "smithman32",
 				num_likes: 69,
-				image_url: "./images/horse.png"
+				image_url: "./images/horse.png",
+				url: "/playlist/abc"
 			},
 			{
 				name: "o, my love",
 				author: "banishtheknight",
 				num_likes: 23,
-				image_url: "./images/mountain.jpg"
+				image_url: "./images/mountain.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "smallest church in the whole mysterious universe",
 				author: "tequilasunset",
 				num_likes: 653,
-				image_url: "./images/disco-church.png"
+				image_url: "./images/disco-church.png",
+				url: "/playlist/abc"
 			},
 			{
 				name: "searching for you",
 				author: "sidneyfalco",
 				num_likes: 43,
-				image_url: "./images/noir2.png"
+				image_url: "./images/noir2.png",
+				url: "/playlist/abc"
 			}
 		]
 	};
@@ -157,13 +167,15 @@ app.get("/getRecommendedPlaylists", (req, res) => {
 				name: "dreams of green",
 				author: "smithman32",
 				num_likes: 765,
-				image_url: "./images/leafy.jpg"
+				image_url: "./images/leafy.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "creeping noir",
 				author: "maltesefalcon",
 				num_likes: 54,
-				image_url: "./images/noir.jpg"
+				image_url: "./images/noir.jpg",
+				url: "/playlist/abc"
 			}
 		],
 		music_match: 57,
@@ -250,7 +262,8 @@ app.get("/getSearchResults/:query", (req, res) => {
 				name: "wonderwall 10 hrs",
 				author: "smithman32",
 				num_likes: 69,
-				image_url: "./images/horse.png"
+				image_url: "./images/horse.png",
+				url: "/playlist/abc"
 			}
 		],
 		tags: [
@@ -271,19 +284,22 @@ app.get("/getProfilePageData/:username", (req, res) => {
 				name: "joke playlist",
 				author: "smithman32",
 				num_likes: 32,
-				image_url: "./images/watermelon-wolf.jpg"
+				image_url: "./images/watermelon-wolf.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "dreams of green",
 				author: "smithman32",
 				num_likes: 765,
-				image_url: "./images/leafy.jpg"
+				image_url: "./images/leafy.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "wonderwall 10 hrs",
 				author: "smithman32",
 				num_likes: 69,
-				image_url: "./images/horse.png"
+				image_url: "./images/horse.png",
+				url: "/playlist/abc"
 			}
 		]
 	}
@@ -342,19 +358,22 @@ app.get("/getUserPlaylists/:username", (req, res) => {
 				name: "joke playlist",
 				author: "smithman32",
 				num_likes: 32,
-				image_url: "./images/watermelon-wolf.jpg"
+				image_url: "./images/watermelon-wolf.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "dreams of green",
 				author: "smithman32",
 				num_likes: 765,
-				image_url: "./images/leafy.jpg"
+				image_url: "./images/leafy.jpg",
+				url: "/playlist/abc"
 			},
 			{
 				name: "wonderwall 10 hrs",
 				author: "smithman32",
 				num_likes: 69,
-				image_url: "./images/horse.png"
+				image_url: "./images/horse.png",
+				url: "/playlist/abc"
 			}
 		]
 	};
