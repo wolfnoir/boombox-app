@@ -147,7 +147,7 @@ app.get("/getNewPlaylists", (req, res) => {
 			}
 		]
 	};
-	res.json(data)
+	res.json(data);
 });
 
 app.get("/getRecommendedPlaylists", (req, res) => {
@@ -164,41 +164,208 @@ app.get("/getRecommendedPlaylists", (req, res) => {
 				author: "maltesefalcon",
 				num_likes: 54,
 				image_url: "./images/noir.jpg"
+			},
+			{
+				name: "wonderwall 10 hrs",
+				author: "smithman32",
+				num_likes: 69,
+				image_url: "./images/horse.png"
+			}
+		],
+		music_match: 57,
+		num_following: 23,
+		num_followers: 45
+	}; 
+	res.json(data);
+});
+
+app.get("/getPlaylistData/:playlistId", (req, res) => {
+	const playlistId = req.params.playlistId;
+	var data = {
+		image_url: './images/horse.png',
+		name: 'wonderwall 10 hrs',
+		author: 'smithman32',
+		last_modified: 1600850614,
+		liked_by_user: false,
+		bookmarked_by_user: false,
+		num_likes: 69,
+		tags: ['wonderwall', 'pop', 'why me'],
+		description: 'This playlist is for Deborah, who broke my heart. Please take me back.',
+		songs: [
+			{
+				name: 'Wonderwall',
+				artist: 'Oasis',
+				full_url: 'https://dummy_url.com',
+				notes: '',
+				length: 259 //Note: How do we get this data?
+			},
+			{
+				name: 'Wonderwall',
+				artist: 'Oasis',
+				full_url: 'https://dummy_url.com',
+				notes: 'Why the obsession with Wonderwall? Well, it\'s because it\'s the only song I know how to play.',
+				length: 259 //Note: How do we get this data?
+			},
+			{
+				name: 'Wonderwall',
+				artist: 'Oasis',
+				full_url: 'https://dummy_url.com',
+				notes: '',
+				length: 259 //Note: How do we get this data?
+			},
+			{
+				name: 'Wonderwall',
+				artist: 'Oasis',
+				full_url: 'https://dummy_url.com',
+				notes: '',
+				length: 259 //Note: How do we get this data?
+			}
+		],
+		comments_enabled: true,
+		comments: [
+			{
+				username: 'wonderwall333',
+				content: 'Nice playlist :)',
+				time: 1600854545
 			}
 		]
-	} 
-	res.json(data)
+	}
+	res.json(data);
 });
 
-app.get("/getPlaylist/:playlistId", (req, res) => {
-	//req.params.playlistId
-	res.json({})
+// for advanced search just pass with get, e.g.  /getSearchResults/wonderwall?author=smithman32
+app.get("/getSearchResults/:query", (req, res) => {
+	var query = req.params.query;
+	var data = {
+		users: [
+			{
+				username: 'wonderwall333',
+				profile_image_url: '/images/luigi time.gif'
+			},
+			{
+				username: 'ilovewonderwall',
+				profile_image_url: './images/kermit.png'
+			},
+			{
+				username: 'wonderwall2',
+				profile_image_url: './images/raccoon.png'
+			}
+		],
+		playlists: [
+			{
+				name: "wonderwall 10 hrs",
+				author: "smithman32",
+				num_likes: 69,
+				image_url: "./images/horse.png"
+			}
+		],
+		tags: [
+			'wonderwall', 'oasis', 'alternative', 'rock', 'does anyone actually like wonderwall'
+		]
+	};
+	res.json(data);
 });
 
-app.get("/getSearchResults", (req, res) => {
-	res.json({})
+app.get("/getProfilePageData/:username", (req, res) => {
+	const username = req.params.username;
+	var data = {
+		username: username,
+		following: false,
+		bio: "Hi, my name is John Smith, and I love making playlists. Deborah, if you're reading this, I'm sorry, and I'm sending you my 10 hour long Wonderwall playlist to make up for it.",
+		playlists: [
+			{
+				name: "joke playlist",
+				author: "smithman32",
+				num_likes: 32,
+				image_url: "./images/watermelon-wolf.jpg"
+			},
+			{
+				name: "dreams of green",
+				author: "smithman32",
+				num_likes: 765,
+				image_url: "./images/leafy.jpg"
+			},
+			{
+				name: "wonderwall 10 hrs",
+				author: "smithman32",
+				num_likes: 69,
+				image_url: "./images/horse.png"
+			}
+		]
+	}
+	res.json(data);
 });
 
-app.get("/getProfilePageData", (req, res) => {
-	res.json({})
+app.get("/getFollowers/:username", (req, res) => {
+	const username = req.params.username;
+	var data = {
+		users: []
+	};
+	for (var i = 0; i < 14; i++) {
+		data.users.push({
+			username: 'wonderwall333',
+			profile_image_url: '/images/luigi time.gif'
+		});
+		data.users.push({
+			username: 'ilovewonderwall',
+			profile_image_url: './images/kermit.png'
+		});
+		data.users.push({
+			username: 'wonderwall2',
+			profile_image_url: './images/raccoon.png'
+		});
+	}
+	res.json(data);
 });
 
-app.get("/getFollowers", (req, res) => {
-	res.json({})
+app.get("/getFollowing/:username", (req, res) => {
+	const username = req.params.username;
+	var data = {
+		users: []
+	};
+	for (var i = 0; i < 14; i++) {
+		data.users.push({
+			username: 'wonderwall333',
+			profile_image_url: '/images/luigi time.gif'
+		});
+		data.users.push({
+			username: 'ilovewonderwall',
+			profile_image_url: './images/kermit.png'
+		});
+		data.users.push({
+			username: 'wonderwall2',
+			profile_image_url: './images/raccoon.png'
+		});
+	}
+	res.json(data);
 });
 
-app.get("/getFollowing", (req, res) => {
-	res.json({})
+app.get("/getUserPlaylists/:username", (req, res) => {
+	const username = req.params.username;
+	var data = {
+		playlists: [
+			{
+				name: "joke playlist",
+				author: "smithman32",
+				num_likes: 32,
+				image_url: "./images/watermelon-wolf.jpg"
+			},
+			{
+				name: "dreams of green",
+				author: "smithman32",
+				num_likes: 765,
+				image_url: "./images/leafy.jpg"
+			},
+			{
+				name: "wonderwall 10 hrs",
+				author: "smithman32",
+				num_likes: 69,
+				image_url: "./images/horse.png"
+			}
+		]
+	};
+	res.json(data);
 });
-
-app.get("/getUserPlaylists", (req, res) => {
-	res.json({})
-});
-
-
-
-
-
 
 
 /*----------------------------- ------------------------
