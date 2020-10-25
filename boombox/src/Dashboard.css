@@ -1,0 +1,17 @@
+#dashboard-pane {
+    font-family: 'Robot Condensed';
+    font-size: 30px;
+}
+
+#dashboard-pane #row1, #dashboard-pane #row3 {
+    text-align: center;
+    padding: 10px 0px;
+}
+
+#dashboard-pane #row2, #dashboard-pane #row4 { 
+    padding: 10px 0px;
+}
+
+#dashboard-pane h1 {
+    font-size: 30px;
+}

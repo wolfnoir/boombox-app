@@ -11,7 +11,6 @@ import logout_icon from './images/exit_to_app-24px.png';
 import Cookie from 'universal-cookie';
 import SettingsPane from './SettingsPane';
 import './NavBar.css';
-import Cookies from 'universal-cookie';
 
 //TODO: add sliding animation
 //reference: https://www.w3schools.com/howto/howto_js_animate.asp
@@ -96,7 +95,7 @@ class NavBar extends React.Component {
                                 <td id="close-menu-cell"><img id="close-menu-icon" src={close_icon} alt="" width={this.iconSize} height="50px" onClick={this.closePushMenu} /></td>
                             </tr>
                             <tr>
-                                <td><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} /> dashboard</td>
+                                <td><a href="/"><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} /> dashboard</a></td>
                             </tr>
                             <tr>
                                 <td><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} /> my profile</td>

@@ -76,7 +76,7 @@ app.post("/editPlaylist", (req, res) => {
 
 app.get("/getBookmarks", (req, res) => {
 	var data = {
-		bookmarks: [
+		playlists: [
 			{
 				name: "joke playlist",
 				author: "smithman32",
@@ -116,16 +116,58 @@ app.get("/getBookmarks", (req, res) => {
 		]
 	};
 	res.json(data);
-	//res.json(["a", "b", "c"]);
-	//res.sendFile(path.join(__dirname, "..", "build", "index.html"));
 });
 
-app.get("/getFollowingNewPlaylists", (req, res) => {
-	res.json({})
+app.get("/getNewPlaylists", (req, res) => {
+	var data = {
+		playlists: [
+			{
+				name: "wonderwall 10 hrs",
+				author: "smithman32",
+				num_likes: 69,
+				image_url: "./images/horse.png"
+			},
+			{
+				name: "o, my love",
+				author: "banishtheknight",
+				num_likes: 23,
+				image_url: "./images/mountain.jpg"
+			},
+			{
+				name: "smallest church in the whole mysterious universe",
+				author: "tequilasunset",
+				num_likes: 653,
+				image_url: "./images/disco-church.png"
+			},
+			{
+				name: "searching for you",
+				author: "sidneyfalco",
+				num_likes: 43,
+				image_url: "./images/noir2.png"
+			}
+		]
+	};
+	res.json(data)
 });
 
 app.get("/getRecommendedPlaylists", (req, res) => {
-	res.json({})
+	var data = {
+		playlists: [
+			{
+				name: "dreams of green",
+				author: "smithman32",
+				num_likes: 765,
+				image_url: "./images/leafy.jpg"
+			},
+			{
+				name: "creeping noir",
+				author: "maltesefalcon",
+				num_likes: 54,
+				image_url: "./images/noir.jpg"
+			}
+		]
+	} 
+	res.json(data)
 });
 
 app.get("/getPlaylist/:playlistId", (req, res) => {

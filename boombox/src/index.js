@@ -1,70 +1,54 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import SettingsPane from './SettingsPane';
-import NavBarTest from './NavBarTest';
-import * as serviceWorker from './serviceWorker';
+
+import Cookie from 'universal-cookie';
+import { Redirect } from 'react-router';
 import { Route,  Switch, BrowserRouter} from 'react-router-dom';
-import PlaylistTest from './PlaylistTest';
-import Login from './Login';
-import Register from './Register';
+import * as serviceWorker from './serviceWorker';
+
 import './css/bootstrap.min.css';
+import './index.css';
+
 import NavBarWrapper from './NavBarWrapper';
-import Bookmarks from './Bookmarks';
+import NavBarTest from './NavBarTest';
+import PlaylistTest from './PlaylistTest';
 import RelayInfo from './RelayInfo';
 
-/*
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-*/
-
-/*
-<Switch>
-		<div>
-		<Switch>
-		<Route exact path="/" component={App} />
-		<Route path="/testnav" component={NavBarWrapper} />
-		<Route path="/playlist-test" component={PlaylistTest} />
-		<Route path="/login" component={Login} />
-		<Route path="/my-bookmarks" component={Bookmarks} />
-		<Route path="/navbar-test" component={NavBarTest} />
-		<Route 
-			path="/settings-test" 
-			render={(props) => (
-				<SettingsPane profile_image="" />
-			)}
-		/>
-		</Switch>
-		</div>
-		</Switch>
-*/
+import Bookmarks from './Bookmarks';
+import Dashboard from './Dashboard';
+import Login from './Login';
+import Register from './Register';
+import SettingsPane from './SettingsPane';
 
 class MyRouter extends React.Component {
+	constructor(props) {
+		super(props);
+		this.cookie = new Cookie();
+		this.state = {loggedIn : this.cookie.get('username')};
+	}
+
     render() {
-	return (
-		<div>
-			<Switch>
-				<Route exact path="/" component={App} />
-				<Route path="/testnav" component={NavBarWrapper} />
-				<Route path="/playlist-test" component={PlaylistTest} />
-				<Route path="/login" component={Login} />
-				<Route path="/my-bookmarks" component={Bookmarks} />
-				<Route path="/register" component={Register} />
-				<Route path="/navbar-test" component={NavBarTest} />
-				<Route path="/relay-info/:info" component={RelayInfo} />
-				<Route 
-					path="/settings-test" 
-					render={(props) => (
-						<SettingsPane profile_image="" />
-					)}
-				/>	
-			</Switch>
-		</div>
+		return (
+			<div>
+				<Switch>
+					<Route exact path="/" component={Dashboard} />
+					<Route path="/testnav" component={NavBarWrapper} />
+					<Route path="/playlist-test" component={PlaylistTest} />
+					<Route path="/login" component={Login} />
+					<Route path="/my-bookmarks">
+						{this.state.loggedIn ? <Bookmarks /> : <Redirect to="/" />}
+					</Route>
+					<Route path="/register" component={Register} />
+					<Route path="/navbar-test" component={NavBarTest} />
+					<Route path="/relay-info/:info" component={RelayInfo} />
+					<Route 
+						path="/settings-test" 
+						render={(props) => (
+							<SettingsPane profile_image="" />
+						)}
+					/>	
+				</Switch>
+			</div>
 	    );
     }
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import NavBarWrapper from './NavBarWrapper';
 import PlaylistDisplay from './PlaylistDisplay';
-import './css/bootstrap.min.css'
-import './Bookmarks.css'
+import './css/bootstrap.min.css';
+import './Bookmarks.css';
 import bookmark_icon from './images/bookmark-24px.svg';
 
 /*--------------------------------------------------*/
@@ -28,13 +28,12 @@ class Bookmarks extends React.Component {
         fetch('/getBookmarks')
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
-            this.setState({bookmarks: obj.bookmarks})
+            this.setState({bookmarks: obj.playlists})
         });
 
         for (var i = 0; i < this.state.bookmarks.length; i++) {
             this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
-            this.state.bookmarks[i].key = "playlist" + i;
+            this.state.bookmarks[i].key = "bookmarkedPlaylist" + i;
         }
     }
 
@@ -47,7 +46,7 @@ class Bookmarks extends React.Component {
         /* TEMPORARY STATIC IMAGE IMPORTS                   */
         /*--------------------------------------------------*/
         var staticImages = [
-            wolf_img, mountain_img, church_img, noir2_img, leafy_img, noir2_img
+            wolf_img, mountain_img, church_img, noir_img, leafy_img, noir2_img
         ]
         /*--------------------------------------------------*/
 

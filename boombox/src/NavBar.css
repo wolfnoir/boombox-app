@@ -125,3 +125,8 @@
 #nav-bar-main #settings-pane {
     display: none;
 }
+
+#nav-bar-main .fixed-top {
+    overflow-x: scroll;
+    max-height: 100vh;
+}
