@@ -6,20 +6,20 @@
     font-size: 30px;
 }
 
-#row1 {
+#settings-pane #row1 {
     text-align: center;
 }
 
-#back-icon {
+#settings-pane #back-icon {
     cursor: pointer;
 }
 
 
-.col-6 {
+#settings-pane .col-6 {
     word-wrap: break-word;
 }
 
-#row2 > .col-6 {
+#settings-pane #row2 > .col-6 {
     /*
     border-width: 5px;
     border-color: green;
@@ -65,9 +65,5 @@
 
 #settings-pane textarea {
     width: 100%;
-}
-
-#temp {
-    text-align: center;
 }
 

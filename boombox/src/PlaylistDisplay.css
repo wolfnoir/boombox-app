@@ -1,4 +1,4 @@
-#playlist-display {
+.playlist-display {
     font-family: 'Roboto Condensed', sans-serif;
     padding: 10px;
     display: inline-block;
@@ -19,6 +19,14 @@
     font-size: 24px;
     font-family: 'Orbitron';
     font-weight: 600;
+    max-width: 250px;
+
+    /* turn overflow into ellipsis, would be nice to add hover over tooltip*/
+    /*
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    */
 }
 
 .playlist-info {

@@ -64,7 +64,47 @@ app.post("/editPlaylist", (req, res) => {
 //should these be get, post, or both?
 
 app.get("/getBookmarks", (req, res) => {
-	res.json({'bookmarks': [{}, {}, {}, {}]});
+	var data = {
+		bookmarks: [
+			{
+				name: "joke playlist",
+				author: "smithman32",
+				num_likes: 32,
+				image_url: "./images/watermelon-wolf.jpg"
+			},
+			{
+				name: "o, my love",
+				author: "banishtheknight",
+				num_likes: 23,
+				image_url: "./images/mountain.jpg"
+			},
+			{
+				name: "smallest church in the whole mysterious universe",
+				author: "tequilasunset",
+				num_likes: 653,
+				image_url: "./images/disco-church.png"
+			},
+			{
+				name: "creeping noir",
+				author: "maltesefalcon",
+				num_likes: 54,
+				image_url: "./images/noir.jpg"
+			},
+			{
+				name: "dreams of green",
+				author: "smithman32",
+				num_likes: 765,
+				image_url: "./images/leafy.jpg"
+			},
+			{
+				name: "searching for you",
+				author: "sidneyfalco",
+				num_likes: 43,
+				image_url: "./images/noir2.png"
+			}
+		]
+	};
+	res.json(data);
 	//res.json(["a", "b", "c"]);
 	//res.sendFile(path.join(__dirname, "..", "build", "index.html"));
 });

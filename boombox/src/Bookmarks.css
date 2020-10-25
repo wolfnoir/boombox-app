@@ -1,0 +1,17 @@
+#bookmarks-pane {
+    font-family: 'Robot Condensed';
+    font-size: 30px;
+}
+
+#bookmarks-pane #row1 {
+    text-align: center;
+    padding: 10px 0px;
+}
+
+#bookmarks-pane #row2 { 
+    padding: 10px 0px;
+}
+
+#bookmarks-pane h1 {
+    font-size: 30px;
+}

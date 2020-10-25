@@ -56,7 +56,6 @@ class NavBar extends React.Component {
     }
 
     componentDidMount() {
-        console.log(document.getElementById("push-menu").offsetWidth);
         var pushMenu = document.getElementById("push-menu");
         //var navBar = document.getElementById("nav-bar");
         pushMenu.style.marginLeft = -pushMenu.offsetWidth - 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
@@ -111,7 +110,7 @@ class NavBar extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                <div class="fixed-top">
+                <div className="fixed-top">
                     <SettingsPane 
                         closeWindow={this.closeSettings}
                         profile_image={this.props.profile_image}

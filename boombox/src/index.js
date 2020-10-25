@@ -10,6 +10,7 @@ import PlaylistTest from './PlaylistTest';
 import Login from './Login';
 import './css/bootstrap.min.css';
 import NavBarWrapper from './NavBarWrapper';
+import Bookmarks from './Bookmarks';
 
 /*
 ReactDOM.render(
@@ -29,6 +30,7 @@ class MyRouter extends React.Component {
 		<Route path="/testnav" component={NavBarWrapper} />
 		<Route path="/playlist-test" component={PlaylistTest} />
 		<Route path="/login" component={Login} />
+		<Route path="/my-bookmarks" component={Bookmarks} />
 		{/* <Route path="/register" component={Register} /> */}
 		<Route path="/navbar-test" component={NavBarTest} />
 		<Route 
