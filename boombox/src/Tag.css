@@ -1,0 +1,9 @@
+.tag-button {
+    background-color: rgb(108, 111, 118);
+    color: white;
+    border: none;
+    border-radius: 250px;
+    margin: 0px 5px;
+    font-size: 16px;
+    outline: none; /* need to figure out how to remove button highlight when clicked */
+}

@@ -50,8 +50,8 @@ class MyRouter extends React.Component {
 						)}
 					/>	
 					<Route path="/playlist/:playlistId" component={PlaylistPage} />
-					<Route path="/followers/:username" component={FollowersPage} />
-					<Route path="/following/:username" component={FollowingPage} />
+					<Route path="/user/:username/followers" component={FollowersPage} />
+					<Route path="/user/:username/following" component={FollowingPage} />
 					<Route path="/user/:username" component={UserProfile} />
 				</Switch>
 			</div>

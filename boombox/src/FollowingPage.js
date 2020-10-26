@@ -15,7 +15,11 @@ import church_img from "./images/disco-church.png";
 
 class ArrowBackComponent extends React.Component {
     render() {
-        return <img id="back-arrow" src={arrow_back_img} height="50px" width="50px" alt="Return to Profile" onClick={this.props.handleBackArrowClick}/>
+        return (
+            <a href={this.props.url}>
+                <img id="back-arrow" src={arrow_back_img} height="50px" width="50px" alt="Return to Profile"/>
+            </a>
+        );
     }
 }
 
@@ -25,10 +29,14 @@ class FollowingPage extends React.Component {
 
         this.state = {
             following: [],
+            user: "",
         }
     }
 
     componentDidMount() {
+        const{ username } = this.props.match.params;
+        this.setState({user: username});
+
         fetch(`/getFollowing/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
@@ -47,6 +55,8 @@ class FollowingPage extends React.Component {
         var staticImages = [wolf_img, mountain_img, church_img];
         /*--------------------------------------------------*/
 
+        var returnUrl = "/user/" + this.state.user;
+
         var followingList = this.state.following.map((user, i) => {
             return (
                 <UserDisplay 
@@ -62,7 +72,7 @@ class FollowingPage extends React.Component {
             <NavBarWrapper>
                 <div className="container" id="following-pane">
                     <div className="row" id="row1">
-                        <ArrowBackComponent handleBackArrowClick={() => this.props.back_url}/>
+                        <ArrowBackComponent url={returnUrl} />
                         <div className="col" id="following-header">
                             Following({followingList.length})
                         </div>
