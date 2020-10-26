@@ -17,6 +17,7 @@ import RelayInfo from './RelayInfo';
 import Bookmarks from './Bookmarks';
 import Dashboard from './Dashboard';
 import Login from './Login';
+import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SettingsPane from './SettingsPane';
 
@@ -47,7 +48,8 @@ class MyRouter extends React.Component {
 							<SettingsPane profile_image="" />
 						)}
 					/>	
-					<Route path="/playlist/:playlistId" component={NavBarTest} />
+					<Route path="/playlist/:playlistId" component={PlaylistPage} />
+					<Route path="/user/:username" component={RelayInfo} />
 				</Switch>
 			</div>
 	    );

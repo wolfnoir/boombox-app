@@ -50,10 +50,12 @@ class NavBar extends React.Component {
     }
 
     openSettings = () => {
+        document.getElementById("settings-pane-fixed-top").style.display = "block";
         document.getElementById("settings-pane").style.display = "block";
     }
 
     closeSettings = () => {
+        document.getElementById("settings-pane-fixed-top").style.display = "none";
         document.getElementById("settings-pane").style.display = "none";
     }
 
@@ -62,7 +64,7 @@ class NavBar extends React.Component {
         //var navBar = document.getElementById("nav-bar");
         pushMenu.style.marginLeft = -pushMenu.offsetWidth - 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
         //navBar.style.width = document.getElementById("root").offsetWidth + "px";
-        console.log(this.cookie.get("username"));
+        //console.log(this.cookie.get("username"));
     }
 
     render() {
@@ -124,7 +126,7 @@ class NavBar extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                <div className="fixed-top">
+                <div className="fixed-top" id="settings-pane-fixed-top">
                     <SettingsPane 
                         closeWindow={this.closeSettings}
                         profile_image={this.props.profile_image}

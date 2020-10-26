@@ -1,0 +1,112 @@
+#playlist-page-container {
+    font-family: 'Roboto Condensed';
+    font-size: 16px;
+}
+
+#playlist-page-container > * > * {
+    border-width: 5px;
+    border-color: red;
+    border-style: solid;
+}
+
+#playlist-page-container #title-row, #playlist-page-container #tags-row {
+    font-family: 'Orbitron';
+}
+
+#playlist-page-container h1 {
+    font-size: 30px;
+    display: inline-block;
+}
+
+#playlist-page-container h2 {
+    font-size: 24px;
+    display: inline-block;
+}
+
+#playlist-page-container p {
+    font-size: 16px;
+}
+
+#playlist-page-container .btn-primary {
+    border-radius: 250px;
+    background-color: rgb(0, 136, 209);
+    font-size: 24px;
+}
+
+#playlist-page-container textarea {
+    width: 75%;
+}
+
+#playlist-page-container #row1 > * {
+    margin-top: auto;
+}
+
+/*
+/* How to deal with overflow in description (really long word)
+#playlist-page .col {
+    overflow-wrap: break-word;
+}
+*/
+
+#playlist-page-container #playlist-cover-container {
+    padding: 20px;
+    max-width: 290px;
+}
+
+/* need to figure out how to vertical align with title */
+#playlist-page-container #icons-div {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+#playlist-page-container #icons-div > img {
+    margin: 0 2.5px;
+}
+
+/* figure out how to vertically align this row */
+#playlist-page-container #tags-row > * {
+    margin: auto;
+    vertical-align: middle;
+}
+
+#playlist-page-container .tag-button {
+    background-color: rgb(108, 111, 118);
+    color: white;
+    border: none;
+    border-radius: 250px;
+    margin: 0px 5px;
+    outline: none; /* need to figure out how to remove button highlight when clicked */
+}
+
+#playlist-page-container #songs-header-row {
+    font-family: 'Orbitron';
+    border-bottom: 2px solid grey;
+}
+
+#playlist-page-container #songs-data-container-row {
+    padding: 3px 5px;
+}
+
+#playlist-page-container .song-notes-row {
+    margin: auto;
+}
+
+#playlist-page-container #playlist-comments-container {
+    text-align: center;
+}
+
+#playlist-page-container .comment-row {
+    border: 1px solid grey;
+}
+
+#playlist-page-container .comment-user-col {
+    text-align: left;
+}
+
+#playlist-page-container .comment-time-col {
+    text-align: right;
+}
+
+#playlist-page-container .comment-content-col {
+    text-align: left;
+}

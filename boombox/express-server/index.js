@@ -187,11 +187,12 @@ app.get("/getRecommendedPlaylists", (req, res) => {
 
 app.get("/getPlaylistData/:playlistId", (req, res) => {
 	const playlistId = req.params.playlistId;
+	console.log(playlistId);
 	var data = {
 		image_url: './images/horse.png',
 		name: 'wonderwall 10 hrs',
 		author: 'smithman32',
-		last_modified: 1600850614,
+		last_modified: 1600850614000,
 		liked_by_user: false,
 		bookmarked_by_user: false,
 		num_likes: 69,
@@ -232,7 +233,12 @@ app.get("/getPlaylistData/:playlistId", (req, res) => {
 			{
 				username: 'wonderwall333',
 				content: 'Nice playlist :)',
-				time: 1600854545
+				time: 1600854605000
+			},
+			{
+				username: 'wonderwall333',
+				content: 'Nice playlist :)',
+				time: 1600854545000
 			}
 		]
 	}
