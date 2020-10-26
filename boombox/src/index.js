@@ -19,12 +19,9 @@ import Login from './Login';
 import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SettingsPane from './SettingsPane';
-<<<<<<< HEAD
 import UserProfile from './UserProfile';
-=======
 import FollowersPage from './FollowersPage';
 import FollowingPage from './FollowingPage';
->>>>>>> c9c30165089232ea5c65cbf323834c4144fe5e9d
 
 class MyRouter extends React.Component {
 	constructor(props) {
@@ -53,13 +50,9 @@ class MyRouter extends React.Component {
 						)}
 					/>	
 					<Route path="/playlist/:playlistId" component={PlaylistPage} />
-<<<<<<< HEAD
 					<Route path="/user/:username" component={UserProfile} />
-=======
-					<Route path="/user/:username" component={RelayInfo} />
 					<Route path="/followers/:username" component={FollowersPage} />
 					<Route path="/following/:username" component={FollowingPage} />
->>>>>>> c9c30165089232ea5c65cbf323834c4144fe5e9d
 				</Switch>
 			</div>
 	    );
