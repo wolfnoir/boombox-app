@@ -27,6 +27,8 @@ class UserProfileDisplay extends React.Component {
         this.state = {
             data: {},
             userPlaylists: [],
+            following: {},
+            followers: {},
         }
     }
 
@@ -57,9 +59,27 @@ class UserProfileDisplay extends React.Component {
         }
     }
 
+    getUserFollowing(){
+        fetch(`/getFollowing/${this.props.username}`)
+        .then(res => res.json())
+        .then(obj => {
+            this.setState({following: obj.users});
+        })
+    }
+
+    getUserFollowers(){
+        fetch(`/getFollowers/${this.props.username}`)
+        .then(res => res.json())
+        .then(obj => {
+            this.setState({followers: obj.users});
+        })
+    }
+
     componentDidMount(){
         this.getUserData();
         this.getUserPlaylists();
+        this.getUserFollowers();
+        this.getUserFollowing();
     }
 
     render(){
@@ -119,12 +139,12 @@ class UserProfileDisplay extends React.Component {
 
                                 <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
                                     Following<br/>
-                                    3
+                                    {this.state.following.length}
                                 </a>
 
                                 <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
                                     Followers<br/>
-                                    3
+                                    {this.state.followers.length}
                                 </a>
                             </td>
                         </tr>

@@ -74,12 +74,14 @@ class FollowersPage extends React.Component {
                     <div className="row" id="row1">
                         <ArrowBackComponent url={returnUrl} />
                         <div className="col" id="followers-header">
-                            Followers({followersList.length})
+                            Followers ({followersList.length})
                         </div>
                     </div>
                     <div className="row" id="row2">
                         <div className="col">
+                            <center>
                             {followersList}
+                            </center>
                         </div>
                     </div>
                 </div>
