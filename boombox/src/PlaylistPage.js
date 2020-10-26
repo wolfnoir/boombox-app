@@ -6,9 +6,13 @@ import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
 import link_img from './images/link-24px.svg';
-import arrow_right_img from './images/keyboard_arrow_right-24px.svg'
-import arrow_down_img from './images/keyboard_arrow_down-24px.svg'
-
+import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
+import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
+import pause_img from './images/pause_circle_outline-24px.svg';
+import play_img from './images/play_circle_outline-24px.svg';
+import skip_next_img from './images/skip_next-24px.svg';
+import skip_previous_img from './images/skip_previous-24px.svg'; 
+import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
@@ -49,7 +53,9 @@ class PlaylistPageDisplay extends React.Component {
         super(props);
         this.state = {
             data: {},
-            song_notes_open: []
+            song_notes_open: [],
+            //current_playing_song: null //correct one
+            current_playing_song: 2 //temporary for showing
         }
     }
 
@@ -81,6 +87,9 @@ class PlaylistPageDisplay extends React.Component {
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
+        console.log(this.state.current_playing_song);
+        console.log(this.state.data.songs);
+        if (this.state.data.songs) console.log(this.state.data.songs[this.state.current_playing_song]);
         return (
             <NavBarWrapper>
                 <div className="container" id="playlist-page-container">
@@ -261,6 +270,31 @@ class PlaylistPageDisplay extends React.Component {
                     }
 
                     {/* added a fixed element here for the play track part */}
+                    <div className="container fixed-bottom" id="play-track-container">
+                        <div className="row">
+                            <div className="col-md-auto" id="play-track-left-col">
+                                <img className="invert-color" src={skip_previous_img} height="60px" width="60px" />
+                                <img className="invert-color" src={play_img} height="60px" width="60px" /> {/* need to add the switch to pause, same issue as note arrow*/}
+                                <img className="invert-color" src={skip_next_img} height="60px" width="60px" />
+                            </div>
+                            <div className="col" id="play-track-right-col">
+                                <div className="row">
+                                    <div className="col">
+                                        <EllipsisWithTooltip placement="top"><h2>{this.state.data.name} by {this.state.data.author}</h2></EllipsisWithTooltip>
+                                        </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col">
+                                        {
+                                            this.state.current_playing_song !== null && this.state.data.songs &&  this.state.data.songs[this.state.current_playing_song] ?
+                                            <EllipsisWithTooltip placement="top">{this.state.current_playing_song + 1}. {this.state.data.songs[this.state.current_playing_song].name} - {this.state.data.songs[this.state.current_playing_song].artist}</EllipsisWithTooltip>
+                                            : null
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </NavBarWrapper>
         );
