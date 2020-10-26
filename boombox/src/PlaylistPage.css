@@ -172,10 +172,14 @@
     padding-bottom: calc(80px + 30px);
 }
 
-#playlist-page-container #play-track-left-col {
-    max-width: 40%;
+#playlist-page-container #play-track-left-col > * {
+    margin: 0px 2.5px;
 }
 
 .invert-color {
     filter: invert(1);
+}
+
+#playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #playlist-page-container #next-song-img {
+    cursor: pointer;
 }

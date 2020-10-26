@@ -273,9 +273,9 @@ class PlaylistPageDisplay extends React.Component {
                     <div className="container fixed-bottom" id="play-track-container">
                         <div className="row">
                             <div className="col-md-auto" id="play-track-left-col">
-                                <img className="invert-color" src={skip_previous_img} height="60px" width="60px" />
-                                <img className="invert-color" src={play_img} height="60px" width="60px" /> {/* need to add the switch to pause, same issue as note arrow*/}
-                                <img className="invert-color" src={skip_next_img} height="60px" width="60px" />
+                                <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" />
+                                <img id="play-pause-img" className="invert-color" src={play_img} height="60px" width="60px" /> {/* need to add the switch to pause, same issue as note arrow*/}
+                                <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" />
                             </div>
                             <div className="col" id="play-track-right-col">
                                 <div className="row">
