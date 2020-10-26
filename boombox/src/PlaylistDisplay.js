@@ -21,7 +21,7 @@ class PlaylistDisplay extends React.Component{
         return(
             <div className = "playlist-display" key={this.state.key}>
                 <a href={this.props.url}><img className = "playlist-cover" src = {albumCover}/></a>
-                <div className = "playlist-title"><EllipsisWithTooltip placement="bottom">{this.state.title}</EllipsisWithTooltip></div>
+                <a href={this.props.url}><div className = "playlist-title"><EllipsisWithTooltip placement="bottom">{this.state.title}</EllipsisWithTooltip></div></a>
                 <div className = "playlist-info">
                     by <a href={"/user/" + this.state.author}>{this.state.author}</a> <br/>
                     {this.state.likes} likes
