@@ -67,3 +67,6 @@
     width: 100%;
 }
 
+.invert-color {
+    filter: invert(1);
+}

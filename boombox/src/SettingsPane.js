@@ -14,7 +14,7 @@ class SettingsPane extends React.Component {
         if (this.props.profile_image) {
             return <img id="profile-image" src={this.props.profile_image} width="256px" height="256px" alt=""/>
         }
-        return <img id="profile-image" src={profile_icon} width="256px" height="256px" style={{filter: 'invert(1)'}} alt=""/>
+        return <img id="profile-image" src={profile_icon} width="256px" height="256px" className="invert-color" alt=""/>
     }
 
     render() {
