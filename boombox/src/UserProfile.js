@@ -117,12 +117,12 @@ class UserProfileDisplay extends React.Component {
                                     53%
                                 </div>
 
-                                <a className = "user-profile-header-text match-followers followers-link" href = {"/getFollowing/" + this.state.data.username}>
+                                <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
                                     Following<br/>
                                     3
                                 </a>
 
-                                <a className = "user-profile-header-text match-followers followers-link" href = {"/getFollowers/" + this.state.data.username}>
+                                <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
                                     Followers<br/>
                                     3
                                 </a>
