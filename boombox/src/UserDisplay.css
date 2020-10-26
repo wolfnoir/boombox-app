@@ -1,15 +1,28 @@
-.UserDisplay {
-    width: 250px;
+.user-display {
+    font-family: 'Roboto Condensed', sans-serif;
+    padding: 15px;
+    display: inline-block;
     text-align: center;
 }
 
-.UserDisplay-picture {
-    width: 150px;
-    height: 150px;
-    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+.user-picture {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 5px;
+    transition: 0.3s;
 }
 
-.UserDisplay-name {
-    font-family: 'Roboto';
-    font-size: 18px;
+.user-picture:hover {
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+}
+
+.user-name {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+}
+
+.user-name:hover {
+    text-decoration: none;
+    color: black;
 }

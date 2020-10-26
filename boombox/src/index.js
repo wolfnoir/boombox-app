@@ -19,6 +19,8 @@ import Login from './Login';
 import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SettingsPane from './SettingsPane';
+import FollowersPage from './FollowersPage';
+import FollowingPage from './FollowingPage';
 import UserProfile from './UserProfile';
 
 class MyRouter extends React.Component {
@@ -48,6 +50,8 @@ class MyRouter extends React.Component {
 						)}
 					/>	
 					<Route path="/playlist/:playlistId" component={PlaylistPage} />
+					<Route path="/user/:username/followers" component={FollowersPage} />
+					<Route path="/user/:username/following" component={FollowingPage} />
 					<Route path="/user/:username" component={UserProfile} />
 				</Switch>
 			</div>

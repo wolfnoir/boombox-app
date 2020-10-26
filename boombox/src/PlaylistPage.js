@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import NavBarWrapper from './NavBarWrapper';
+import Tag from './Tag';
 import './css/bootstrap.min.css';
 import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
@@ -126,7 +127,7 @@ class PlaylistPageDisplay extends React.Component {
                             <div className="row" id="tags-row">
                                 <div className="col">
                                     <div style={{"marginRight": "10px", "display": "inline-block"}}><h2>tags:</h2></div>
-                                    {this.state.data.tags ? this.state.data.tags.map((tag, i) => <button type="button" className="btn btn-primary tag-button" key={"tag"+i}>{tag}</button>) : null}
+                                    {this.state.data.tags ? this.state.data.tags.map((tag, i) => <Tag number = {i} content = {tag}/>) : null}
                                 </div>
                             </div>
                         </div>
