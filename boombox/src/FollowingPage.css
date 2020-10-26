@@ -1,0 +1,26 @@
+#following-pane {
+    font-family: 'Robot Condensed';
+    font-size: 30px;
+}
+
+#following-pane #row1 {
+    text-align: center;
+    padding: 10px 0px;
+}
+
+#following-pane #row2 { 
+    padding: 10px 0px;
+}
+
+#following-pane h1 {
+    font-size: 30px;
+}
+
+#back-arrow {
+    cursor: pointer;
+}
+
+#following-header {
+    font-family: 'Orbitron';
+    font-weight: 600;
+}
