@@ -143,6 +143,7 @@
 
 #playlist-page-container .comment-row {
     border: 1px solid grey;
+    padding: 10px;
 }
 
 #playlist-page-container .comment-user-col {

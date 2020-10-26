@@ -65,30 +65,17 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     handleSongArrowClick = (i) => {
-        /*
-        const songArrow = document.getElementById("song-arrow-" + i);
-        console.log(i, songArrow);
-        console.log(songArrow.src, arrow_right_img, arrow_down_img);
-        if (songArrow) {
-            if (songArrow.src === arrow_right_img) {
-                console.log("change to down");
-                songArrow.src = arrow_down_img;
-            }
+        const songNote = document.getElementById("song-note-"+i);
+        if (songNote) {
+            this.state.song_notes_open[i] = !this.state.song_notes_open[i];
+            console.log(this.state.song_notes_open[i]);
+            if (this.state.song_notes_open[i]) {
+                songNote.style.display = "block";
+             }
             else {
-                console.log("change to right");
-                songArrow.src = arrow_right_img;
+                songNote.style.display = "none";
             }
         }
-        */
-       this.state.song_notes_open[i] = !this.state.song_notes_open[i];
-       console.log(this.state.song_notes_open[i]);
-       const songNote = document.getElementById("song-note-"+i);
-       if (this.state.song_notes_open[i]) {
-           songNote.style.display = "block";
-       }
-       else {
-           songNote.style.display = "none";
-       }
     }
 
     render() {
@@ -183,7 +170,11 @@ class PlaylistPageDisplay extends React.Component {
                                                             {this.state.song_notes_open[i] ? <ArrowDownComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/> : <ArrowRightComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/>}
                                                         */}    
                                                             {/* the changing from right to down doesn't work */}
-                                                            <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
+                                                            {
+                                                                song.notes ?
+                                                                <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
+                                                                : <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
+                                                            }
                                                             <b>{(i+1) + "."}</b>
                                                         </div>
                                                         <div className="col songs-col1">
