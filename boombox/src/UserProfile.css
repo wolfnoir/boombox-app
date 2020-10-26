@@ -1,0 +1,77 @@
+.user-profile {
+    width: 60%;
+    font-family: 'Roboto Condensed';
+    margin: auto;
+}
+
+.user-profile-header {
+    margin: 10px;
+}
+
+.user-profile-info {
+    padding: 10px;
+}
+
+.user-profile-img {
+    padding: 10px;
+    margin-right: 10px;
+    width: 150px;
+}
+
+.user-profile-match-followers {
+    width: 50%;
+}
+
+.user-profile-header-text {
+    font-family: 'Orbitron';
+    font-weight: 600;
+    font-size: 28px;
+    display: inline-block;
+    text-align: center;
+}
+
+.followers-link {
+    transition: 0.3s;
+    text-decoration: none;
+    color: black;
+}
+
+.followers-link:hover {
+    text-decoration: none;
+    color: black;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.username {
+    vertical-align: middle;
+    float: inline-start;
+    margin-top: 8px;
+}
+
+.match-followers {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.follow-button {
+    display: inline-block;
+    margin: 10px;
+    font-family: 'Orbitron';
+    font-size: 18px;
+    border-radius: 20px;
+    vertical-align: top;
+}
+
+.user-profile-description {
+    text-align: left;
+}
+
+.my-playlists{
+    text-align: left;
+    margin-left: 10px;
+}
+
+.user-playlists {
+    margin: auto;
+}

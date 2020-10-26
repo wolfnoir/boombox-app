@@ -11,7 +11,6 @@ import './index.css';
 
 import NavBarWrapper from './NavBarWrapper';
 import NavBarTest from './NavBarTest';
-import PlaylistTest from './PlaylistTest';
 import RelayInfo from './RelayInfo';
 
 import Bookmarks from './Bookmarks';
@@ -20,6 +19,7 @@ import Login from './Login';
 import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SettingsPane from './SettingsPane';
+import UserProfile from './UserProfile';
 
 class MyRouter extends React.Component {
 	constructor(props) {
@@ -34,7 +34,6 @@ class MyRouter extends React.Component {
 				<Switch>
 					<Route exact path="/" component={Dashboard} />
 					<Route path="/testnav" component={NavBarWrapper} />
-					<Route path="/playlist-test" component={PlaylistTest} />
 					<Route path="/login" component={Login} />
 					<Route path="/my-bookmarks">
 						{this.state.loggedIn ? <Bookmarks /> : <Redirect to="/" />}
@@ -49,7 +48,7 @@ class MyRouter extends React.Component {
 						)}
 					/>	
 					<Route path="/playlist/:playlistId" component={PlaylistPage} />
-					<Route path="/user/:username" component={RelayInfo} />
+					<Route path="/user/:username" component={UserProfile} />
 				</Switch>
 			</div>
 	    );
