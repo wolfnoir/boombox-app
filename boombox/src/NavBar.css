@@ -7,7 +7,9 @@
     display: inline-block;
     vertical-align: top;
     width: 100%;
-    font-family: 'Orbitron'
+    font-family: 'Orbitron';
+    position: fixed;
+    z-index:100;
 }
 
 #nav-bar-table {
@@ -92,6 +94,7 @@
     vertical-align: top;
     height: 100vh;
     background-color: black;
+    
     /*overflow: hidden;*/
 }
 
@@ -99,6 +102,7 @@
     /* font-family: 'Roboto Condensed'; */
     color: white;
     font-size: 30px;
+    
 }
 
 #push-menu-table td {
