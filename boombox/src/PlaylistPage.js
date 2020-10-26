@@ -6,6 +6,9 @@ import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
 import link_img from './images/link-24px.svg';
+import arrow_right_img from './images/keyboard_arrow_right-24px.svg'
+import arrow_down_img from './images/keyboard_arrow_down-24px.svg'
+
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
@@ -19,11 +22,34 @@ function PlaylistPage() {
     return <PlaylistPageDisplay playlistId={playlistId}/>
 }
 
+class ArrowDownComponent extends React.Component {
+    render() {
+        return <img className="song-arrow" id={"song-arrow-" + this.props.i} src={arrow_down_img} height="30px" width="30px" alt=">" onClick={this.props.handleSongArrowClick}/>
+    }
+}
+
+class ArrowRightComponent extends React.Component {
+    render() {
+        return <img className="song-arrow" id={"song-arrow-" + this.props.i} src={arrow_right_img} height="30px" width="30px" alt=">" onClick={this.props.handleSongArrowClick}/>
+    }
+}
+
+class ArrowDownRightComponent extends React.Component {
+    render() {
+        if (this.props.open) {
+            console.log("show down");
+            return <ArrowDownComponent i={this.props.i} handleSongArrowClick={this.props.handleSongArrowClick}/>;
+        }
+        console.log("show right");
+        return <ArrowRightComponent i={this.props.i} handleSongArrowClick={this.props.handleSongArrowClick}/>};
+}
+
 class PlaylistPageDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {}
+            data: {},
+            song_notes_open: []
         }
     }
 
@@ -32,14 +58,42 @@ class PlaylistPageDisplay extends React.Component {
         .then(res => res.json())
         .then(obj => {
             this.setState({data: obj});
-            console.log(this.state.data);
-
+            for (var i = 0; i < this.state.data.songs.length; i++) {
+                this.state.song_notes_open.push(false);
+            }
         });
-        console.log(this.state.data);
+    }
+
+    handleSongArrowClick = (i) => {
+        /*
+        const songArrow = document.getElementById("song-arrow-" + i);
+        console.log(i, songArrow);
+        console.log(songArrow.src, arrow_right_img, arrow_down_img);
+        if (songArrow) {
+            if (songArrow.src === arrow_right_img) {
+                console.log("change to down");
+                songArrow.src = arrow_down_img;
+            }
+            else {
+                console.log("change to right");
+                songArrow.src = arrow_right_img;
+            }
+        }
+        */
+       this.state.song_notes_open[i] = !this.state.song_notes_open[i];
+       console.log(this.state.song_notes_open[i]);
+       const songNote = document.getElementById("song-note-"+i);
+       if (this.state.song_notes_open[i]) {
+           songNote.style.display = "block";
+       }
+       else {
+           songNote.style.display = "none";
+       }
     }
 
     render() {
-        var filler = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
         return (
             <NavBarWrapper>
                 <div className="container" id="playlist-page-container">
@@ -60,7 +114,7 @@ class PlaylistPageDisplay extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    Last modified by <a href={"username/" + this.state.data.author}>{this.state.data.author}</a> on {new Date(this.state.data.last_modified).toDateString()} 
+                                    Last modified by <a href={"/user/" + this.state.data.author}>{this.state.data.author}</a> on {new Date(this.state.data.last_modified).toDateString()} 
                                 </div>
                             </div>
                             <div className="row">
@@ -84,8 +138,8 @@ class PlaylistPageDisplay extends React.Component {
                     <div className="row" id="row2">
                         <div className="col songs-container">
                             <div className="row" id="songs-header-row">
-                            <div className="col songs-col-0"> </div>
-                                <div className="col songs-col-1">
+                            <div className="col songs-col0"> </div>
+                                <div className="col songs-col1">
                                     <h2>SONGS - ARTIST</h2>
                                 </div>
                                 <div className="col songs-col2">
@@ -103,7 +157,34 @@ class PlaylistPageDisplay extends React.Component {
                                                 <div key={"song"+i}>
                                                     <div className="row">
                                                         <div className="col songs-col0">
-                                                        {"> " + i + "."}
+                                                            {/* should decide based on state? */}
+                                                            {/*}
+                                                        <img className="song-arrow" id={"song-arrow-" + i} 
+                                                            src={
+                                                                this.state.song_notes_open[i] ?
+                                                                arrow_down_img
+                                                                : arrow_right_img
+                                                            } 
+                                                            height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                        */}
+                                                            {/*
+                                                            {
+                                                                this.state.song_notes_open[i] ?
+                                                                <img className="song-arrow" id={"song-arrow-" + i} 
+                                                            src={arrow_down_img} 
+                                                            height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                                :
+                                                                <img className="song-arrow" id={"song-arrow-" + i} 
+                                                            src={arrow_right_img} 
+                                                            height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                            }
+                                                        */}
+                                                        {/*
+                                                            {this.state.song_notes_open[i] ? <ArrowDownComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/> : <ArrowRightComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/>}
+                                                        */}    
+                                                            {/* the changing from right to down doesn't work */}
+                                                            <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
+                                                            <b>{(i+1) + "."}</b>
                                                         </div>
                                                         <div className="col songs-col1">
                                                             <b>{song.name}</b> - {song.artist}
@@ -117,9 +198,9 @@ class PlaylistPageDisplay extends React.Component {
                                                     </div>
                                                     {
                                                         song.notes ?
-                                                        <div className="row song-notes-row">
+                                                        <div className="row song-notes-row" id={"song-note-"+i}>
                                                             <div className="col">
-                                                                {song.notes}
+                                                                <p>{song.notes}</p>
                                                             </div>
                                                         </div>
                                                         : null
@@ -146,7 +227,7 @@ class PlaylistPageDisplay extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <textarea /> 
+                                    <textarea id="comment-entry" placeholder="Add New Comment" /> 
                                 </div>
                             </div>
                             <div className="row">
@@ -154,7 +235,7 @@ class PlaylistPageDisplay extends React.Component {
                                     <button type="button" className="btn btn-primary">Submit</button>
                                 </div>
                             </div>
-                            <div className="row">
+                            <div className="row" id="displayed-comments-row">
                                 <div className="col">
                                     {
                                         this.state.data.comments ?
@@ -163,7 +244,7 @@ class PlaylistPageDisplay extends React.Component {
                                                 <div className="col">
                                                     <div className="row">
                                                         <div className="col comment-user-col">
-                                                            {comment.username}
+                                                        <a href={"/user/" + comment.username}>{comment.username}</a>
                                                         </div>
                                                         <div className="col comment-time-col">
                                                             {new Date(comment.time).toDateString()}
@@ -187,6 +268,8 @@ class PlaylistPageDisplay extends React.Component {
                     : null
 
                     }
+
+                    {/* added a fixed element here for the play track part */}
                 </div>
             </NavBarWrapper>
         );
