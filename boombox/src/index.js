@@ -20,6 +20,8 @@ import Login from './Login';
 import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SettingsPane from './SettingsPane';
+import FollowersPage from './FollowersPage';
+import FollowingPage from './FollowingPage';
 
 class MyRouter extends React.Component {
 	constructor(props) {
@@ -50,6 +52,8 @@ class MyRouter extends React.Component {
 					/>	
 					<Route path="/playlist/:playlistId" component={PlaylistPage} />
 					<Route path="/user/:username" component={RelayInfo} />
+					<Route path="/followers/:username" component={FollowersPage} />
+					<Route path="/following/:username" component={FollowingPage} />
 				</Switch>
 			</div>
 	    );
