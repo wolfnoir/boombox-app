@@ -19,12 +19,9 @@ import Login from './Login';
 import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SettingsPane from './SettingsPane';
-<<<<<<< HEAD
 import FollowersPage from './FollowersPage';
 import FollowingPage from './FollowingPage';
-=======
 import UserProfile from './UserProfile';
->>>>>>> d3d54113e61d71b79b61cb6dc39306ed911e6247
 
 class MyRouter extends React.Component {
 	constructor(props) {
