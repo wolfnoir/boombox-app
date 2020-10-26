@@ -142,7 +142,8 @@
 }
 
 #playlist-page-container .comment-row {
-    border: 1px solid grey;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
     padding: 10px;
 }
 
@@ -156,4 +157,29 @@
 
 #playlist-page-container .comment-content-col {
     text-align: left;
+}
+
+#playlist-page-container #play-track-container {
+    background-color: black;
+    color: white;
+    font-family: 'Orbitron';
+    min-height: 80px;
+    max-height: 160px;
+    padding: 10px 20px;
+}
+
+#playlist-page-container {
+    padding-bottom: calc(80px + 30px);
+}
+
+#playlist-page-container #play-track-left-col > * {
+    margin: 0px 2.5px;
+}
+
+.invert-color {
+    filter: invert(1);
+}
+
+#playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #playlist-page-container #next-song-img {
+    cursor: pointer;
 }
