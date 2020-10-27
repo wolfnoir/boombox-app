@@ -100,7 +100,7 @@ class NavBar extends React.Component {
                                 <td><a href="/"><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} /> dashboard</a></td>
                             </tr>
                             <tr>
-                                <td><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} /> my profile</td>
+                                <td><a href={this.cookie.get('username') ? "/user/" + this.cookie.get('username') : "/"}><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} /> my profile</a></td>
                             </tr>
                             <tr>
                                 <td><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} /> new playlist</td>
