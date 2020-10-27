@@ -14,7 +14,6 @@ import play_img from './images/play_circle_outline-24px.svg';
 import skip_next_img from './images/skip_next-24px.svg';
 import skip_previous_img from './images/skip_previous-24px.svg'; 
 import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
-import Tag from './Tag';
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
@@ -128,11 +127,7 @@ class PlaylistPageDisplay extends React.Component {
                             <div className="row" id="tags-row">
                                 <div className="col">
                                     <div style={{"marginRight": "10px", "display": "inline-block"}}><h2>tags:</h2></div>
-<<<<<<< HEAD
-                                    {this.state.data.tags ? this.state.data.tags.map((tag, i) => <Tag content={tag} number={i} />) : null}
-=======
                                     {this.state.data.tags ? this.state.data.tags.map((tag, i) => <Tag number = {i} content = {tag}/>) : null}
->>>>>>> 66c02e7f78858c6792003a036d43caa7a0346c31
                                 </div>
                             </div>
                         </div>
