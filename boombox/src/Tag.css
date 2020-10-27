@@ -1,9 +1,15 @@
 .tag-button {
-    background-color: rgb(108, 111, 118);
+    background-color: rgba(0, 0, 0, 0.3) !important;
     color: white;
     border: none;
-    border-radius: 250px;
+    border-radius: 25px;
     margin: 0px 5px;
-    font-size: 16px;
+    font-size: 12px;
+    font-family: 'Roboto Condensed';
     outline: none; /* need to figure out how to remove button highlight when clicked */
+    transition: 0.3s;
+}
+
+.tag-button:hover {
+    background-color: rgba(0, 0, 0, 0.7) !important;
 }

@@ -1,14 +1,14 @@
 .user-display {
     font-family: 'Roboto Condensed', sans-serif;
-    padding: 10px;
+    padding: 15px;
     display: inline-block;
     text-align: center;
 }
 
 .user-picture {
-    width: 160px;
-    height: 160px;
-    padding-bottom: 5px;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 5px;
     transition: 0.3s;
 }
 
@@ -17,5 +17,12 @@
 }
 
 .user-name {
-    font-size: 18px;
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+}
+
+.user-name:hover {
+    text-decoration: none;
+    color: black;
 }

@@ -69,15 +69,15 @@
     vertical-align: middle;
 }
 
-#playlist-page-container .tag-button {
+/* #playlist-page-container .tag-button {
     background-color: rgb(108, 111, 118);
     color: white;
     border: none;
     border-radius: 250px;
     margin: 0px 5px;
-    font-size: 16px;
-    outline: none; /* need to figure out how to remove button highlight when clicked */
-}
+    font-size: 12px;
+    outline: none; /* need to figure out how to remove button highlight when clicked 
+} */
 
 #playlist-page-container .songs-container {
     margin: 20px 0px 0px 0px;
@@ -147,6 +147,10 @@
     padding: 10px;
 }
 
+#comment-entry {
+    margin-bottom: 10px;
+}
+
 #playlist-page-container .comment-user-col {
     text-align: left;
 }
@@ -172,10 +176,14 @@
     padding-bottom: calc(80px + 30px);
 }
 
-#playlist-page-container #play-track-left-col {
-    max-width: 40%;
+#playlist-page-container #play-track-left-col > * {
+    margin: 0px 2.5px;
 }
 
 .invert-color {
     filter: invert(1);
+}
+
+#playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #playlist-page-container #next-song-img {
+    cursor: pointer;
 }

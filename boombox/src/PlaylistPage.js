@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import NavBarWrapper from './NavBarWrapper';
+import Tag from './Tag';
 import './css/bootstrap.min.css';
 import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
@@ -127,7 +128,11 @@ class PlaylistPageDisplay extends React.Component {
                             <div className="row" id="tags-row">
                                 <div className="col">
                                     <div style={{"marginRight": "10px", "display": "inline-block"}}><h2>tags:</h2></div>
+<<<<<<< HEAD
                                     {this.state.data.tags ? this.state.data.tags.map((tag, i) => <Tag content={tag} number={i} />) : null}
+=======
+                                    {this.state.data.tags ? this.state.data.tags.map((tag, i) => <Tag number = {i} content = {tag}/>) : null}
+>>>>>>> 66c02e7f78858c6792003a036d43caa7a0346c31
                                 </div>
                             </div>
                         </div>
@@ -274,9 +279,9 @@ class PlaylistPageDisplay extends React.Component {
                     <div className="container fixed-bottom" id="play-track-container">
                         <div className="row">
                             <div className="col-md-auto" id="play-track-left-col">
-                                <img className="invert-color" src={skip_previous_img} height="60px" width="60px" />
-                                <img className="invert-color" src={play_img} height="60px" width="60px" /> {/* need to add the switch to pause, same issue as note arrow*/}
-                                <img className="invert-color" src={skip_next_img} height="60px" width="60px" />
+                                <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" />
+                                <img id="play-pause-img" className="invert-color" src={play_img} height="60px" width="60px" /> {/* need to add the switch to pause, same issue as note arrow*/}
+                                <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" />
                             </div>
                             <div className="col" id="play-track-right-col">
                                 <div className="row">
