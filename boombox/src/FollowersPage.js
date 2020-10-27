@@ -33,19 +33,24 @@ class FollowersPage extends React.Component {
         }
     }
 
-    componentDidMount() {
-        const{ username } = this.props.match.params;
-        this.setState({user: username});
-
+    getFollowers() {
         fetch(`/getFollowers/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
             this.setState({followers: obj.users});
         })
+    }
 
-        for(var i = 0; i < this.state.followers.length; i++) {
-            this.state.followers[i].image = require(this.state.followers[i].profile_image_url);
-        }
+    componentDidMount() {
+        const{ username } = this.props.match.params;
+
+        this.setState({user: username}, () => {
+            this.getFollowers();
+
+            for(var i = 0; i < this.state.followers.length; i++) {
+                this.state.followers[i].image = require(this.state.followers[i].profile_image_url);
+            }
+        });
     }
 
     render() {

@@ -27,7 +27,7 @@ class SearchResults extends React.Component {
     }
 
     getResultingUsers() {
-        fetch(`/getSearchResults/${this.props.query}`)
+        fetch(`/getSearchResults/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
             this.setState({users: obj.users});
@@ -35,7 +35,7 @@ class SearchResults extends React.Component {
     }
 
     getResultingPlaylists() {
-        fetch(`/getSearchResults/${this.props.query}`)
+        fetch(`/getSearchResults/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
             this.setState({playlists: obj.playlists});
@@ -43,7 +43,7 @@ class SearchResults extends React.Component {
     }
 
     getResultingTags() {
-        fetch(`/getSearchResults/${this.props.query}`)
+        fetch(`/getSearchResults/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
             this.setState({tags: obj.tags});
@@ -52,11 +52,11 @@ class SearchResults extends React.Component {
 
     componentDidMount() {
         const{ query } = this.props.match.params;
-        this.setState({queryString: query});
-
-        this.getResultingUsers();
-        this.getResultingPlaylists();
-        this.getResultingTags();
+        this.setState({queryString: query}, () => {
+            this.getResultingUsers();
+            this.getResultingPlaylists();
+            this.getResultingTags();
+        });
     }
 
     render(){

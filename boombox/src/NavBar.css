@@ -84,6 +84,19 @@
     font-size: 16px;
 }
 
+#search-button {
+    background-color: black;
+    color: white;
+    border: none;
+    font-size: 15px;
+    font-family: 'Roboto Condensed';
+    outline: none;
+}
+
+#search-button:hover {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
 
 /*--------------------*/
 
