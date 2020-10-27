@@ -54,8 +54,9 @@ class PlaylistPageDisplay extends React.Component {
         this.state = {
             data: {},
             song_notes_open: [],
-            //current_playing_song: null //correct one
-            current_playing_song: 2 //temporary for showing
+            //current_song: null, //correct one
+            current_song: 2, //temporary for showing
+            is_song_playing: false
         }
     }
 
@@ -87,9 +88,7 @@ class PlaylistPageDisplay extends React.Component {
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
-        console.log(this.state.current_playing_song);
-        console.log(this.state.data.songs);
-        if (this.state.data.songs) console.log(this.state.data.songs[this.state.current_playing_song]);
+
         return (
             <NavBarWrapper>
                 <div className="container" id="playlist-page-container">
@@ -154,7 +153,7 @@ class PlaylistPageDisplay extends React.Component {
                                                     <div className="row">
                                                         <div className="col songs-col0">
                                                             {/* should decide based on state? */}
-                                                            {/*}
+                                                            
                                                         <img className="song-arrow" id={"song-arrow-" + i} 
                                                             src={
                                                                 this.state.song_notes_open[i] ?
@@ -162,7 +161,7 @@ class PlaylistPageDisplay extends React.Component {
                                                                 : arrow_right_img
                                                             } 
                                                             height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                        */}
+                                                        
                                                             {/*
                                                             {
                                                                 this.state.song_notes_open[i] ?
@@ -179,11 +178,13 @@ class PlaylistPageDisplay extends React.Component {
                                                             {this.state.song_notes_open[i] ? <ArrowDownComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/> : <ArrowRightComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/>}
                                                         */}    
                                                             {/* the changing from right to down doesn't work */}
+                                                            {/*
                                                             {
                                                                 song.notes ?
                                                                 <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
                                                                 : <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
                                                             }
+                                                        */}
                                                             <b>{(i+1) + "."}</b>
                                                         </div>
                                                         <div className="col songs-col1">
@@ -286,8 +287,8 @@ class PlaylistPageDisplay extends React.Component {
                                 <div className="row">
                                     <div className="col">
                                         {
-                                            this.state.current_playing_song !== null && this.state.data.songs &&  this.state.data.songs[this.state.current_playing_song] ?
-                                            <EllipsisWithTooltip placement="top">{this.state.current_playing_song + 1}. {this.state.data.songs[this.state.current_playing_song].name} - {this.state.data.songs[this.state.current_playing_song].artist}</EllipsisWithTooltip>
+                                            this.state.current_song !== null && this.state.data.songs &&  this.state.data.songs[this.state.current_song] ?
+                                            <EllipsisWithTooltip placement="top">{this.state.current_song + 1}. {this.state.data.songs[this.state.current_song].name} - {this.state.data.songs[this.state.current_song].artist}</EllipsisWithTooltip>
                                             : null
                                         }
                                     </div>
