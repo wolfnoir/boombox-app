@@ -33,19 +33,24 @@ class FollowingPage extends React.Component {
         }
     }
 
-    componentDidMount() {
-        const{ username } = this.props.match.params;
-        this.setState({user: username});
-
-        fetch(`/getFollowing/${this.props.username}`)
+    getFollowingUsers() {
+        fetch(`/getFollowing/${this.state.user}`)
         .then(res => res.json())
         .then(obj => {
             this.setState({following: obj.users});
         })
+    }
 
-        for(var i = 0; i < this.state.following.length; i++) {
-            this.state.following[i].image = require(this.state.following[i].profile_image_url);
-        }
+    componentDidMount() {
+        const{ username } = this.props.match.params;
+
+        this.setState({user: username}, () => {
+            this.getFollowingUsers();
+
+            for(var i = 0; i < this.state.following.length; i++) {
+                this.state.following[i].image = require(this.state.following[i].profile_image_url);
+            }
+        });
     }
 
     render() {

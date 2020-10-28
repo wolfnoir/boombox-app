@@ -109,8 +109,12 @@ class PlaylistEditDisplay extends React.Component {
                         <div className="col">
                             <div className="row">
                                 <div className="col" id="playlist-edit-state-buttons-col">
-                                    <button type="button" className="btn btn-primary">Save Changes</button>
-                                    <button type="button" className="btn btn-danger">Cancel</button>
+                                    <a href={"/playlist/" + this.props.playlistId}>
+                                        <button type="button" className="btn btn-primary">Save Changes</button>
+                                    </a>
+                                    <a href={"/playlist/" + this.props.playlistId}>
+                                        <button type="button" className="btn btn-danger">Cancel</button>
+                                    </a>
                                 </div>
                             </div>
                             <div className="row" id="title-row">
