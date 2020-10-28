@@ -7,6 +7,7 @@ import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
 import link_img from './images/link-24px.svg';
+import edit_img from './images/create-24px.svg';
 import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
 import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
 import pause_img from './images/pause_circle_outline-24px.svg';
@@ -105,6 +106,7 @@ class PlaylistPageDisplay extends React.Component {
                                         <img src={like_img} height="30px" width="30px" />
                                         <img src={bookmark_img} height="30px" width="30px" />
                                         <img src={link_img} height="30px" width="30px" />
+                                        <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
                                     </div>
                                 </div>
                             </div>
