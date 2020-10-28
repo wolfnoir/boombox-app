@@ -21,7 +21,8 @@ class NavBar extends React.Component {
         this.iconSize = "30px";
         this.cookie = new Cookie();
         this.state = {
-            pushMenuVisible: false
+            pushMenuVisible: false,
+            inputVal: "",
         }
     }
 
@@ -65,6 +66,10 @@ class NavBar extends React.Component {
         pushMenu.style.marginLeft = -pushMenu.offsetWidth - 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
         //navBar.style.width = document.getElementById("root").offsetWidth + "px";
         //console.log(this.cookie.get("username"));
+    }
+
+    updateInput = (event) => {
+        this.setState({inputVal: event.target.value});
     }
 
     render() {
@@ -120,7 +125,12 @@ class NavBar extends React.Component {
                             <tr>
                                 <td><img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/></td>
                                 <td><a href = "/" id = "boombox-header">boombox</a></td>
-                                <td><input id="search-bar" placeholder="Search" type="text"></input></td>
+                                <td>
+                                    <input id="search-bar" placeholder="Search" onChange={this.updateInput} type="text"/> 
+                                    <a href = {"/search/" + this.state.inputVal}>
+                                        <button id="search-button">Search</button>
+                                    </a>
+                                </td>
                                 <td>{settingsIcon}</td>
                             </tr>
                         </tbody>

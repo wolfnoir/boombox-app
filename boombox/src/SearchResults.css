@@ -1,0 +1,27 @@
+.search-results {
+    width: 60%;
+    font-family: 'Roboto Condensed';
+    margin: auto;
+}
+
+.search-result-label {
+    font-family: 'Orbitron';
+    font-weight: 600;
+    font-size: 28px;
+    text-align: center;
+}
+
+.user-results {
+    text-align: center;
+    vertical-align: text-top;
+}
+
+.tag-results {
+    text-align: left;
+    vertical-align: text-top;
+    width: 50%;
+}
+
+.playlists-results {
+    text-align: left;
+}
