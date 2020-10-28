@@ -173,7 +173,7 @@
 }
 
 #playlist-page-container {
-    padding-bottom: calc(80px + 30px);
+    padding-bottom: calc(80px + 30px); /* could use some changes for smaller viewport */
 }
 
 #playlist-page-container #play-track-left-col > * {

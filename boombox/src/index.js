@@ -16,6 +16,7 @@ import RelayInfo from './RelayInfo';
 import Bookmarks from './Bookmarks';
 import Dashboard from './Dashboard';
 import Login from './Login';
+import PlaylistEdit from './PlaylistEdit';
 import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SettingsPane from './SettingsPane';
@@ -49,6 +50,7 @@ class MyRouter extends React.Component {
 							<SettingsPane profile_image="" />
 						)}
 					/>	
+					<Route path="/playlist/:playlistId/edit" component={PlaylistEdit} /> {/* add something here or in the class to only allow access is user is creator of playlist*/}
 					<Route path="/playlist/:playlistId" component={PlaylistPage} />
 					<Route path="/user/:username/followers" component={FollowersPage} />
 					<Route path="/user/:username/following" component={FollowingPage} />

@@ -3,17 +3,16 @@ import { useParams } from 'react-router';
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
 import './css/bootstrap.min.css';
-import './PlaylistPage.css';
+import './PlaylistEdit.css';
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
 import link_img from './images/link-24px.svg';
 import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
 import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
-import pause_img from './images/pause_circle_outline-24px.svg';
-import play_img from './images/play_circle_outline-24px.svg';
-import skip_next_img from './images/skip_next-24px.svg';
-import skip_previous_img from './images/skip_previous-24px.svg'; 
-import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
+import settings_img from './images/settings-24px.svg';
+import add_circle_img from './images/add_circle-24px.svg';
+import remove_circle_img from './images/remove_circle-24px.svg';
+import edit_img from './images/edit-24px.svg';
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
@@ -21,10 +20,10 @@ import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 import horse_img from './images/horse.png';
 /*-----------------------------------------*/
 
-function PlaylistPage() {
+function PlaylistEdit() {
     let { playlistId } = useParams();
     console.log(playlistId);
-    return <PlaylistPageDisplay playlistId={playlistId}/>
+    return <PlaylistEditDisplay playlistId={playlistId}/>
 }
 
 class ArrowDownComponent extends React.Component {
@@ -49,7 +48,17 @@ class ArrowDownRightComponent extends React.Component {
         return <ArrowRightComponent i={this.props.i} handleSongArrowClick={this.props.handleSongArrowClick}/>};
 }
 
-class PlaylistPageDisplay extends React.Component {
+class PlaylistSettings extends React.Component {
+    render() {
+        return (
+            <div class="container" id="playlist-settings-container">
+                hello world
+            </div>
+        )
+    }
+}
+
+class PlaylistEditDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -88,45 +97,47 @@ class PlaylistPageDisplay extends React.Component {
 
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
+        var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
 
         return (
             <NavBarWrapper>
-                <div className="container" id="playlist-page-container">
+                <div className="container" id="playlist-edit-container">
                     <div className="row" id="row1">
                         <div className="col" id="playlist-cover-container">
                             <img src={horse_img} id="playlist-cover" width="250px" height="250px"/>
                         </div>
                         <div className="col">
+                            <div className="row">
+                                <div className="col" id="playlist-edit-state-buttons-col">
+                                    <button type="button" className="btn btn-primary">Save Changes</button>
+                                    <button type="button" className="btn btn-danger">Cancel</button>
+                                </div>
+                            </div>
                             <div className="row" id="title-row">
                                 <div className="col">
                                     <h1>{this.state.data.name}</h1>
                                     <div id="icons-div">
-                                        <img src={like_img} height="30px" width="30px" />
-                                        <img src={bookmark_img} height="30px" width="30px" />
-                                        <img src={link_img} height="30px" width="30px" />
+                                        <img src={settings_img} height="30px" width="30px" />
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    Last modified by <a href={"/user/" + this.state.data.author}>{this.state.data.author}</a> on {new Date(this.state.data.last_modified).toDateString()} 
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    {this.state.data.num_likes} Likes
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <br/><p>{this.state.data.description}</p>
+                                    <p>{this.state.data.description}</p>
                                 </div>
                             </div>
                             <div className="row" id="tags-row">
                                 <div className="col">
                                     <div style={{"marginRight": "10px", "display": "inline-block"}}><h2>tags:</h2></div>
-                                    {this.state.data.tags ? this.state.data.tags.map((tag, i) => <Tag number = {i} content = {tag}/>) : null}
+                                    {this.state.data.tags ? 
+                                        this.state.data.tags.map((tag, i) => 
+                                        <div key={"tagDiv" + i} style={{"display": "inline-block"}}>
+                                            <Tag number = {i} content = {tag}/>
+                                            <img className="remove-tag-icon" src={remove_circle_img} />
+                                        </div>
+                                        ) 
+                                        : null}
+                                    <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" />
                                 </div>
                             </div>
                         </div>
@@ -202,7 +213,7 @@ class PlaylistPageDisplay extends React.Component {
                                                         song.notes ?
                                                         <div className="row song-notes-row" id={"song-note-"+i}>
                                                             <div className="col">
-                                                                <p>{song.notes}</p>
+                                                                <textarea className="song-notes-textarea" id={"song-note-"+i+"-textarea"} value={song.notes} />
                                                             </div>
                                                         </div>
                                                         : null
@@ -213,94 +224,24 @@ class PlaylistPageDisplay extends React.Component {
                                         }
                                     </div>
                                 </div>
-                            </div>
+                            </div>        
                     </div>
-
-                    {
-
-                    this.state.data.comments_enabled ?
-
                     <div className="row" id="row3">
-                        <div className="col" id="playlist-comments-container">
-                            <div className="row">
+                        <div className="col">
+                            <div className="row" id="title-row">
                                 <div className="col">
-                                    <h1>Comments</h1>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <textarea id="comment-entry" placeholder="Add New Comment" /> 
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <button type="button" className="btn btn-primary">Submit</button>
-                                </div>
-                            </div>
-                            <div className="row" id="displayed-comments-row">
-                                <div className="col">
-                                    {
-                                        this.state.data.comments ?
-                                        this.state.data.comments.map((comment, i) => (
-                                            <div className="row comment-row" key={"comment"+i}>
-                                                <div className="col">
-                                                    <div className="row">
-                                                        <div className="col comment-user-col">
-                                                        <a href={"/user/" + comment.username}>{comment.username}</a>
-                                                        </div>
-                                                        <div className="col comment-time-col">
-                                                            {new Date(comment.time).toDateString() + " " + new Date(comment.time).toLocaleTimeString()}
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col comment-content-col">
-                                                            {comment.content}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                        : null
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    : null
-
-                    }
-
-                    {/* added a fixed element here for the play track part */}
-                    <div className="container fixed-bottom" id="play-track-container">
-                        <div className="row">
-                            <div className="col-md-auto" id="play-track-left-col">
-                                <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" />
-                                <img id="play-pause-img" className="invert-color" src={play_img} height="60px" width="60px" /> {/* need to add the switch to pause, same issue as note arrow*/}
-                                <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" />
-                            </div>
-                            <div className="col" id="play-track-right-col">
-                                <div className="row">
-                                    <div className="col">
-                                        <EllipsisWithTooltip placement="top"><h2>{this.state.data.name} by {this.state.data.author}</h2></EllipsisWithTooltip>
-                                        </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col">
-                                        {
-                                            this.state.current_song !== null && this.state.data.songs &&  this.state.data.songs[this.state.current_song] ?
-                                            <EllipsisWithTooltip placement="top">{this.state.current_song + 1}. {this.state.data.songs[this.state.current_song].name} - {this.state.data.songs[this.state.current_song].artist}</EllipsisWithTooltip>
-                                            : null
-                                        }
-                                    </div>
+                                    <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
+                                    <h1>add song</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* put playlist-settings class here, in similar view to settingspane in navbar.js */}
             </NavBarWrapper>
         );
     }
 }
 
-export default PlaylistPage;
+export default PlaylistEdit;

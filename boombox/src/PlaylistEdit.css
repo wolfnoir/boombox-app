@@ -1,0 +1,216 @@
+#playlist-edit-container {
+    font-family: 'Roboto Condensed';
+    font-size: 16px;
+}
+
+#playlist-edit-container > * > * {
+    border-width: 0px;
+    border-color: red;
+    border-style: solid;
+}
+
+#playlist-edit-container #playlist-edit-state-buttons-col {
+    margin-bottom: 5px;
+}
+
+#playlist-edit-container #playlist-edit-state-buttons-col > button {
+    margin-right: 10px;
+}
+
+#playlist-edit-container #title-row, #playlist-edit-container #tags-row {
+    font-family: 'Orbitron';
+}
+
+#playlist-edit-container h1 {
+    font-size: 30px;
+    display: inline-block;
+}
+
+#playlist-edit-container h2 {
+    font-size: 24px;
+    display: inline-block;
+}
+
+#playlist-edit-container p {
+    font-size: 16px;
+}
+
+#playlist-edit-container .btn-primary {
+    border-radius: 250px;
+    background-color: rgb(0, 136, 209);
+    font-size: 16px;
+}
+
+#playlist-edit-container .btn-danger {
+    border-radius: 250px;
+    background-color: rgb(240, 110, 156);
+    font-size: 16px;
+}
+
+#playlist-edit-container textarea {
+    width: 75%;
+}
+
+#playlist-edit-container #row1 > * {
+    margin-top: auto;
+}
+
+/*
+/* How to deal with overflow in description (really long word)
+#playlist-page .col {
+    overflow-wrap: break-word;
+}
+*/
+
+#playlist-edit-container #playlist-cover-container {
+    padding: 20px;
+    max-width: 290px;
+}
+
+/* need to figure out how to vertical align with title */
+#playlist-edit-container #icons-div {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+#playlist-edit-container #icons-div > img {
+    margin: 0 2.5px;
+}
+
+/* figure out how to vertically align this row */
+#playlist-edit-container #tags-row > * {
+    margin: auto;
+    vertical-align: middle;
+}
+
+#playlist-edit-container #add-tag-icon {
+    cursor: pointer;
+}
+
+#playlist-edit-container .remove-tag-icon {
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    vertical-align: top;
+    margin-left: -5px;
+    margin-right: 5px;
+}
+
+/* #playlist-edit-container .tag-button {
+    background-color: rgb(108, 111, 118);
+    color: white;
+    border: none;
+    border-radius: 250px;
+    margin: 0px 5px;
+    font-size: 12px;
+    outline: none; /* need to figure out how to remove button highlight when clicked 
+} */
+
+#playlist-edit-container .songs-container {
+    margin: 20px 0px 0px 0px;
+    border-bottom: 2px solid grey;
+}
+
+#playlist-edit-container .songs-col0 {
+    border: 0px solid blue;
+    text-align: right;
+    max-width: 7%; 
+}
+
+#playlist-edit-container .songs-col1 {
+    border: 0px solid rgb(255, 102, 0);
+    text-align: left;
+}
+
+#playlist-edit-container .songs-col2 {
+    border: 0px solid purple;
+    text-align: center;
+}
+
+#playlist-edit-container .songs-col3 {
+    text-align: right;
+    padding-right: 5%;
+    border: 0px solid green;
+}
+
+#playlist-edit-container #songs-header-row {
+    font-family: 'Orbitron';
+    border-bottom: 2px solid grey;
+}
+
+#playlist-edit-container #songs-data-container-row {
+    padding: 10px 0px;
+}
+
+#playlist-edit-container #songs-data-container-row > * > * {
+    padding: 5px 0px;
+}
+
+
+#playlist-edit-container .song-arrow {
+    cursor: pointer;
+}
+
+#playlist-edit-container .song-notes-row {
+    margin: 0px auto 10px auto;
+    background-color: rgb(245, 245, 245);
+    width: 80%;
+    text-align: center;
+    display: none;
+}
+
+#playlist-edit-container .song-notes-textarea {
+    background-color: rgb(245, 245, 245);
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+#playlist-edit-container #playlist-comments-container {
+    text-align: center;
+    margin: 30px 0px 0px 0px;
+}
+
+#playlist-edit-container #displayed-comments-row {
+    margin-top: 20px;
+}
+
+#playlist-edit-container .comment-row {
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    padding: 10px;
+}
+
+#comment-entry {
+    margin-bottom: 10px;
+}
+
+#playlist-edit-container .comment-user-col {
+    text-align: left;
+}
+
+#playlist-edit-container .comment-time-col {
+    text-align: right;
+}
+
+#playlist-edit-container .comment-content-col {
+    text-align: left;
+}
+
+.invert-color {
+    filter: invert(1);
+}
+
+#playlist-edit-container #row3 {
+    text-align-last: center;
+    margin: 20px 0px 0px 0px;
+}
+
+#playlist-edit-container #row3 > * > * > * > * {
+    vertical-align: middle;
+    margin: 0px 5px;
+}
+
+#playlist-edit-container #add-song-icon {
+    cursor: pointer;
+}
