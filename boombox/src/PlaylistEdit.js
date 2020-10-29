@@ -4,6 +4,9 @@ import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
 import './css/bootstrap.min.css';
 import './PlaylistEdit.css';
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
 import link_img from './images/link-24px.svg';
@@ -11,8 +14,10 @@ import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
 import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
 import settings_img from './images/settings-24px.svg';
 import add_circle_img from './images/add_circle-24px.svg';
+import add_box_img from './images/add_box-24px.svg';
 import remove_circle_img from './images/remove_circle-24px.svg';
 import edit_img from './images/edit-24px.svg';
+
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
@@ -49,12 +54,84 @@ class ArrowDownRightComponent extends React.Component {
 }
 
 class PlaylistSettings extends React.Component {
-    render() {
+    constructor(props){
+        super(props);
+        this.state = {
+            show: false,
+            setShow: false,
+            name: this.props.playlistName,
+            desc: this.props.playlistDesc
+        }
+    }
+
+    render(){
+        const handleClose = () => this.setState({show: false});
+        const handleShow = () => this.setState({show: true});
         return (
-            <div class="container" id="playlist-settings-container">
-                hello world
+        <div>
+          <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
+    
+          <Modal show={this.state.show} onHide={handleClose} size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                backdrop="static"
+                keyboard={false}> 
+
+            <div className = "settings-modal-header">
+                settings
             </div>
-        )
+
+            <Form className = "settings-modal-content">
+                <Form.Group style = {{display: 'inline-block', marginRight: '50px'}}>
+                    <Form.File style = {{display: 'inline-block'}}>
+                        <img src = {add_box_img} style={{filter: 'invert(1)', width: '100px', cursor: 'pointer'}}/>
+                    </Form.File>
+                    <div style = {{display: 'inline-block', fontFamily: 'Roboto Condensed', width: '30%', verticalAlign: 'middle'}}>
+                        <b>Upload Cover</b><br/>
+                        Must be JPG, JPEG, PNG, or GIF, under 500KB
+                    </div>
+                </Form.Group>
+
+                <Form.Group style = {{display: 'inline-block', verticalAlign: 'middle'}} className = "settings-modal-checkboxes">
+                    <Form.Check label = "Public Playlist" className = "settings-checkbox"/>
+                    <Form.Check label = "Enable Comments" className = "settings-checkbox"/>
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control>{this.state.playlistName}</Form.Control><br/>
+                    <Form.Label>Description</Form.Label><br/>
+                    <textarea className = "settings-modal-description">{this.state.playlistDesc}</textarea>
+                </Form.Group>
+            </Form>
+
+            <center>
+              <Button variant="primary" onClick={handleClose}>
+                Save
+              </Button>
+
+              <Button variant="secondary" onClick={handleClose}>
+                Cancel
+              </Button>
+
+              <Button variant="danger">
+                Delete Playlist
+              </Button>
+            </center>
+            {/* <Modal.Header closeButton>
+              <Modal.Title>Settings</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+            <Modal.Footer>
+              <center>
+              <Button variant="primary" onClick={handleClose}>
+                Save
+              </Button>
+              </center>
+            </Modal.Footer> */}
+          </Modal>
+        </div>
+      );
     }
 }
 
@@ -121,7 +198,9 @@ class PlaylistEditDisplay extends React.Component {
                                 <div className="col">
                                     <h1>{this.state.data.name}</h1>
                                     <div id="icons-div">
-                                        <img src={settings_img} height="30px" width="30px" />
+                                        {/* put playlist-settings class here, in similar view to settingspane in navbar.js */}
+                                        <PlaylistSettings playlistName = {this.state.data.name} playlistDesc = {this.state.data.description}/>
+                                        {/* <img src={settings_img} height="30px" width="30px" /> */}
                                     </div>
                                 </div>
                             </div>
@@ -242,7 +321,6 @@ class PlaylistEditDisplay extends React.Component {
                     </div>
                 </div>
 
-                {/* put playlist-settings class here, in similar view to settingspane in navbar.js */}
             </NavBarWrapper>
         );
     }

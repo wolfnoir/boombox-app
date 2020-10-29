@@ -214,3 +214,53 @@
 #playlist-edit-container #add-song-icon {
     cursor: pointer;
 }
+
+/*---------------------------------------*/
+
+#playlist-settings-button {
+    transition: 0.3s;
+}
+
+#playlist-settings-button:hover {
+    box-shadow: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.modal-content{
+    background: black;
+    color: white;
+    font-family: 'Orbitron';
+    padding: 10px;
+}
+
+.settings-modal-header {
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+    margin: 5px;
+}
+
+.settings-modal-content {
+    font-family: 'Roboto Condensed';
+}
+
+.modal-content button{
+    margin: 5px;
+    font-weight: 600;
+}
+
+.settings-modal-checkboxes {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.form-check {
+    height: 50px;
+}
+
+.settings-modal-description {
+    height: 200px;
+    width: 100%;
+    border-radius: 5px;
+}
