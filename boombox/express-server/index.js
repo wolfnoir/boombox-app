@@ -44,33 +44,14 @@ app.get("/logoutUser", (req, res) => {
 	res.send("logout " + user);
 });
 
-app.post("/editUsername", (req, res) => {
-	
-});
+app.post("/editUserSettings", (req, res) => {
 
-app.post("/editPassword", (req, res) => {
-	
-});
-
-app.post("/editProfileImage", (req, res) => {
-	
-});
-
-app.post("/editEmail", (req, res) => {
-	
-});
-
-app.post("/editBio", (req, res) => {
-	
 });
 
 //is a placeholder, can expand on it later
 app.post("/editPlaylist", (req, res) => {
 	
 });
-
-
-
 
 //should these be get, post, or both?
 
