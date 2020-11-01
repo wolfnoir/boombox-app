@@ -20,6 +20,8 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+const UserHandler = require('./UserHandler.js');
+
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
 const mongoUserCollection = 'users';
@@ -35,25 +37,22 @@ app.get("/helloworld", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
 });
 
+
+/*
 //should be post
 app.get("/registerUser", (req, res) => {
-	MongoClient.connect(mongoUrl, {useNewUrlParser: true}, (error, client) => {
-		if (error) throw error;
-		const collection = client.db(monogDbName).collection(mongoUserCollection);
-		// perform actions on the collection object
-		collection.insertOne({
-			id: 0,
-			username: 'test-user',
-			password: 'tfyydfwuefciuw',
-			email: 'test@test.com',
-			salt: '37tgde7ergcue3b2i3',
-			followers: [],
-			followees: []
-		});
-		client.close();
-	});
+	
+	const username = 'test-user'; //req.body.username;
+	const password = 'testPassword123?'; //req.body.password;
+	const email = 'test@test.com'; ////req.body.email;
+	var e = UserHandler.registerUser(username, password, email);
+	console.log("e: " + e);
 	res.send("hello");
 });
+*/
+
+app.get("/registerUser", UserHandler.registerUserRoute);
+
 
 app.get("/loginUser", (req, res) => {
     //request.session.loggedin = true;
