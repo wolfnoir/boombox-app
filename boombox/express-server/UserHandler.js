@@ -28,29 +28,49 @@ class UserHandler {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
-        }).catch(err => {throw err});
+        }).catch(err => {
+            console.log(err);
+            return -1;
+        });
 
         if (!client) {
-            return;
+            console.log("Client is null");
+            return -1;
         }
+
         try {
             const collection = client.db(monogDbName).collection(mongoUserCollection);
             const userQuery = {'$or': [{username: username}, {email: email}]};
             var cursor = collection.find(userQuery);
             if (await cursor.count() != 0) {
                 console.log("duplicate");
-                return false;
+                return 1;
             }
-            await collection.insertOne({username: 'test-user'});
+            const salt = crypto.randomBytes(16).toString('hex');
+            const hashedPassword = crypto.createHash('sha256').update(password + salt).digest('hex');
+            console.log(hashedPassword);
+            await collection.insertOne({
+                username: username,
+                email: email,
+                password: hashedPassword,
+                salt: salt,
+                pw_reset_link: null,
+                icon_url: null,
+                bio: '',
+                following: [],
+                followers: [],
+                bookmarks: []
+            });
         }
         catch (err) {
-            throw err;
+            console.log(err);
+            return -1;
         }
         finally {
             client.close();
         }
         console.log("okay");
-        return true;
+        return 0;
     }
 
     static async registerUserRoute(req, res) {
@@ -58,8 +78,9 @@ class UserHandler {
 	    const password = 'testPassword123?'; //req.body.password;
         const email = 'test@test.com'; ////req.body.email;
         const success = await UserHandler.registerUser(username, password, email);
-
-        res.send(success);
+        res.send({
+            statusCode: success //-1: an error occurred, 0: success, 1: duplicate username or email
+        });
     }
 }
 
