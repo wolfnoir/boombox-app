@@ -3,6 +3,8 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const MongoClient = require('mongodb');
+const { assert } = require("console");
 const app = express(); // create express app
 
 // add middlewares
@@ -16,8 +18,14 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
-
 app.use(cookieParser());
+
+const mongoUrl = 'mongodb://localhost:27017'; //Will need to change later
+const monogDbName = 'boombox';
+const mongoUserCollection = 'users';
+const mongoPlaylistCollection = 'playlists';
+const mongoSongCollection = 'songs';
+const mongoTagCollection = 'tags';
 
 /*-----------------------------------------------------
 Non-React routes (take priority over React routes)
@@ -25,6 +33,27 @@ Non-React routes (take priority over React routes)
 
 app.get("/helloworld", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
+});
+
+//should be post
+app.get("/registerUser", (req, res) => {
+	MongoClient.connect(mongoUrl, (err, client) => {
+		if (err) throw err;
+		console.log("Connected successfully to server");
+		const db = client.db(monogDbName);
+		const collection = db.collection(mongoUserCollection);
+		collection.insertMany([{
+			id: 0,
+			username: 'test-user',
+			password: 'tfyydfwuefciuw',
+			email: 'test@test.com',
+			salt: '37tgde7ergcue3b2i3',
+			followers: [],
+			followees: []
+		}]);
+		client.close();
+	});
+	res.send("hello");
 });
 
 app.get("/loginUser", (req, res) => {

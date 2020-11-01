@@ -1,0 +1,7 @@
+Install mongo for terminal
+
+You can connect with terminal with the command 'mongo'
+
+If it fails to connect, run the command 'mongod' in the background (with sudo if need be)
+
+Make the directory '/data/db' for 'mongod' if needed
