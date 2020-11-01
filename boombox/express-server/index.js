@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const mongoUrl = 'mongodb://localhost:27017'; //Will need to change later
+const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
 const mongoUserCollection = 'users';
 const mongoPlaylistCollection = 'playlists';
@@ -37,12 +37,11 @@ app.get("/helloworld", (req, res) => {
 
 //should be post
 app.get("/registerUser", (req, res) => {
-	MongoClient.connect(mongoUrl, (err, client) => {
-		if (err) throw err;
-		console.log("Connected successfully to server");
-		const db = client.db(monogDbName);
-		const collection = db.collection(mongoUserCollection);
-		collection.insertMany([{
+	MongoClient.connect(mongoUrl, {useNewUrlParser: true}, (error, client) => {
+		if (error) throw error;
+		const collection = client.db(monogDbName).collection(mongoUserCollection);
+		// perform actions on the collection object
+		collection.insertOne({
 			id: 0,
 			username: 'test-user',
 			password: 'tfyydfwuefciuw',
@@ -50,7 +49,7 @@ app.get("/registerUser", (req, res) => {
 			salt: '37tgde7ergcue3b2i3',
 			followers: [],
 			followees: []
-		}]);
+		});
 		client.close();
 	});
 	res.send("hello");
