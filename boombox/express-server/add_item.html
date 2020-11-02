@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Tweet</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      function send_add_media_request() {
+        console.log("hi");
+        var formData = new FormData(document.getElementById("add_file_form"));
+        $.ajax({
+          type: "POST",
+          url: "/testImage",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(result) {
+            console.log(result);
+            if (result.status == "OK") {
+              document.getElementById("uploaded_media").innerHTML += "<br>" + result.id;
+              if (document.getElementById("media_list").value == "") {
+                document.getElementById("media_list").value = result.id;
+              }
+              else {
+                document.getElementById("media_list").value += "," + result.id;
+              }
+            }
+            else {
+              console.log("Upload failed - Error: " + result.error);
+            }
+          }
+        });
+      }
+    </script>
+  </head>
+
+  <body>
+
+    <h1>Add Tweet</h1>
+    
+    <div id="toptext"></div>
+    
+    <form method="POST" action="/login" id="addform">
+      
+      <p>User: {% if username %}{{username}}{% else %}None{% endif %}</p>
+      
+      <p>Content: <textarea form="addform" name="content" id="content"></textarea></p>
+      <p>
+	<select name="childType" id="childType">
+	  <option value="">Null</option>
+	  <option value="retweet">Retweet</option>
+	  <option value="reply">Reply</option>
+	</select>
+      </p>
+      <p>Parent: <input type="text" id="parent"></p>
+    </form>
+
+    <p>
+      <form method="POST" id="add_file_form" enctype="multipart/form-data">
+	<h4>Add Media</h4>
+  <input type="file" name="content" id="add_file">
+  <input type="text" name="test_text" id="the_text" value="Example Text" />
+	<button type="button" onclick="send_add_media_request()">Add File</button>
+      </form>
+    </p>
+    <p>
+      <h4>Uploaded Media</h4>
+      <div id="uploaded_media" name="content"></div>
+      <input type="hidden" value="" id="media_list">
+    </p>
+    
+    <p><button type="button" onclick="send_add_item_request()">Add Item</button></p>
+      
+    
+  </body>
+
+  
+</html>
