@@ -22,7 +22,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const UserHandler = require('./UserHandler.js');
-const { logoutUserRoute } = require("./UserHandler.js");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
@@ -55,7 +54,20 @@ app.post("/logoutUser", UserHandler.logoutUserRoute);
 //app.get("/editUserSettings", UserHandler.editUserSettingsRoute);
 app.post("/editUserSettings", UserHandler.editUserSettingsRoute);
 
+<<<<<<< HEAD
 app.all("/getBookmarks", (req, res) => {});
+=======
+app.get("/testImage", (req, res) => {
+	res.sendFile(path.join(__dirname, "add_item.html"));
+});
+app.post("/testImage", UserHandler.testImage);
+
+
+//is a placeholder, can expand on it later
+app.post("/editPlaylist", (req, res) => {
+	
+});
+>>>>>>> 8249af51097f0a2ed5947da8889c928789653435
 
 app.all("/getPlaylistData/:playlistId", (req, res) => {});
 

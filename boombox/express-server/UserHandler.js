@@ -1,10 +1,12 @@
 const path = require("path");
 const express = require("express");
 const session = require("express-session");
-const bodyParser = require("body-parser");
+const multiparty = require("multiparty");
 const cookieParser = require("cookie-parser");
 const MongoClient = require('mongodb');
+const fs = require('fs');
 const crypto = require('crypto');
+const { resolve } = require("path");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
@@ -272,9 +274,89 @@ class UserHandler {
         const statusObject = await UserHandler.editUserSettings(username, newIcon, newUsername, newBio, newEmail, currentPassword, newPassword, newPasswordConfirm);
         if (statusObject.status == 0 && newUsername) {
             res.cookie('username', newUsername);
-            req.session.username = username;
+            req.session.username = newUsername;
         }
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found/not logged in, 2: email in use, 3: incorrect password, 4: passwords did not match
+    }
+
+
+
+    static async testImage(req, res) {
+        console.log(req.body);
+
+        const form = new multiparty.Form();
+        /*
+        form.parse(req, (err, fields, files) => {
+            if (err) {console.log(err);}
+            console.log(fields);
+            console.log(files);
+
+        });
+        */
+
+        const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
+            if (err) {console.log(err);}
+            return resolve([fields, files]);
+        }));
+        const [fields, files] = await formPromise;
+        console.log(fields);
+        console.log(files);
+
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            //return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            //return {status: -1};
+        }
+
+        console.log(files.content);
+
+        try {
+            const db = client.db(monogDbName);
+            const bucket = new MongoClient.GridFSBucket(db);
+
+            /*
+             fs.createReadStream(files.content[0].path).
+                pipe(bucket.openUploadStream(files.content[0].originalFilename)).
+                    on('error', function(error) {
+                        throw error;
+                    }).
+                    on('finish', function() {
+                        console.log('done!');
+                        //process.exit(0);
+                    });
+                    //client.close() happens before pipe finishes
+                    */
+
+            const readStream = fs.createReadStream(files.content[0].path);
+            const uploadStream = bucket.openUploadStream(files.content[0].originalFilename);
+            readStream.pipe(uploadStream)
+                .on('error', (err) => {
+                    throw error;
+                })
+                .on('finish', () => {
+                    //console.log(uploadStream.id);
+                })
+            console.log(uploadStream.id);
+
+            //return {status: 0}
+        }
+        catch (err) {
+            console.log(err);
+            //return {status: -1};
+        }
+        finally {
+            //client.close();
+        }
+        
+        res.send("hello");
+
     }
 }
 
