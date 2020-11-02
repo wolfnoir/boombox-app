@@ -18,13 +18,13 @@ class TagGenres {
 
         if (!client) {
             console.log("Client is null");
-            //err handle here
+            return {status: -1};
         }
 
         try {
             const collection = client.db(monogDbName).collection(mongoTagCollection);
             // perform actions on the collection object
-            collection.insertMany([
+            await collection.insertMany([
                 { tag_id: "alternative" },
                 { tag_id: "alternative rock" },
                 { tag_id: "experimental rock" },
@@ -152,7 +152,7 @@ class TagGenres {
         }
         catch (err) {
             console.log(err);
-            //err handle here
+            return {status: -1};
         }
         finally {
             client.close();
@@ -160,6 +160,5 @@ class TagGenres {
     }
 }
 
-module.exports = TagGenres;
-
+TagGenres.pushTags();
 
