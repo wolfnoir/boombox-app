@@ -589,6 +589,14 @@ class UserHandler {
 
 
     static async testImage(req, res) {
+        /*
+        variables:
+            -image field name (this example has the field name as content [files.content])
+
+        need to check:
+            -if file was actually uploaded (files.content[0].size > 0)
+            -check the file extension
+        */
         console.log(req.body);
 
         const form = new multiparty.Form();
@@ -620,7 +628,7 @@ class UserHandler {
             const uploadStream = bucket.openUploadStream(files.content[0].originalFilename);
             readStream.pipe(uploadStream)
                 .on('error', (err) => {
-                    throw error;
+                    throw err;
                 })
                 .on('finish', () => {
                     //console.log(uploadStream.id);
