@@ -15,7 +15,7 @@ class PlaylistHandler {
      * Create Playlist
      */
 
-    static async createPlaylist() {
+    static async createPlaylist(user_id) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -30,8 +30,8 @@ class PlaylistHandler {
         }
 
         try {
-            var date = new Date();
-            var user_id = req.session.user_id;
+            const date = new Date();
+            const userIdObject = MongoClient.ObjectID(user_id);
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
 
             await collection.insertOne({
@@ -44,7 +44,7 @@ class PlaylistHandler {
                 name: 'Untitled',
                 songs: [],
                 tags: [],
-                user_id: user_id,
+                user_id: userIdObject
             });
         }
 
@@ -62,10 +62,11 @@ class PlaylistHandler {
     }
 
     static async createPlaylistRoute(req, res) {
-        const success = await UserHandler.createPlaylist();
+        const user_id = req.session.user_id;
+        const success = await UserHandler.createPlaylist(user_id);
 
         res.send({
-            statusCode: success //-1: an error occurred, 0: success, 1: duplicate username or email
+            statusCode: success //-1: an error occurred, 0: success
         });
     }
 
@@ -73,7 +74,7 @@ class PlaylistHandler {
      * Edit Playlist
      */
     
-    static async editPlaylist(id, com_enabled, comments, description, image_url, likes, name, notes, songs, tags) {
+    static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -88,11 +89,11 @@ class PlaylistHandler {
         }
 
         try {
-            var date = new Date();
-            var user_id = req.session.user_id;
-            var idObject = new MongoClient.ObjectID(id);
-            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const date = new Date();
+            const idObject = new MongoClient.ObjectID(playlist_id);
+            const userIdObject = MongoClient.ObjectID(user_id);
 
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const filter = { "_id": idObject };
 
             const updateDoc = {
@@ -105,7 +106,7 @@ class PlaylistHandler {
                 name: name,
                 songs: songs,
                 tags: tags,
-                user_id: user_id,
+                user_id: userIdObject
             }
 
             await collection.updateOne(filter, updateDoc);
@@ -125,7 +126,13 @@ class PlaylistHandler {
     }
 
     static async editPlaylistRoute(req, res) {
-        const id = req.body.id;
+        const user_id = req.session.user_id;
+        if (!user_id) {
+            res.send({status: 1});
+            return;
+        }
+
+        const playlist_id = req.body.id;
         const com_enabled = req.body.com_enabled;
         const comments = req.body.comments;
         const description = req.body.description;
@@ -134,11 +141,60 @@ class PlaylistHandler {
         const name = req.body.name;
         const songs = req.body.songs;
         const tags = req.body.tags;
-        const success = await UserHandler.editPlaylist(id, com_enabled, comments, description, image_url, likes, name, notes, songs, tags);
+        const success = await UserHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags);
 
         res.send({
-            statusCode: success //-1: an error occurred, 0: success, 1: duplicate username or email
+            statusCode: success //-1: an error occurred, 0: success, 1: not logged in
         });
+    }
+
+    /**
+     * Get Playlist
+     */
+
+    static async getPlaylist(playlist_id) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = new MongoClient.ObjectID(playlist_id);
+            const userQuery = { "_id" : idObject };
+            const userObject = await collection.findOne(userQuery);
+            if (!userObject) {
+                console.log("playlist not found");
+                return {status: 1};
+            }
+
+            return {
+                status: 0,
+                result: userObject
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getPlaylistRoute(req, res) {
+        const playlist_id = req.body.playlist_id;
+        const statusObject = await PlaylistHandler.getPlaylist(playlist_id);
+
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: playlist not found
     }
 }
 

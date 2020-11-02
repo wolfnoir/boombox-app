@@ -55,17 +55,17 @@ app.post("/logoutUser", UserHandler.logoutUserRoute);
 //app.get("/editUserSettings", UserHandler.editUserSettingsRoute);
 app.post("/editUserSettings", UserHandler.editUserSettingsRoute);
 
-app.all("/getBookmarks", (req, res) => {});
+app.all("/getBookmarks", (req, res) => UserHandler.getBookmarksRoute);
 
-app.all("/getPlaylistData/:playlistId", (req, res) => {});
+app.all("/getProfilePageData/:username", (req, res) => UserHandler.getProfilePageDataRoute);
 
-app.all("/getProfilePageData/:username", (req, res) => {});
+app.all("/getFollowers/:username", (req, res) => UserHandler.getFollowersRoute);
 
-app.all("/getFollowers/:username", (req, res) => {});
+app.all("/getFollowing/:username", (req, res) => UserHandler.getFollowingRoute);
 
-app.all("/getFollowing/:username", (req, res) => {});
+app.all("/getUserPlaylists/:username", (req, res) => UserHandler.getUserPlaylistsRoute);
 
-app.all("/getUserPlaylists/:username", (req, res) => {});
+app.all("/getPlaylistData/:playlistId", (req, res) => PlaylistHandler.getPlaylistRoute);
 
 app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
