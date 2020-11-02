@@ -54,9 +54,6 @@ app.post("/logoutUser", UserHandler.logoutUserRoute);
 //app.get("/editUserSettings", UserHandler.editUserSettingsRoute);
 app.post("/editUserSettings", UserHandler.editUserSettingsRoute);
 
-<<<<<<< HEAD
-app.all("/getBookmarks", (req, res) => {});
-=======
 app.get("/testImage", (req, res) => {
 	res.sendFile(path.join(__dirname, "add_item.html"));
 });
@@ -67,7 +64,6 @@ app.post("/testImage", UserHandler.testImage);
 app.post("/editPlaylist", (req, res) => {
 	
 });
->>>>>>> 8249af51097f0a2ed5947da8889c928789653435
 
 app.all("/getPlaylistData/:playlistId", (req, res) => {});
 

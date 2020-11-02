@@ -11,6 +11,7 @@ const { resolve } = require("path");
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
 const mongoUserCollection = 'users';
+const mongoPlaylistCollection = 'playlists';
 
 class UserHandler {
     /*-------------*/
@@ -279,84 +280,310 @@ class UserHandler {
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found/not logged in, 2: email in use, 3: incorrect password, 4: passwords did not match
     }
 
+    /**
+     * Get Bookmarks
+     */
 
-
-    static async testImage(req, res) {
-        console.log(req.body);
-
-        const form = new multiparty.Form();
-        /*
-        form.parse(req, (err, fields, files) => {
-            if (err) {console.log(err);}
-            console.log(fields);
-            console.log(files);
-
-        });
-        */
-
-        const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
-            if (err) {console.log(err);}
-            return resolve([fields, files]);
-        }));
-        const [fields, files] = await formPromise;
-        console.log(fields);
-        console.log(files);
-
+    static async getBookmarks(user_id) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
         }).catch(err => {
             console.log(err);
-            //return {status: -1};
+            return {status: -1};
         });
 
         if (!client) {
             console.log("Client is null");
-            //return {status: -1};
+            return {status: -1};
         }
 
-        console.log(files.content);
-
         try {
-            const db = client.db(monogDbName);
-            const bucket = new MongoClient.GridFSBucket(db);
+            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const idObject = new MongoClient.ObjectID(user_id);
+            const userQuery = { "_id" : idObject };
+            const userObject = await collection.findOne(userQuery);
+            if (!userObject) {
+                console.log("user not found");
+                return {status: 1};
+            }
 
-            /*
-             fs.createReadStream(files.content[0].path).
-                pipe(bucket.openUploadStream(files.content[0].originalFilename)).
-                    on('error', function(error) {
-                        throw error;
-                    }).
-                    on('finish', function() {
-                        console.log('done!');
-                        //process.exit(0);
-                    });
-                    //client.close() happens before pipe finishes
-                    */
-
-            const readStream = fs.createReadStream(files.content[0].path);
-            const uploadStream = bucket.openUploadStream(files.content[0].originalFilename);
-            readStream.pipe(uploadStream)
-                .on('error', (err) => {
-                    throw error;
-                })
-                .on('finish', () => {
-                    //console.log(uploadStream.id);
-                })
-            console.log(uploadStream.id);
-
-            //return {status: 0}
+            return {
+                status: 0,
+                result: userObject.bookmarks
+            };
         }
         catch (err) {
             console.log(err);
-            //return {status: -1};
+            return {status: -1};
         }
         finally {
-            //client.close();
+            client.close();
+        }
+    }
+
+    static async getBookmarksRoute(req, res) {
+        const user_id = req.session.user_id;
+        
+        if (!user_id) {
+            res.send({status: 1});
+            return;
         }
         
-        res.send("hello");
+        const statusObject = await UserHandler.getBookmarks(user_id);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found/not logged in
+    }
 
+    /**
+     * Get Profile Page Data
+     */
+
+    static async getProfilePageData(selfId, targetUsername) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            //First, search users collection for the user object
+            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const selfIdObject = new MongoClient.ObjectID(selfId);
+            const userQuery = { username : targetUsername };
+            const userObject = await collection.findOne(userQuery);
+            if (!userObject) {
+                console.log("user not found");
+                return {status: 1};
+            }
+
+            //Get target user's id
+            const targetIdObject = userObject._id;
+
+            //Then, search playlists collection for all of the user's playlists
+            const playlistCollection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const playlistQuery = { "user_id" : targetIdObject }; 
+            const playlistsObject = await playlistCollection.find(playlistQuery);
+            if (!playlistsObject) {
+                console.log("playlists not found");
+                return {status: 1};
+            }
+
+            //Check if the end user is a follower of the target user
+            const isFollowing = userObject.following.includes(selfIdObject);
+
+            const data = {
+                username: userObject.username,
+                bio: userObject.bio,
+                playlists: playlistsObject,
+                following: isFollowing
+            };
+
+            return {
+                status: 0,
+                result: data
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getProfilePageDataRoute(req, res) {
+        const target_username = req.body.username;
+        const self_user_id = req.session.user_id;
+        
+        if (!target_username) {
+            res.send({status: 1});
+            return;
+        }
+        
+        const statusObject = await UserHandler.getProfilePageData(self_user_id, target_username);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    /**
+     * Get Followers
+     */
+
+    static async getFollowers(username) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            //First, search users collection for the user object
+            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const userQuery = { username : username };
+            const userObject = await collection.findOne(userQuery);
+            if (!userObject) {
+                console.log("user not found");
+                return {status: 1};
+            }
+
+            return {
+                status: 0,
+                result: userObject.followers
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getFollowersRoute(req, res) {
+        const username = req.body.username;
+        
+        if (!username) {
+            res.send({status: 1});
+            return;
+        }
+        
+        const statusObject = await UserHandler.getFollowers(username);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    /**
+     * Get Following
+     */
+
+    static async getFollowing(username) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            //First, search users collection for the user object
+            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const userQuery = { username : username };
+            const userObject = await collection.findOne(userQuery);
+            if (!userObject) {
+                console.log("user not found");
+                return {status: 1};
+            }
+
+            return {
+                status: 0,
+                result: userObject.following
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getFollowingRoute(req, res) {
+        const username = req.body.username;
+        
+        if (!username) {
+            res.send({status: 1});
+            return;
+        }
+        
+        const statusObject = await UserHandler.getFollowing(username);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    /**
+     * Get User Playlists
+     */
+
+    static async getUserPlaylists(username) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            //First, search users collection for the user object
+            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const userQuery = { username : username };
+            const userObject = await collection.findOne(userQuery);
+            if (!userObject) {
+                console.log("user not found");
+                return {status: 1};
+            }
+
+            //Get target user's id
+            const targetIdObject = userObject._id;
+
+            //Then, search playlists collection for all of the user's playlists
+            const playlistCollection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const playlistQuery = { "user_id" : targetIdObject }; 
+            const playlistsObject = await playlistCollection.find(playlistQuery);
+            if (!playlistsObject) {
+                console.log("playlists not found");
+                return {status: 1};
+            }
+
+            return {
+                status: 0,
+                result: playlistsObject
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getUserPlaylistsRoute(req, res) {
+        const username = req.body.username;
+        
+        if (!username) {
+            res.send({status: 1});
+            return;
+        }
+        
+        const statusObject = await UserHandler.getFollowing(username);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
     }
 }
 
