@@ -191,7 +191,7 @@ class PlaylistHandler {
     }
 
     static async getPlaylistRoute(req, res) {
-        const playlist_id = req.body.playlist_id;
+        const playlist_id = req.params.playlistId;
         const statusObject = await PlaylistHandler.getPlaylist(playlist_id);
 
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: playlist not found

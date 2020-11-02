@@ -66,9 +66,14 @@ class PlaylistPageDisplay extends React.Component {
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
         .then(obj => {
-            this.setState({data: obj});
-            for (var i = 0; i < this.state.data.songs.length; i++) {
-                this.state.song_notes_open.push(false);
+            if (obj.status == 0) {
+                this.setState({data: obj.result});
+                for (var i = 0; i < this.state.data.songs.length; i++) {
+                    this.state.song_notes_open.push(false);
+                }
+            }
+            else {
+                this.setState({data: null}) //need to change the component to have a not found page
             }
         });
     }

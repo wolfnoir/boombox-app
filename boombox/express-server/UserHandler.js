@@ -265,7 +265,20 @@ class UserHandler {
         const newPasswordConfirm = null; //"testPassword123?";
         */
         
-        const newIcon = req.body.newIcon; 
+
+        const form = new multiparty.Form();
+        const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
+            if (err) {console.log(err);}
+            return resolve([fields, files]);
+        }));
+        const [fields, files] = await formPromise;
+        const uploadedFile = files.fieldname[0];
+        const imageExts = ["jpeg", "png", "gif"];
+        const newIcon = (uploadedFile && uploadedFile.size > 0 && imageExts.includes(uploadedFile.originalFilename.substring(uploadedFile.originalFilename.lastIndexOf('.') + 1))) ? 
+            uploadedFile.path : null;
+        //const newIcon = req.body.newIcon; 
+        //this needs to be handled separately
+
         const newUsername = req.body.newUsername;
         const newBio = req.body.newBio;
         const newEmail = req.body.newEmail;
