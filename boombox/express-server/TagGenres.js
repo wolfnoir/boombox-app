@@ -1,3 +1,5 @@
+const MongoClient = require('mongodb');
+
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
 const mongoTagCollection = 'tags';
