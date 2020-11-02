@@ -11,6 +11,10 @@ const monogDbName = 'boombox';
 const mongoPlaylistCollection = 'playlists';
 
 class PlaylistHandler {
+    /**
+     * Create Playlist
+     */
+
     static async createPlaylist() {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
@@ -57,6 +61,18 @@ class PlaylistHandler {
         return 0;
     }
 
+    static async createPlaylistRoute(req, res) {
+        const success = await UserHandler.createPlaylist();
+
+        res.send({
+            statusCode: success //-1: an error occurred, 0: success, 1: duplicate username or email
+        });
+    }
+
+    /**
+     * Edit Playlist
+     */
+    
     static async editPlaylist(id, com_enabled, comments, description, image_url, likes, name, notes, songs, tags) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
@@ -106,14 +122,6 @@ class PlaylistHandler {
 
         console.log("Success");
         return 0;
-    }
-
-    static async createPlaylistRoute(req, res) {
-        const success = await UserHandler.createPlaylist();
-
-        res.send({
-            statusCode: success //-1: an error occurred, 0: success, 1: duplicate username or email
-        });
     }
 
     static async editPlaylistRoute(req, res) {

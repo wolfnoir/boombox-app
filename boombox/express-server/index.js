@@ -39,48 +39,6 @@ app.all("/helloworld", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
 });
 
-<<<<<<< HEAD
-//should be post
-app.post("/registerUser", (req, res) => {
-	MongoClient.connect(mongoUrl, {useNewUrlParser: true}, (error, client) => {
-		if (error) throw error;
-		const collection = client.db(monogDbName).collection(mongoUserCollection);
-		// perform actions on the collection object
-		collection.insertOne({
-			id: 0,
-			username: 'test-user',
-			password: 'tfyydfwuefciuw',
-			email: 'test@test.com',
-			salt: '37tgde7ergcue3b2i3',
-			followers: [],
-			followees: []
-		});
-		client.close();
-	});
-	res.send("hello");
-});
-
-app.all("/loginUser", (req, res) => {
-    //request.session.loggedin = true;
-	//request.session.username = "";
-	console.log("current user: " + req.cookies.username);
-	res.cookie('username', 'test-user');
-	console.log('login test-user');
-	res.send("login test-user");
-});
-
-app.all("/logoutUser", (req, res) => {
-	//request.session.destroy();
-	var user = req.cookies.username;
-	console.log('logout: ' + user);
-	res.clearCookie('username');
-	res.send("logout " + user);
-});
-
-app.post("/editUserSettings", (req, res) => {});
-
-app.all("/getBookmarks", (req, res) => {});
-=======
 //SHOULD BE POST ONLY
 //app.get("/registerUser", UserHandler.registerUserRoute);
 app.post("/registerUser", UserHandler.registerUserRoute);
@@ -96,7 +54,8 @@ app.post("/logoutUser", UserHandler.logoutUserRoute);
 //SHOULD BE POST ONLY
 //app.get("/editUserSettings", UserHandler.editUserSettingsRoute);
 app.post("/editUserSettings", UserHandler.editUserSettingsRoute);
->>>>>>> a3e6a4af1e2adb482bb6fc3511bd29a43a53f891
+
+app.all("/getBookmarks", (req, res) => {});
 
 app.all("/getPlaylistData/:playlistId", (req, res) => {});
 
