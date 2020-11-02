@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const UserHandler = require('./UserHandler.js');
+const { logoutUserRoute } = require("./UserHandler.js");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
@@ -37,43 +38,21 @@ app.get("/helloworld", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
 });
 
+//SHOULD BE POST ONLY
+//app.get("/registerUser", UserHandler.registerUserRoute);
+app.post("/registerUser", UserHandler.registerUserRoute);
 
-/*
-//should be post
-app.get("/registerUser", (req, res) => {
-	
-	const username = 'test-user'; //req.body.username;
-	const password = 'testPassword123?'; //req.body.password;
-	const email = 'test@test.com'; ////req.body.email;
-	var e = UserHandler.registerUser(username, password, email);
-	console.log("e: " + e);
-	res.send("hello");
-});
-*/
+//SHOULD BE POST ONLY
+//app.get("/loginUser", UserHandler.loginUserRoute);
+app.post("/loginUser", UserHandler.loginUserRoute);
 
-app.get("/registerUser", UserHandler.registerUserRoute);
+//SHOULD BE POST ONLY
+//app.get("/logoutUser", UserHandler.logoutUserRoute);
+app.post("/logoutUser", UserHandler.logoutUserRoute);
 
-
-app.get("/loginUser", (req, res) => {
-    //request.session.loggedin = true;
-	//request.session.username = "";
-	console.log("current user: " + req.cookies.username);
-	res.cookie('username', 'test-user');
-	console.log('login test-user');
-	res.send("login test-user");
-});
-
-app.get("/logoutUser", (req, res) => {
-	//request.session.destroy();
-	var user = req.cookies.username;
-	console.log('logout: ' + user);
-	res.clearCookie('username');
-	res.send("logout " + user);
-});
-
-app.post("/editUserSettings", (req, res) => {
-
-});
+//SHOULD BE POST ONLY
+//app.get("/editUserSettings", UserHandler.editUserSettingsRoute);
+app.post("/editUserSettings", UserHandler.editUserSettingsRoute);
 
 //is a placeholder, can expand on it later
 app.post("/editPlaylist", (req, res) => {
