@@ -125,15 +125,15 @@ class PlaylistHandler {
     }
 
     static async editPlaylistRoute(req, res) {
-        const id;
-        const com_enabled = false;
-        const comments = [];
-        const description = "I am an edited playlist!";
-        const image_url = "";
-        const likes = [];
-        const name = "Dummy Playlist";
-        const songs = [];
-        const tags = [];
+        const id = req.body.id;
+        const com_enabled = req.body.com_enabled;
+        const comments = req.body.comments;
+        const description = req.body.description;
+        const image_url = req.body.image_url;
+        const likes = req.body.likes;
+        const name = req.body.name;
+        const songs = req.body.songs;
+        const tags = req.body.tags;
         const success = await UserHandler.editPlaylist(id, com_enabled, comments, description, image_url, likes, name, notes, songs, tags);
 
         res.send({
