@@ -296,46 +296,67 @@ class UserHandler {
 
         const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
             if (err) {console.log(err);}
-            console.log(fields);
-            console.log(files);
             return resolve([fields, files]);
         }));
         const [fields, files] = await formPromise;
         console.log(fields);
         console.log(files);
 
-
-        
-        res.send("hello");
-
-        /*
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
         }).catch(err => {
             console.log(err);
-            return {status: -1};
+            //return {status: -1};
         });
 
         if (!client) {
             console.log("Client is null");
-            return {status: -1};
+            //return {status: -1};
         }
+
+        console.log(files.content);
 
         try {
             const db = client.db(monogDbName);
             const bucket = new MongoClient.GridFSBucket(db);
-            fs.createReadStream();
-            return {status: 0}
+
+            /*
+             fs.createReadStream(files.content[0].path).
+                pipe(bucket.openUploadStream(files.content[0].originalFilename)).
+                    on('error', function(error) {
+                        throw error;
+                    }).
+                    on('finish', function() {
+                        console.log('done!');
+                        //process.exit(0);
+                    });
+                    //client.close() happens before pipe finishes
+                    */
+
+            const readStream = fs.createReadStream(files.content[0].path);
+            const uploadStream = bucket.openUploadStream(files.content[0].originalFilename);
+            readStream.pipe(uploadStream)
+                .on('error', (err) => {
+                    throw error;
+                })
+                .on('finish', () => {
+                    //console.log(uploadStream.id);
+                })
+            console.log(uploadStream.id);
+
+            //return {status: 0}
         }
         catch (err) {
             console.log(err);
-            return {status: -1};
+            //return {status: -1};
         }
         finally {
-            client.close();
+            //client.close();
         }
-        */
+        
+        res.send("hello");
+
     }
 }
 
