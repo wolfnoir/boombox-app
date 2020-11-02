@@ -21,6 +21,9 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+const UserHandler = require('./UserHandler.js');
+const { logoutUserRoute } = require("./UserHandler.js");
+
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
 const mongoUserCollection = 'users';
@@ -36,6 +39,7 @@ app.all("/helloworld", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
 });
 
+<<<<<<< HEAD
 //should be post
 app.post("/registerUser", (req, res) => {
 	MongoClient.connect(mongoUrl, {useNewUrlParser: true}, (error, client) => {
@@ -76,6 +80,23 @@ app.all("/logoutUser", (req, res) => {
 app.post("/editUserSettings", (req, res) => {});
 
 app.all("/getBookmarks", (req, res) => {});
+=======
+//SHOULD BE POST ONLY
+//app.get("/registerUser", UserHandler.registerUserRoute);
+app.post("/registerUser", UserHandler.registerUserRoute);
+
+//SHOULD BE POST ONLY
+//app.get("/loginUser", UserHandler.loginUserRoute);
+app.post("/loginUser", UserHandler.loginUserRoute);
+
+//SHOULD BE POST ONLY
+//app.get("/logoutUser", UserHandler.logoutUserRoute);
+app.post("/logoutUser", UserHandler.logoutUserRoute);
+
+//SHOULD BE POST ONLY
+//app.get("/editUserSettings", UserHandler.editUserSettingsRoute);
+app.post("/editUserSettings", UserHandler.editUserSettingsRoute);
+>>>>>>> a3e6a4af1e2adb482bb6fc3511bd29a43a53f891
 
 app.all("/getPlaylistData/:playlistId", (req, res) => {});
 
