@@ -40,6 +40,7 @@ class SettingsPane extends React.Component {
         if(fileInput.value == ""){
             e.preventDefault();
             alert("Please select a file.");
+            return;
         }
 
         const file = fileInput.files[0];        
@@ -82,14 +83,12 @@ class SettingsPane extends React.Component {
                                     {this.getProfileImage()}
                                 </div>
                                 <div className="col" id="user-icon-right-side">
-                                    <p>
-                                        {/* <button id="change-icon-button" className="btn btn-primary" type="button" >Change Icon</button> */}
-                                        <form id ="upload-profile-img-form">
-                                            <input type = "file" id = "fileInput" accept=".png, .jpeg, .jpg, .gif" /> <br/>
-                                            <p>Image must be under 500KB and must be a PNG, JPEG, or GIF.</p>
-                                            <button type="submit" id="change-icon-button" className="btn btn-primary" onClick = {this.send_add_media_request}>Change Icon</button>
-                                        </form>
-                                    </p>
+                                    {/* <button id="change-icon-button" className="btn btn-primary" type="button" >Change Icon</button> */}
+                                    <form id ="upload-profile-img-form">
+                                        <p><input type = "file" id = "fileInput" accept=".png, .jpeg, .jpg, .gif" /></p>
+                                        <p>Image must be under 500KB and must be a PNG, JPEG, or GIF.</p>
+                                        <button type="submit" id="change-icon-button" className="btn btn-primary" onClick = {this.send_add_media_request}>Change Icon</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
