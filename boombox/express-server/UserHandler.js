@@ -146,13 +146,6 @@ class UserHandler {
         const password = 'testPassword123?'; //req.body.password;
         
        
-<<<<<<< HEAD
-        // const username = req.body.username; 
-        // const password = req.body.password;
-        const statusObject = await UserHandler.loginUser(username, password);
-        if (statusObject.status == 0) {
-            res.cookie('username', 'test-user');
-=======
         console.log("body", req.body);
         console.log("params", req.params);
 
@@ -161,7 +154,6 @@ class UserHandler {
         const statusObject = await UserHandler.loginUser(email, password);
         if (statusObject.status == 0) {
             res.cookie('username', statusObject.username);
->>>>>>> a590aeff23e4c487ad6c12cabcea248f01b0380b
             req.session.logged_in = true;
             req.session.username = statusObject.username;
             req.session.user_id = statusObject.user_id;
