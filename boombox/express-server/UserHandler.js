@@ -298,6 +298,7 @@ class UserHandler {
      */
 
     static async getBookmarks(user_id) {
+        
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -313,17 +314,39 @@ class UserHandler {
 
         try {
             const collection = client.db(mongoDbName).collection(mongoUserCollection);
+
+            /*
             const idObject = new MongoClient.ObjectID(user_id);
             const userQuery = { "_id" : idObject };
+            */
+
+            const userQuery = {username: user_id};
+
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
                 console.log("user not found");
                 return {status: 1};
             }
 
+            const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistCollection);
+            const bookmarkedPlaylists = []
+            for (var i = 0; i < userObject.bookmarks.length; i++) {
+                const playlistObject = await playlistCollection.findOne({"_id": userObject.bookmarks[i]});
+                const userQuery = {"_id": playlistObject.user_id};
+                const playlistUserObject = await collection.findOne(userQuery);
+                if (!playlistUserObject) {
+                    playlistObject.author = null;
+                }
+                else {
+                    playlistObject.author = playlistUserObject.username;
+                }
+                playlistObject.url = "/playlist/" + userObject.bookmarks[i];
+                bookmarkedPlaylists.push(playlistObject);
+            }
+
             return {
                 status: 0,
-                result: userObject.bookmarks
+                result: bookmarkedPlaylists
             };
         }
         catch (err) {
@@ -336,7 +359,7 @@ class UserHandler {
     }
 
     static async getBookmarksRoute(req, res) {
-        const user_id = req.session.user_id;
+        const user_id = req.cookies.username; //req.session.user_id;
         
         if (!user_id) {
             res.send({status: 1});
@@ -351,7 +374,8 @@ class UserHandler {
      * Get Profile Page Data
      */
 
-    static async getProfilePageData(selfId, targetUsername) {
+    //static async getProfilePageData(selfId, targetUsername) {
+    static async getProfilePageData(selfUsername, targetUsername) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -368,7 +392,7 @@ class UserHandler {
         try {
             //First, search users collection for the user object
             const collection = client.db(mongoDbName).collection(mongoUserCollection);
-            const selfIdObject = new MongoClient.ObjectID(selfId);
+            //const selfIdObject = new MongoClient.ObjectID(selfId);
             const userQuery = { username : targetUsername };
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
@@ -388,14 +412,38 @@ class UserHandler {
                 return {status: 1};
             }
 
+            const userPlaylists = [];
+            playlistsObject.forEach((playlist) => {
+                userPlaylists.push(playlist);
+            });
+            for (var i = 0; i < userPlaylists.length; i++) {
+                const playlist = userPlaylists[i];
+                const userQuery = {"_id": playlist.user_id};
+                const playlistUserObject = await collection.findOne(userQuery);
+                if (!playlistUserObject) {
+                    playlist.author = null;
+                }
+                else {
+                    playlist.author = playlistUserObject.username;
+                }
+                playlist.url = "/playlist/" + playlist._id;
+                console.log(playlist);
+                //userPlaylists.push(playlist);
+            }
+            
+
             //Check if the end user is a follower of the target user
-            const isFollowing = userObject.following.includes(selfIdObject);
+            //const isFollowing = userObject.following.includes(selfIdObject);
+            const selfUserObject = await collection.findOne({username: selfUsername});
+            const isFollowing = userObject.following.includes(selfUserObject._id);
 
             const data = {
                 username: userObject.username,
                 bio: userObject.bio,
-                playlists: playlistsObject,
-                following: isFollowing
+                playlists: userPlaylists,
+                isFollowing: isFollowing,
+                followers: userObject.followers,
+                following: userObject.following
             };
 
             return {
@@ -407,15 +455,18 @@ class UserHandler {
             console.log(err);
             return {status: -1};
         }
+        /*
         finally {
             client.close();
         }
+        */
     }
 
     static async getProfilePageDataRoute(req, res) {
-        const target_username = req.body.username;
-        const self_user_id = req.session.user_id;
-        
+        const target_username = req.params.username;
+        //const self_user_id = req.session.user_id;
+        const self_user_id = req.cookies.username;
+
         if (!target_username) {
             res.send({status: 1});
             return;
@@ -453,22 +504,30 @@ class UserHandler {
                 return {status: 1};
             }
 
+            const userFollowers = [];
+            for (var i = 0; i < userObject.followers.length; i++) {
+                const followerObject = await collection.findOne({"_id": userObject.followers[i]});
+                userFollowers.push(followerObject);
+            }
+
             return {
                 status: 0,
-                result: userObject.followers
+                result: userFollowers
             };
         }
         catch (err) {
             console.log(err);
             return {status: -1};
         }
+        /*
         finally {
             client.close();
         }
+        */
     }
 
     static async getFollowersRoute(req, res) {
-        const username = req.body.username;
+        const username = req.params.username;
         
         if (!username) {
             res.send({status: 1});
@@ -507,9 +566,15 @@ class UserHandler {
                 return {status: 1};
             }
 
+            const userFollowing = [];
+            for (var i = 0; i < userObject.following.length; i++) {
+                const followerObject = await collection.findOne({"_id": userObject.following[i]});
+                userFollowing.push(followerObject);
+            }
+
             return {
                 status: 0,
-                result: userObject.following
+                result: userFollowing
             };
         }
         catch (err) {
@@ -522,8 +587,8 @@ class UserHandler {
     }
 
     static async getFollowingRoute(req, res) {
-        const username = req.body.username;
-        
+        const username = req.params.username;
+
         if (!username) {
             res.send({status: 1});
             return;

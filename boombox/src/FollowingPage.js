@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { useParams } from 'react-router';
 import NavBarWrapper from './NavBarWrapper';
 import UserDisplay from './UserDisplay';
 import './css/bootstrap.min.css';
@@ -23,7 +24,12 @@ class ArrowBackComponent extends React.Component {
     }
 }
 
-class FollowingPage extends React.Component {
+function FollowingPage() {
+    let { username } = useParams();
+    return <FollowingPageDisplay username={username}/>
+}
+
+class FollowingPageDisplay extends React.Component {
     constructor(props) {
         super(props);
 
@@ -34,15 +40,21 @@ class FollowingPage extends React.Component {
     }
 
     getFollowingUsers() {
-        fetch(`/getFollowing/${this.state.user}`)
+        fetch(`/getFollowing/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            this.setState({following: obj.users});
+            console.log(obj);
+            if (obj.status == 0) {
+                this.setState({following: obj.result});
+            }
+            else {
+                this.setState({following: null}); //not found stuff do
+            }
         })
     }
 
     componentDidMount() {
-        const{ username } = this.props.match.params;
+        const{ username } = this.props.username;
 
         this.setState({user: username}, () => {
             this.getFollowingUsers();
