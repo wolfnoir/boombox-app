@@ -90,7 +90,7 @@ class UserHandler {
     /* LOGIN       */
     /*-------------*/
 
-    static async loginUser(username, password) {
+    static async loginUser(email, password) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -106,7 +106,7 @@ class UserHandler {
 
         try {
             const collection = client.db(mongoDbName).collection(mongoUserCollection);
-            const userQuery = {username: username};
+            const userQuery = {email: email};
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
                 console.log("user not found");
@@ -120,7 +120,8 @@ class UserHandler {
             }
             return {
                 status: 0,
-                user_id: userObject._id
+                user_id: userObject._id,
+                username: userObject.username
             }
         }
         catch (err) {
@@ -145,15 +146,27 @@ class UserHandler {
         const password = 'testPassword123?'; //req.body.password;
         
        
+<<<<<<< HEAD
         // const username = req.body.username; 
         // const password = req.body.password;
         const statusObject = await UserHandler.loginUser(username, password);
         if (statusObject.status == 0) {
             res.cookie('username', 'test-user');
+=======
+        console.log("body", req.body);
+        console.log("params", req.params);
+
+        const email = req.body.email; 
+        const password = req.body.password;
+        const statusObject = await UserHandler.loginUser(email, password);
+        if (statusObject.status == 0) {
+            res.cookie('username', statusObject.username);
+>>>>>>> a590aeff23e4c487ad6c12cabcea248f01b0380b
             req.session.logged_in = true;
-            req.session.username = username;
+            req.session.username = statusObject.username;
             req.session.user_id = statusObject.user_id;
-            console.log('login ' + username);
+            console.log('login ' + statusObject.username);
+            delete statusObject.user_id;
         }
         res.send(statusObject); // [status] -1: an error occurred, 0: success, 1: combination does not exist
     }
@@ -675,7 +688,7 @@ class UserHandler {
             -if file was actually uploaded (files.content[0].size > 0)
             -check the file extension
         */
-        console.log(req.body);
+        console.log('body', req.body);
 
         const form = new multiparty.Form();
         const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
@@ -683,9 +696,10 @@ class UserHandler {
             return resolve([fields, files]);
         }));
         const [fields, files] = await formPromise;
-        console.log(fields);
+        console.log('fields', fields);
         console.log(files);
 
+        /*
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -721,6 +735,7 @@ class UserHandler {
         finally {
             //client.close();
         }
+        */
         res.send("hello"); //change to something that the client can actually use
     }
 
