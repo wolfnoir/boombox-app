@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { useParams } from 'react-router';
 import NavBarWrapper from './NavBarWrapper';
 import UserDisplay from './UserDisplay';
 import './css/bootstrap.min.css';
@@ -23,7 +24,12 @@ class ArrowBackComponent extends React.Component {
     }
 }
 
-class FollowersPage extends React.Component {
+function FollowersPage() {
+    let { username } = useParams();
+    return <FollowersPageDisplay username={username}/>
+}
+
+class FollowersPageDisplay extends React.Component {
     constructor(props) {
         super(props);
 
@@ -37,14 +43,18 @@ class FollowersPage extends React.Component {
         fetch(`/getFollowers/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            this.setState({followers: obj.users});
+            console.log(obj);
+            if (obj.status == 0) {
+                this.setState({followers: obj.result});
+            }
+            else {
+                this.setState({followers: null}); //not found stuff
+            }
         })
     }
 
     componentDidMount() {
-        const{ username } = this.props.match.params;
-
-        this.setState({user: username}, () => {
+        this.setState({user: this.props.username}, () => {
             this.getFollowers();
 
             for(var i = 0; i < this.state.followers.length; i++) {

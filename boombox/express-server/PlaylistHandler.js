@@ -9,6 +9,7 @@ const crypto = require('crypto');
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
 const mongoPlaylistCollection = 'playlists';
+const mongoUserCollection = 'users';
 
 class PlaylistHandler {
     /**
@@ -169,16 +170,25 @@ class PlaylistHandler {
         try {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const idObject = new MongoClient.ObjectID(playlist_id);
-            const userQuery = { "_id" : idObject };
-            const userObject = await collection.findOne(userQuery);
-            if (!userObject) {
+            const playlistQuery = { "_id" : idObject };
+            const playlistObject = await collection.findOne(playlistQuery);
+            if (!playlistObject) {
                 console.log("playlist not found");
                 return {status: 1};
             }
+            const userQuery = {"_id": playlistObject.user_id};
+            const userObject = await client.db(monogDbName).collection(mongoUserCollection).findOne(userQuery);
+            if (!userObject) {
+                playlistObject.author = null;
+            }
+            else {
+                playlistObject.author = userObject.username;
+            }
+            playlistObject.url = "/playlist/" + playlist_id;
 
             return {
                 status: 0,
-                result: userObject
+                result: playlistObject
             };
         }
         catch (err) {
