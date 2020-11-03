@@ -28,13 +28,19 @@ class Bookmarks extends React.Component {
         fetch('/getBookmarks')
         .then(res => res.json())
         .then(obj => {
-            this.setState({bookmarks: obj.playlists});
-            /*
-            for (var i = 0; i < this.state.bookmarks.length; i++) {
-                this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
-                this.state.bookmarks[i].key = "bookmarkedPlaylist" + i;
+            if (obj.status == 0) {
+                console.log(obj);
+                this.setState({bookmarks: obj.result});
+                /*
+                for (var i = 0; i < this.state.bookmarks.length; i++) {
+                    this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
+                    this.state.bookmarks[i].key = "bookmarkedPlaylist" + i;
+                }
+                */
             }
-            */
+            else {
+                this.setState({data: null}) //need to change the component to have a not found page
+            }
         });
     }
 

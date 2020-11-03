@@ -43,7 +43,13 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getProfilePageData/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            this.setState({data: obj});
+            console.log(obj);
+            if (obj.status == 0) {
+                this.setState({data: obj.result});
+            }
+            else {
+                this.setState({data: null}); //do stuff for showing not found
+            }
         });
     }
 
@@ -51,6 +57,7 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getProfilePageData/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
+            console.log(obj);
             this.setState({userPlaylists: obj.playlists});
         });
         for (var i = 0; i < this.state.userPlaylists.length; i++) {
@@ -63,6 +70,7 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getFollowing/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
+            console.log(obj);
             this.setState({following: obj.users});
         })
     }
@@ -71,15 +79,16 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getFollowers/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
+            console.log(obj);
             this.setState({followers: obj.users});
         })
     }
 
     componentDidMount(){
         this.getUserData();
-        this.getUserPlaylists();
-        this.getUserFollowers();
-        this.getUserFollowing();
+        //this.getUserPlaylists();
+        //this.getUserFollowers();
+        //this.getUserFollowing();
     }
 
     render(){
@@ -123,7 +132,7 @@ class UserProfileDisplay extends React.Component {
                                 </div>
 
                                 <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
-                                    {this.state.data.following ? "Unfollow" : "Follow"}
+                                    {this.state.data.isFollowing ? "Unfollow" : "Follow"}
                                 </div>
 
                                 <div className = "user-profile-description">
@@ -139,12 +148,12 @@ class UserProfileDisplay extends React.Component {
 
                                 <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
                                     Following<br/>
-                                    {this.state.following.length}
+                                    {this.state.data.following ? this.state.data.following.length : 0}
                                 </a>
 
                                 <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
                                     Followers<br/>
-                                    {this.state.followers.length}
+                                    {this.state.data.followers ? this.state.data.followers.length : 0}
                                 </a>
                             </td>
                         </tr>

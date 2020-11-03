@@ -66,15 +66,17 @@ app.post("/editPlaylist", (req, res) => {
 	
 });
 
+app.all("/getBookmarks", UserHandler.getBookmarksRoute);
+
 app.all("/getPlaylistData/:playlistId", PlaylistHandler.getPlaylistRoute);
 
-app.all("/getProfilePageData/:username", (req, res) => {});
+app.all("/getProfilePageData/:username", UserHandler.getProfilePageDataRoute);
 
-app.all("/getFollowers/:username", (req, res) => {});
+app.all("/getFollowers/:username", UserHandler.getFollowersRoute);
 
-app.all("/getFollowing/:username", (req, res) => {});
+app.all("/getFollowing/:username", UserHandler.getFollowingRoute);
 
-app.all("/getUserPlaylists/:username", (req, res) => {});
+app.all("/getUserPlaylists/:username", UserHandler.getUserPlaylistsRoute);
 
 app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
