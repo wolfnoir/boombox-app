@@ -10,6 +10,13 @@ class SettingsPane extends React.Component {
         //this.props.closeWindow.bind(this);
     }
 
+    // componentDidMount() {
+    //     const script = document.createElement('script'); 
+	// 	script.src = jQuery; 
+	// 	script.async = true;
+    //     document.getElementsByTagName('head')[0].appendChild(script);
+    // }
+
     getProfileImage = () => {
         if (this.props.profile_image) {
             return <img id="profile-image" src={this.props.profile_image} width="256px" height="256px" alt=""/>
@@ -17,11 +24,49 @@ class SettingsPane extends React.Component {
         return <img id="profile-image" src={profile_icon} width="256px" height="256px" className="invert-color" alt=""/>
     }
 
+    send_add_media_request() {
+        console.log("hi");
+        var formData = new FormData(document.getElementById("change-icon-button"));
+        const response = fetch("/testImage", {
+            method: 'POST',
+            body: formData,
+            
+        }).then(
+            function(result) {
+                if (result.status == "OK"){
+                    console.log("Upload Success");
+                }
+                else {
+                    console.log("Upload failed - Error: " + result.error);
+                }
+            }
+        );
+    }
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/testImage",
+        //         data: formData,
+        //         processData: false,
+        //         contentType: false,
+        //         success: function(result) {
+        //           console.log(result);
+        //           if (result.status == "OK") {
+        //             console.log("Upload Success");
+        //           }
+        //           else {
+        //             console.log("Upload failed - Error: " + result.error);
+        //           }
+        //         }
+        // });
+        
+      
+
     render() {
         return (
             <div className="container-fluid" id="settings-pane">
                 <div className="row" id="row1">
                     <div className="col-auto">
+
                         <img id="back-icon" src={back_icon} width="30px" heigh="30px" alt="" onClick={this.props.closeWindow} />
                     </div>
                     <div className="col">
@@ -39,7 +84,8 @@ class SettingsPane extends React.Component {
                                     {this.getProfileImage()}
                                 </div>
                                 <div className="col" id="user-icon-right-side">
-                                    <p><button id="change-icon-button" className="btn btn-primary" type="button">Change Icon</button></p>
+                                    <p>
+                                        <button id="change-icon-button" className="btn btn-primary" type="button" /*onClick = {this.send_add_media_request()}*/>Change Icon</button></p>
                                     <p>Image must be under 500KB and must be a PNG, JPEG, or GIF.</p>
                                 </div>
                             </div>

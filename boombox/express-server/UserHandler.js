@@ -140,16 +140,16 @@ class UserHandler {
             return;
         }
 
-        /*
+        
         const username = 'test-user'; //req.body.username;
         const password = 'testPassword123?'; //req.body.password;
-        */
+        
        
-        const username = req.body.username; 
-        const password = req.body.password;
+        // const username = req.body.username; 
+        // const password = req.body.password;
         const statusObject = await UserHandler.loginUser(username, password);
         if (statusObject.status == 0) {
-            res.cookie('username', username);
+            res.cookie('username', 'test-user');
             req.session.logged_in = true;
             req.session.username = username;
             req.session.user_id = statusObject.user_id;

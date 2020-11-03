@@ -34,9 +34,9 @@ const mongoTagCollection = 'tags';
 Non-React routes (take priority over React routes)
 -------------------------------------------------------*/
 
-app.all("/helloworld", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
-});
+// app.all("/helloworld", (req, res) => {
+//     res.sendFile(path.join(__dirname, "..", "build", "helloworld.html"));
+// });
 
 //SHOULD BE POST ONLY
 //app.get("/registerUser", UserHandler.registerUserRoute);
@@ -45,6 +45,7 @@ app.post("/registerUser", UserHandler.registerUserRoute);
 //SHOULD BE POST ONLY
 //app.get("/loginUser", UserHandler.loginUserRoute);
 app.post("/loginUser", UserHandler.loginUserRoute);
+
 
 //SHOULD BE POST ONLY
 //app.get("/logoutUser", UserHandler.logoutUserRoute);
