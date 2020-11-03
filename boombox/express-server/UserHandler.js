@@ -674,7 +674,7 @@ class UserHandler {
     static async testImage(req, res) {
         /*
         variables:
-            -image field name (this example has the field name as content [files.content])
+            -image field name (this example has the field name as file [files.file])
 
         need to check:
             -if file was actually uploaded (files.content[0].size > 0)
@@ -708,8 +708,8 @@ class UserHandler {
         try {
             const db = client.db(mongoDbName);
             const bucket = new MongoClient.GridFSBucket(db);
-            const readStream = fs.createReadStream(files.content[0].path);
-            const uploadStream = bucket.openUploadStream(files.content[0].originalFilename);
+            const readStream = fs.createReadStream(files.file[0].path);
+            const uploadStream = bucket.openUploadStream(files.file[0].originalFilename);
             readStream.pipe(uploadStream)
                 .on('error', (err) => {
                     throw err;
