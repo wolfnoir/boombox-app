@@ -1,0 +1,16 @@
+#not-found-header {
+    font-family: 'Orbitron';
+    font-size: 50px;
+    font-weight: 600;
+}
+
+#cassette_image {
+    width: 30%;
+    border-radius: 20px;
+    margin: 10px;
+}
+
+#not-found-subtitle {
+    font-family: 'Roboto Condensed';
+    font-size: 24px;
+}

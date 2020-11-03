@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
+import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import PlaylistDisplay from './PlaylistDisplay';
 import './css/bootstrap.min.css';
@@ -92,86 +93,91 @@ class UserProfileDisplay extends React.Component {
     }
 
     render(){
-        /*--------------------------------------------------*/
-        /* TEMPORARY STATIC IMAGE IMPORTS                   */
-        /*--------------------------------------------------*/
-        var staticImages = [
-            wolf_img, leafy_img, horse_img
-        ]
-        /*--------------------------------------------------*/
-        var listOfUserPlaylists = this.state.userPlaylists.map((playlist, i) => {
-            //need to figure out how to load image
-            //albumCover={playlist.image} 
-            return (
-                <PlaylistDisplay
-                    albumCover={staticImages[i]} 
-                    title={playlist.name}
-                    author={playlist.author}
-                    likes={playlist.num_likes} 
-                    url={playlist.url}
-                    key={playlist.key}
-                />
-            )
-        });
+        if(this.state.data == null) {
+            return <Redirect to="/404" />
+        }
+        else{
+            /*--------------------------------------------------*/
+            /* TEMPORARY STATIC IMAGE IMPORTS                   */
+            /*--------------------------------------------------*/
+            var staticImages = [
+                wolf_img, leafy_img, horse_img
+            ]
+            /*--------------------------------------------------*/
+            var listOfUserPlaylists = this.state.userPlaylists.map((playlist, i) => {
+                //need to figure out how to load image
+                //albumCover={playlist.image} 
+                return (
+                    <PlaylistDisplay
+                        albumCover={staticImages[i]} 
+                        title={playlist.name}
+                        author={playlist.author}
+                        likes={playlist.num_likes} 
+                        url={playlist.url}
+                        key={playlist.key}
+                    />
+                )
+            });
 
-        return(
-            <NavBarWrapper>
-            <div className = "user-profile">
-                <table className = "user-profile-header">
-                    <tbody>
-                        <tr>
-                            <td>
-                            <div className = "user-profile-img">
-                                {this.getProfileImage()}
-                            </div>
-                            </td>
-
-                            <td className = "user-profile-info">
-                                <div className = "user-profile-header-text username">
-                                    {this.state.data.username}
+            return(
+                <NavBarWrapper>
+                <div className = "user-profile">
+                    <table className = "user-profile-header">
+                        <tbody>
+                            <tr>
+                                <td>
+                                <div className = "user-profile-img">
+                                    {this.getProfileImage()}
                                 </div>
+                                </td>
 
-                                <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
-                                    {this.state.data.isFollowing ? "Unfollow" : "Follow"}
-                                </div>
+                                <td className = "user-profile-info">
+                                    <div className = "user-profile-header-text username">
+                                        {this.state.data.username}
+                                    </div>
 
-                                <div className = "user-profile-description">
-                                    {this.state.data.bio}
-                                </div>
-                            </td>
+                                    <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
+                                        {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                    </div>
 
-                            <td className = "user-profile-match-followers">
-                                <div className = "user-profile-header-text match-followers">
-                                    Music Match<br/>
-                                    53%
-                                </div>
+                                    <div className = "user-profile-description">
+                                        {this.state.data.bio}
+                                    </div>
+                                </td>
 
-                                <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
-                                    Following<br/>
-                                    {this.state.data.following ? this.state.data.following.length : 0}
-                                </a>
+                                <td className = "user-profile-match-followers">
+                                    <div className = "user-profile-header-text match-followers">
+                                        Music Match<br/>
+                                        53%
+                                    </div>
 
-                                <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
-                                    Followers<br/>
-                                    {this.state.data.followers ? this.state.data.followers.length : 0}
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
+                                        Following<br/>
+                                        {this.state.data.following ? this.state.data.following.length : 0}
+                                    </a>
 
-                
+                                    <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
+                                        Followers<br/>
+                                        {this.state.data.followers ? this.state.data.followers.length : 0}
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <div className = "user-playlists">
-                    <div className = "user-profile-header-text my-playlists">
-                        My Playlists
-                    </div><br/>
-                    {listOfUserPlaylists}
+                    
+
+                    <div className = "user-playlists">
+                        <div className = "user-profile-header-text my-playlists">
+                            My Playlists
+                        </div><br/>
+                        {listOfUserPlaylists}
+                    </div>
+                    
                 </div>
-                
-            </div>
-            </NavBarWrapper>
-        );
+                </NavBarWrapper>
+            );
+        }
     }
 
 }

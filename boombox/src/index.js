@@ -24,6 +24,7 @@ import SettingsPane from './SettingsPane';
 import FollowersPage from './FollowersPage';
 import FollowingPage from './FollowingPage';
 import UserProfile from './UserProfile';
+import PageNotFound from './PageNotFound';
 
 class MyRouter extends React.Component {
 	constructor(props) {
@@ -57,6 +58,7 @@ class MyRouter extends React.Component {
 					<Route path="/user/:username/following" component={FollowingPage} />
 					<Route path="/user/:username" component={UserProfile} />
 					<Route path="/search/:query" component={SearchResults} />
+					<Route path="/404" component={PageNotFound} />
 				</Switch>
 			</div>
 	    );
