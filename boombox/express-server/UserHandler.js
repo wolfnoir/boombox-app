@@ -142,8 +142,8 @@ class UserHandler {
         }
 
         
-        const username = 'test-user'; //req.body.username;
-        const password = 'testPassword123?'; //req.body.password;
+        // const username = 'test-user'; //req.body.username;
+        // const password = 'testPassword123?'; //req.body.password;
         
        
         console.log("body", req.body);
