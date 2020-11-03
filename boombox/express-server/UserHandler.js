@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const { resolve } = require("path");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
-const monogDbName = 'boombox';
+const mongoDbName = 'boombox';
 const mongoUserCollection = 'users';
 const mongoPlaylistCollection = 'playlists';
 
@@ -33,7 +33,7 @@ class UserHandler {
         }
 
         try {
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const userQuery = {'$or': [{username: username}, {email: email}]};
             var cursor = collection.find(userQuery);
             if (await cursor.count() != 0) {
@@ -105,7 +105,7 @@ class UserHandler {
         }
 
         try {
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const userQuery = {username: username};
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
@@ -189,7 +189,7 @@ class UserHandler {
         }
 
         try {
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const userQuery = {username: username};
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
@@ -265,7 +265,20 @@ class UserHandler {
         const newPasswordConfirm = null; //"testPassword123?";
         */
         
-        const newIcon = req.body.newIcon; 
+
+        const form = new multiparty.Form();
+        const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
+            if (err) {console.log(err);}
+            return resolve([fields, files]);
+        }));
+        const [fields, files] = await formPromise;
+        const uploadedFile = files.fieldname[0];
+        const imageExts = ["jpeg", "png", "gif"];
+        const newIcon = (uploadedFile && uploadedFile.size > 0 && imageExts.includes(uploadedFile.originalFilename.substring(uploadedFile.originalFilename.lastIndexOf('.') + 1))) ? 
+            uploadedFile.path : null;
+        //const newIcon = req.body.newIcon; 
+        //this needs to be handled separately
+
         const newUsername = req.body.newUsername;
         const newBio = req.body.newBio;
         const newEmail = req.body.newEmail;
@@ -299,7 +312,7 @@ class UserHandler {
         }
 
         try {
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const idObject = new MongoClient.ObjectID(user_id);
             const userQuery = { "_id" : idObject };
             const userObject = await collection.findOne(userQuery);
@@ -354,7 +367,7 @@ class UserHandler {
 
         try {
             //First, search users collection for the user object
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const selfIdObject = new MongoClient.ObjectID(selfId);
             const userQuery = { username : targetUsername };
             const userObject = await collection.findOne(userQuery);
@@ -367,7 +380,7 @@ class UserHandler {
             const targetIdObject = userObject._id;
 
             //Then, search playlists collection for all of the user's playlists
-            const playlistCollection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistCollection);
             const playlistQuery = { "user_id" : targetIdObject }; 
             const playlistsObject = await playlistCollection.find(playlistQuery);
             if (!playlistsObject) {
@@ -432,7 +445,7 @@ class UserHandler {
 
         try {
             //First, search users collection for the user object
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const userQuery = { username : username };
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
@@ -486,7 +499,7 @@ class UserHandler {
 
         try {
             //First, search users collection for the user object
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const userQuery = { username : username };
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
@@ -540,7 +553,7 @@ class UserHandler {
 
         try {
             //First, search users collection for the user object
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const userQuery = { username : username };
             const userObject = await collection.findOne(userQuery);
             if (!userObject) {
@@ -552,7 +565,7 @@ class UserHandler {
             const targetIdObject = userObject._id;
 
             //Then, search playlists collection for all of the user's playlists
-            const playlistCollection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistCollection);
             const playlistQuery = { "user_id" : targetIdObject }; 
             const playlistsObject = await playlistCollection.find(playlistQuery);
             if (!playlistsObject) {
@@ -589,6 +602,14 @@ class UserHandler {
 
 
     static async testImage(req, res) {
+        /*
+        variables:
+            -image field name (this example has the field name as content [files.content])
+
+        need to check:
+            -if file was actually uploaded (files.content[0].size > 0)
+            -check the file extension
+        */
         console.log(req.body);
 
         const form = new multiparty.Form();
@@ -614,13 +635,13 @@ class UserHandler {
         }
 
         try {
-            const db = client.db(monogDbName);
+            const db = client.db(mongoDbName);
             const bucket = new MongoClient.GridFSBucket(db);
             const readStream = fs.createReadStream(files.content[0].path);
             const uploadStream = bucket.openUploadStream(files.content[0].originalFilename);
             readStream.pipe(uploadStream)
                 .on('error', (err) => {
-                    throw error;
+                    throw err;
                 })
                 .on('finish', () => {
                     //console.log(uploadStream.id);
@@ -637,6 +658,46 @@ class UserHandler {
         }
         res.send("hello"); //change to something that the client can actually use
     }
+
+    static async getImage(object_id) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            //return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            //return {status: -1};
+        }
+
+        try {
+            const db = client.db(mongoDbName);
+            const bucket = new MongoClient.GridFSBucket(db);
+            const downloadStream = bucket.openDownloadStream(object_id);
+            const writeStream = fs.createWriteStream('./tmp_file');
+            downloadStream.pipe(writeStream)
+                .on('error', (err) => {
+                    throw err;
+                })
+                .on('finish', () => {
+                    //console.log(uploadStream.id);
+                })
+            //return {status: 0}
+        }
+        catch (err) {
+            console.log(err);
+            //return {status: -1};
+        }
+        finally {
+            //client.close();
+        }
+        res.send("hello"); //change to something that the client can actually use
+    }
+
+
 }
 
 

@@ -66,7 +66,7 @@ app.post("/editPlaylist", (req, res) => {
 	
 });
 
-app.all("/getPlaylistData/:playlistId", (req, res) => {});
+app.all("/getPlaylistData/:playlistId", PlaylistHandler.getPlaylistRoute);
 
 app.all("/getProfilePageData/:username", (req, res) => {});
 
