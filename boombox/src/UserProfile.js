@@ -6,7 +6,7 @@ import PlaylistDisplay from './PlaylistDisplay';
 import './css/bootstrap.min.css';
 import './UserProfile.css';
 import profile_icon from './images/account_circle-24px.svg';
-import { render } from '@testing-library/react';
+import Cookie from 'universal-cookie';
 
 /*--------------------------------------------------*/
 /* TEMPORARY STATIC IMAGE IMPORTS                   */
@@ -14,6 +14,7 @@ import { render } from '@testing-library/react';
 import wolf_img from './images/watermelon-wolf.jpg';
 import horse_img from './images/horse.png';
 import leafy_img from "./images/leafy.jpg";
+import Cookies from 'universal-cookie';
 /*--------------------------------------------------*/
 
 function UserProfile() {
@@ -25,6 +26,7 @@ function UserProfile() {
 class UserProfileDisplay extends React.Component {
     constructor(props){
         super(props);
+        this.cookie = new Cookie();
         this.state = {
             data: {},
             userPlaylists: [],
@@ -139,9 +141,13 @@ class UserProfileDisplay extends React.Component {
                                         {this.state.data.username}
                                     </div>
 
+                                    {
+                                        this.cookie.get('username') !== this.props.username ? 
                                     <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
                                         {this.state.data.isFollowing ? "Unfollow" : "Follow"}
                                     </div>
+                                    : null
+                                    }
 
                                     <div className = "user-profile-description">
                                         {this.state.data.bio}
