@@ -93,63 +93,34 @@ class UserProfileDisplay extends React.Component {
     }
 
     render(){
-        /*--------------------------------------------------*/
-        /* TEMPORARY STATIC IMAGE IMPORTS                   */
-        /*--------------------------------------------------*/
-        var staticImages = [
-            wolf_img, leafy_img, horse_img
-        ]
-        /*--------------------------------------------------*/
-        var listOfUserPlaylists;
-        if (this.state.data && this.state.data.playlists) {
-            listOfUserPlaylists = this.state.data.playlists.map((playlist, i) => {
-                //need to figure out how to load image
-                //albumCover={playlist.image} 
-                return (
-                    <PlaylistDisplay
-                        albumCover={staticImages[i]} 
-                        title={playlist.name}
-                        author={playlist.author}
-                        likes={playlist.num_likes} 
-                        url={playlist.url}
-                        key={playlist.key}
-                    />
-                )
-            });
-<<<<<<< HEAD
+        if(this.state.data == null) {
+            return <Redirect to="/404" />
         }
-
-        return(
-            <NavBarWrapper>
-            <div className = "user-profile">
-                <table className = "user-profile-header">
-                    <tbody>
-                        <tr>
-                            <td>
-                            <div className = "user-profile-img">
-                                {this.getProfileImage()}
-                            </div>
-                            </td>
-
-                            <td className = "user-profile-info">
-                                <div className = "user-profile-header-text username">
-                                    {this.state.data.username}
-                                </div>
-
-                                <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
-                                    {this.state.data.isFollowing ? "Unfollow" : "Follow"}
-                                </div>
-
-                                <div className = "user-profile-description">
-                                    {this.state.data.bio}
-                                </div>
-                            </td>
-
-                            <td className = "user-profile-match-followers">
-                                <div className = "user-profile-header-text match-followers">
-                                    Music Match<br/>
-                                    53%
-=======
+        else{
+            /*--------------------------------------------------*/
+            /* TEMPORARY STATIC IMAGE IMPORTS                   */
+            /*--------------------------------------------------*/
+            var staticImages = [
+                wolf_img, leafy_img, horse_img
+            ]
+            /*--------------------------------------------------*/
+            var listOfUserPlaylists;
+            if (this.state.data && this.state.data.playlists) {
+                listOfUserPlaylists = this.state.data.playlists.map((playlist, i) => {
+                    //need to figure out how to load image
+                    //albumCover={playlist.image} 
+                    return (
+                        <PlaylistDisplay
+                            albumCover={staticImages[i]} 
+                            title={playlist.name}
+                            author={playlist.author}
+                            likes={playlist.num_likes} 
+                            url={playlist.url}
+                            key={playlist.key}
+                        />
+                    )
+                });
+            }
 
             return(
                 <NavBarWrapper>
@@ -160,7 +131,6 @@ class UserProfileDisplay extends React.Component {
                                 <td>
                                 <div className = "user-profile-img">
                                     {this.getProfileImage()}
->>>>>>> 04bbde318b82c6ea252935e57579ffe82fe88672
                                 </div>
                                 </td>
 
@@ -212,7 +182,6 @@ class UserProfileDisplay extends React.Component {
             );
         }
     }
-
 }
 
 export default UserProfile;
