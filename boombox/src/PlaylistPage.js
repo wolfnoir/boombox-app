@@ -72,6 +72,7 @@ class PlaylistPageDisplay extends React.Component {
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
         .then(obj => {
+            console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
                 for (var i = 0; i < this.state.data.songs.length; i++) {
@@ -225,10 +226,10 @@ class PlaylistPageDisplay extends React.Component {
                                                             </div>
                                                         </div>
                                                         {
-                                                            song.notes ?
+                                                            song.note ?
                                                             <div className="row song-notes-row" id={"song-note-"+i}>
                                                                 <div className="col">
-                                                                    <p>{song.notes}</p>
+                                                                    <p>{song.note}</p>
                                                                 </div>
                                                             </div>
                                                             : null
