@@ -99,20 +99,23 @@ class UserProfileDisplay extends React.Component {
             wolf_img, leafy_img, horse_img
         ]
         /*--------------------------------------------------*/
-        var listOfUserPlaylists = this.state.userPlaylists.map((playlist, i) => {
-            //need to figure out how to load image
-            //albumCover={playlist.image} 
-            return (
-                <PlaylistDisplay
-                    albumCover={staticImages[i]} 
-                    title={playlist.name}
-                    author={playlist.author}
-                    likes={playlist.num_likes} 
-                    url={playlist.url}
-                    key={playlist.key}
-                />
-            )
-        });
+        var listOfUserPlaylists;
+        if (this.state.data && this.state.data.playlists) {
+            listOfUserPlaylists = this.state.data.playlists.map((playlist, i) => {
+                //need to figure out how to load image
+                //albumCover={playlist.image} 
+                return (
+                    <PlaylistDisplay
+                        albumCover={staticImages[i]} 
+                        title={playlist.name}
+                        author={playlist.author}
+                        likes={playlist.num_likes} 
+                        url={playlist.url}
+                        key={playlist.key}
+                    />
+                )
+            });
+        }
 
         return(
             <NavBarWrapper>
