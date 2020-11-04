@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
+import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
 import './css/bootstrap.min.css';
@@ -180,154 +181,158 @@ class PlaylistEditDisplay extends React.Component {
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
-
-        return (
-            <NavBarWrapper>
-                <div className="container" id="playlist-edit-container">
-                    <div className="row" id="row1">
-                        <div className="col" id="playlist-cover-container">
-                            <img src={horse_img} id="playlist-cover" width="250px" height="250px"/>
-                        </div>
-                        <div className="col">
-                            <div className="row">
-                                <div className="col" id="playlist-edit-state-buttons-col">
-                                    <a href={"/playlist/" + this.props.playlistId}>
-                                        <button type="button" className="btn btn-primary">Save Changes</button>
-                                    </a>
-                                    <a href={"/playlist/" + this.props.playlistId}>
-                                        <button type="button" className="btn btn-danger">Cancel</button>
-                                    </a>
-                                </div>
+        if(this.state.data == null) {
+            return <Redirect to="/404" />
+        }
+        else{
+            return (
+                <NavBarWrapper>
+                    <div className="container" id="playlist-edit-container">
+                        <div className="row" id="row1">
+                            <div className="col" id="playlist-cover-container">
+                                <img src={horse_img} id="playlist-cover" width="250px" height="250px"/>
                             </div>
-                            <div className="row" id="title-row">
-                                <div className="col">
-                                    <h1>{this.state.data.name}</h1>
-                                    <div id="icons-div">
-                                        {/* put playlist-settings class here, in similar view to settingspane in navbar.js */}
-                                        <PlaylistSettings playlistName = {this.state.data.name} playlistDesc = {this.state.data.description}/>
-                                        {/* <img src={settings_img} height="30px" width="30px" /> */}
+                            <div className="col">
+                                <div className="row">
+                                    <div className="col" id="playlist-edit-state-buttons-col">
+                                        <a href={"/playlist/" + this.props.playlistId}>
+                                            <button type="button" className="btn btn-primary">Save Changes</button>
+                                        </a>
+                                        <a href={"/playlist/" + this.props.playlistId}>
+                                            <button type="button" className="btn btn-danger">Cancel</button>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="row" id="title-row">
+                                    <div className="col">
+                                        <h1>{this.state.data.name}</h1>
+                                        <div id="icons-div">
+                                            {/* put playlist-settings class here, in similar view to settingspane in navbar.js */}
+                                            <PlaylistSettings playlistName = {this.state.data.name} playlistDesc = {this.state.data.description}/>
+                                            {/* <img src={settings_img} height="30px" width="30px" /> */}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col">
+                                        <p>{this.state.data.description}</p>
+                                    </div>
+                                </div>
+                                <div className="row" id="tags-row">
+                                    <div className="col">
+                                        <div style={{"marginRight": "10px", "display": "inline-block"}}><h2>tags:</h2></div>
+                                        {this.state.data.tags ? 
+                                            this.state.data.tags.map((tag, i) => 
+                                            <div key={"tagDiv" + i} style={{"display": "inline-block"}}>
+                                                <Tag number = {i} content = {tag}/>
+                                                <img className="remove-tag-icon" src={remove_circle_img} />
+                                            </div>
+                                            ) 
+                                            : null}
+                                        <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" />
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col">
-                                    <p>{this.state.data.description}</p>
-                                </div>
-                            </div>
-                            <div className="row" id="tags-row">
-                                <div className="col">
-                                    <div style={{"marginRight": "10px", "display": "inline-block"}}><h2>tags:</h2></div>
-                                    {this.state.data.tags ? 
-                                        this.state.data.tags.map((tag, i) => 
-                                        <div key={"tagDiv" + i} style={{"display": "inline-block"}}>
-                                            <Tag number = {i} content = {tag}/>
-                                            <img className="remove-tag-icon" src={remove_circle_img} />
-                                        </div>
-                                        ) 
-                                        : null}
-                                    <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" />
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                    <div className="row" id="row2">
-                        <div className="col songs-container">
-                            <div className="row" id="songs-header-row">
-                            <div className="col songs-col0"> </div>
-                                <div className="col songs-col1">
-                                    <h2>SONGS - ARTIST</h2>
+                        <div className="row" id="row2">
+                            <div className="col songs-container">
+                                <div className="row" id="songs-header-row">
+                                <div className="col songs-col0"> </div>
+                                    <div className="col songs-col1">
+                                        <h2>SONGS - ARTIST</h2>
+                                    </div>
+                                    <div className="col songs-col2">
+                                        <h2>ALBUM</h2>
+                                    </div>
+                                    <div className="col songs-col3">
+                                        <h2>LENGTH</h2>
+                                    </div>
                                 </div>
-                                <div className="col songs-col2">
-                                    <h2>ALBUM</h2>
-                                </div>
-                                <div className="col songs-col3">
-                                    <h2>LENGTH</h2>
-                                </div>
-                            </div>
-                            <div className="row" id="songs-data-container-row">
-                                    <div className="col songs-data-container">
-                                        {
-                                            this.state.data.songs ?
-                                            this.state.data.songs.map((song, i) => (
-                                                <div key={"song"+i}>
-                                                    <div className="row">
-                                                        <div className="col songs-col0">
-                                                            {/* should decide based on state? */}
+                                <div className="row" id="songs-data-container-row">
+                                        <div className="col songs-data-container">
+                                            {
+                                                this.state.data.songs ?
+                                                this.state.data.songs.map((song, i) => (
+                                                    <div key={"song"+i}>
+                                                        <div className="row">
+                                                            <div className="col songs-col0">
+                                                                {/* should decide based on state? */}
+                                                                
+                                                            <img className="song-arrow" id={"song-arrow-" + i} 
+                                                                src={
+                                                                    this.state.song_notes_open[i] ?
+                                                                    arrow_down_img
+                                                                    : arrow_right_img
+                                                                } 
+                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
                                                             
-                                                        <img className="song-arrow" id={"song-arrow-" + i} 
-                                                            src={
-                                                                this.state.song_notes_open[i] ?
-                                                                arrow_down_img
-                                                                : arrow_right_img
-                                                            } 
-                                                            height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                        
+                                                                {/*
+                                                                {
+                                                                    this.state.song_notes_open[i] ?
+                                                                    <img className="song-arrow" id={"song-arrow-" + i} 
+                                                                src={arrow_down_img} 
+                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                                    :
+                                                                    <img className="song-arrow" id={"song-arrow-" + i} 
+                                                                src={arrow_right_img} 
+                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                                }
+                                                            */}
                                                             {/*
-                                                            {
-                                                                this.state.song_notes_open[i] ?
-                                                                <img className="song-arrow" id={"song-arrow-" + i} 
-                                                            src={arrow_down_img} 
-                                                            height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                                :
-                                                                <img className="song-arrow" id={"song-arrow-" + i} 
-                                                            src={arrow_right_img} 
-                                                            height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                            }
-                                                        */}
-                                                        {/*
-                                                            {this.state.song_notes_open[i] ? <ArrowDownComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/> : <ArrowRightComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/>}
-                                                        */}    
-                                                            {/* the changing from right to down doesn't work */}
-                                                            {/*
-                                                            {
-                                                                song.notes ?
-                                                                <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
-                                                                : <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
-                                                            }
-                                                        */}
-                                                            <b>{(i+1) + "."}</b>
-                                                        </div>
-                                                        <div className="col songs-col1">
-                                                            <b>{song.name}</b> - {song.artist}
-                                                        </div>
-                                                        <div className="col songs-col2">
-                                                            {song.album ? song.album : "N/A"}
-                                                        </div>
-                                                        <div className="col songs-col3">
-                                                            {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
-                                                        </div>
-                                                    </div>
-                                                    {
-                                                        song.notes ?
-                                                        <div className="row song-notes-row" id={"song-note-"+i}>
-                                                            <div className="col">
-                                                                <textarea className="song-notes-textarea" id={"song-note-"+i+"-textarea"} value={song.notes} />
+                                                                {this.state.song_notes_open[i] ? <ArrowDownComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/> : <ArrowRightComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/>}
+                                                            */}    
+                                                                {/* the changing from right to down doesn't work */}
+                                                                {/*
+                                                                {
+                                                                    song.notes ?
+                                                                    <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
+                                                                    : <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
+                                                                }
+                                                            */}
+                                                                <b>{(i+1) + "."}</b>
+                                                            </div>
+                                                            <div className="col songs-col1">
+                                                                <b>{song.name}</b> - {song.artist}
+                                                            </div>
+                                                            <div className="col songs-col2">
+                                                                {song.album ? song.album : "N/A"}
+                                                            </div>
+                                                            <div className="col songs-col3">
+                                                                {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
                                                         </div>
-                                                        : null
-                                                    }
-                                                </div>
-                                            ))
-                                            : null
-                                        }
+                                                        {
+                                                            song.notes ?
+                                                            <div className="row song-notes-row" id={"song-note-"+i}>
+                                                                <div className="col">
+                                                                    <textarea className="song-notes-textarea" id={"song-note-"+i+"-textarea"} value={song.notes} />
+                                                                </div>
+                                                            </div>
+                                                            : null
+                                                        }
+                                                    </div>
+                                                ))
+                                                : null
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            </div>        
-                    </div>
-                    <div className="row" id="row3">
-                        <div className="col">
-                            <div className="row" id="title-row">
-                                <div className="col">
-                                    <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
-                                    <h1>add song</h1>
+                                </div>        
+                        </div>
+                        <div className="row" id="row3">
+                            <div className="col">
+                                <div className="row" id="title-row">
+                                    <div className="col">
+                                        <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
+                                        <h1>add song</h1>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            </NavBarWrapper>
-        );
+                </NavBarWrapper>
+            );
+        }
     }
 }
 

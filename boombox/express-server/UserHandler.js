@@ -76,12 +76,12 @@ class UserHandler {
         
         const username = req.body.username;
         const password = req.body.password;
-        const passwordConfirm = req.body.passwordConfirm;
+        //const passwordConfirm = req.body.passwordConfirm;
         const email = req.body.email;
-        if (password !== passwordConfirm) {
-            res.send({status: 2}); //passwords do not match
-            return;
-        }
+        // if (password !== passwordConfirm) {
+        //     res.send({status: 2}); //passwords do not match
+        //     return;
+        // }
         const statusObject = await UserHandler.registerUser(username, password, email);
         res.send(statusObject);
     }
@@ -141,10 +141,10 @@ class UserHandler {
             return;
         }
 
-        /*
-        const username = 'test-user'; //req.body.username;
-        const password = 'testPassword123?'; //req.body.password;
-        */
+        
+        // const username = 'test-user'; //req.body.username;
+        // const password = 'testPassword123?'; //req.body.password;
+        
        
         console.log("body", req.body);
         console.log("params", req.params);
@@ -691,7 +691,7 @@ class UserHandler {
         console.log('fields', fields);
         console.log(files);
 
-        /*
+        
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -727,7 +727,7 @@ class UserHandler {
         finally {
             //client.close();
         }
-        */
+        
         res.send("hello"); //change to something that the client can actually use
     }
 

@@ -90,3 +90,9 @@
     text-transform: lowercase;
     margin: 10px;
 }
+
+#error-response{
+    color: lightcoral;
+    margin: 10px;
+    font-weight: 600;
+}

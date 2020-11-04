@@ -24,6 +24,8 @@ import SettingsPane from './SettingsPane';
 import FollowersPage from './FollowersPage';
 import FollowingPage from './FollowingPage';
 import UserProfile from './UserProfile';
+import PageNotFound from './PageNotFound';
+import RegisterSuccess from './RegisterSuccess';
 
 class MyRouter extends React.Component {
 	constructor(props) {
@@ -43,6 +45,7 @@ class MyRouter extends React.Component {
 						{this.state.loggedIn ? <Bookmarks /> : <Redirect to="/" />}
 					</Route>
 					<Route path="/register" component={Register} />
+					<Route path="/registersuccess" component={RegisterSuccess} />
 					<Route path="/navbar-test" component={NavBarTest} />
 					<Route path="/relay-info/:info" component={RelayInfo} />
 					<Route 
@@ -57,6 +60,7 @@ class MyRouter extends React.Component {
 					<Route path="/user/:username/following" component={FollowingPage} />
 					<Route path="/user/:username" component={UserProfile} />
 					<Route path="/search/:query" component={SearchResults} />
+					<Route path="/404" component={PageNotFound} />
 				</Switch>
 			</div>
 	    );
