@@ -106,9 +106,9 @@ class PlaylistPageDisplay extends React.Component {
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
         
         console.log(this.cookie.get('username'));
-        console.log(this.state.data.author);
+        //console.log(this.state.data.author);
         var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
-        if(this.state.data.author !== this.cookie.get('username')){
+        if(this.state.data && this.state.data.author !== this.cookie.get('username')){
             editButton = null;
         }
 
