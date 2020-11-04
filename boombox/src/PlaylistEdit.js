@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
+import Cookie from 'universal-cookie';
 import './css/bootstrap.min.css';
 import './PlaylistEdit.css';
 import Modal from 'react-bootstrap/Modal'
@@ -61,7 +62,7 @@ class PlaylistSettings extends React.Component {
             show: false,
             setShow: false,
             name: this.props.playlistName,
-            desc: this.props.playlistDesc
+            desc: this.props.playlistDesc,
         }
     }
 
@@ -139,6 +140,7 @@ class PlaylistSettings extends React.Component {
 class PlaylistEditDisplay extends React.Component {
     constructor(props) {
         super(props);
+        this.cookie = new Cookie();
         this.state = {
             data: {},
             song_notes_open: [],
@@ -182,7 +184,10 @@ class PlaylistEditDisplay extends React.Component {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
         if(this.state.data == null) {
-            return <Redirect to="/404" />
+            return <Redirect to="/error" />
+        }
+        else if (this.state.data.author !== this.cookie.get('username')){
+            return <Redirect to="/error" />
         }
         else{
             return (

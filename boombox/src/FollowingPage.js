@@ -68,7 +68,7 @@ class FollowingPageDisplay extends React.Component {
 
     render() {
         if(this.state.data == null) {
-            return <Redirect to="/404" />
+            return <Redirect to="/error" />
         }
         else {
             /*--------------------------------------------------*/
