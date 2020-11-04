@@ -3,6 +3,8 @@ import { useParams } from 'react-router';
 import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
+import Cookie from 'universal-cookie';
+
 import './css/bootstrap.min.css';
 import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
@@ -16,6 +18,7 @@ import play_img from './images/play_circle_outline-24px.svg';
 import skip_next_img from './images/skip_next-24px.svg';
 import skip_previous_img from './images/skip_previous-24px.svg'; 
 import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
+
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
@@ -55,6 +58,7 @@ class ArrowDownRightComponent extends React.Component {
 class PlaylistPageDisplay extends React.Component {
     constructor(props) {
         super(props);
+        this.cookie = new Cookie();
         this.state = {
             data: {},
             song_notes_open: [],
@@ -78,6 +82,8 @@ class PlaylistPageDisplay extends React.Component {
                 this.setState({data: null}); //need to change the component to have a not found page
             }
         });
+        console.log(this.state.loggedIn);
+        //this.getCurrentUserData(user)
     }
 
     handleSongArrowClick = (i) => {
@@ -97,8 +103,16 @@ class PlaylistPageDisplay extends React.Component {
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
+        
+        console.log(this.cookie.get('username'));
+        console.log(this.state.data.author);
+        var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
+        if(this.state.data.author !== this.cookie.get('username')){
+            editButton = null;
+        }
+
         if(this.state.data == null) {
-            return <Redirect to="/404" />
+            return <Redirect to="/error" />
         }
         else{
             return (
@@ -116,7 +130,7 @@ class PlaylistPageDisplay extends React.Component {
                                             <img src={like_img} height="30px" width="30px" />
                                             <img src={bookmark_img} height="30px" width="30px" />
                                             <img src={link_img} height="30px" width="30px" />
-                                            <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
+                                            {editButton}
                                         </div>
                                     </div>
                                 </div>

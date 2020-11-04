@@ -9,11 +9,11 @@ function PageNotFound(){
         <NavBarWrapper>
             <center>
                 <div id = "not-found-header">
-                    404: PAGE NOT FOUND
+                    ERROR!<br/>
                 </div>
                 <img src={cassette_image} id = "cassette_image"/>
                 <div id = "not-found-subtitle">
-                    Whoops! Try navigating back to the <a href="/">dashboard</a> and try again.
+                    Whoops! Page not found and/or you are not authorized to view this page. Try navigating back to the <a href="/">dashboard</a> and try again.
                 </div>
             </center>
         </NavBarWrapper>
