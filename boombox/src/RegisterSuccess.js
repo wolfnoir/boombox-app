@@ -20,7 +20,7 @@ class RegisterSuccess extends React.Component {
                     </div>
                         
                         <div>
-                        Make sure to log in <a className = "login-link" href='/login'>here</a> to start connecting to people!
+                        Make sure to log in <a className = "login-link" href='/login'>here</a> with your new account!
                         </div>
                     </div>
                 </center>

@@ -60,7 +60,7 @@ class MyRouter extends React.Component {
 					<Route path="/user/:username/following" component={FollowingPage} />
 					<Route path="/user/:username" component={UserProfile} />
 					<Route path="/search/:query" component={SearchResults} />
-					<Route path="/404" component={PageNotFound} />
+					<Route path="/error" component={PageNotFound} />
 				</Switch>
 			</div>
 	    );
