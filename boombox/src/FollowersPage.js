@@ -47,6 +47,7 @@ class FollowersPageDisplay extends React.Component {
             console.log(obj);
             if (obj.status == 0) {
                 this.setState({followers: obj.result});
+                this.setState({user: this.props.username});
             }
             else {
                 this.setState({followers: null}); //not found stuff
@@ -65,7 +66,7 @@ class FollowersPageDisplay extends React.Component {
     }
 
     render() {
-        if(this.state.data == null) {
+        if(this.state.data === null) {
             return <Redirect to="/error" />
         }
         else {

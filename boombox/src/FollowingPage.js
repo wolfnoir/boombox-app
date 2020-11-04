@@ -47,6 +47,7 @@ class FollowingPageDisplay extends React.Component {
             console.log(obj);
             if (obj.status == 0) {
                 this.setState({following: obj.result});
+                this.setState({user: this.props.username});
             }
             else {
                 this.setState({following: null}); //not found stuff do
@@ -67,7 +68,7 @@ class FollowingPageDisplay extends React.Component {
     }
 
     render() {
-        if(this.state.data == null) {
+        if(this.state.data === null) {
             return <Redirect to="/error" />
         }
         else {
