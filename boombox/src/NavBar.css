@@ -137,6 +137,10 @@
     padding: 10px 0px;
 }
 
+#logout-cell {
+    cursor: pointer;
+}
+
 /*--------------------*/
 
 #nav-bar-main #settings-pane {

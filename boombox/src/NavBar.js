@@ -60,6 +60,14 @@ class NavBar extends React.Component {
         document.getElementById("settings-pane").style.display = "none";
     }
 
+    logoutUser = () => {
+        fetch('/logoutUser', {
+			method: 'POST'
+		}).then(res => {
+            window.location.href= "/";
+        });
+    }
+
     componentDidMount() {
         var pushMenu = document.getElementById("push-menu");
         //var navBar = document.getElementById("nav-bar");
@@ -114,7 +122,7 @@ class NavBar extends React.Component {
                                 <td><a href="/my-bookmarks"><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} /> bookmarks</a></td>
                             </tr>
                             <tr>
-                                <td><img src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} /> log out</td>
+                                <td id="logout-cell" onClick={this.logoutUser}><img id="logout-icon" src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} /> log out</td>
                             </tr>
                         </tbody>
                     </table>
