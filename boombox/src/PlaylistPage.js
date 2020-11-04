@@ -141,7 +141,7 @@ class PlaylistPageDisplay extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        {this.state.data.likes.length} Likes
+                                        {this.state.data.likes ? this.state.data.likes.length : 0} Likes
                                     </div>
                                 </div>
                                 <div className="row">
