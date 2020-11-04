@@ -93,7 +93,7 @@ class SearchResults extends React.Component {
                     albumCover={staticImages[i]} 
                     title={playlist.name}
                     author={playlist.author}
-                    likes={playlist.num_likes} 
+                    likes={playlist.likes} 
                     url={playlist.url}
                     key={playlist.key}
                 />

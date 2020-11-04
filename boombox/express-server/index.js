@@ -89,28 +89,28 @@ app.all("/getNewPlaylists", (req, res) => {
 			{
 				name: "wonderwall 10 hrs",
 				author: "smithman32",
-				num_likes: 69,
+				likes: new Array(69),
 				image_url: "./images/horse.png",
 				url: "/playlist/abc"
 			},
 			{
 				name: "o, my love",
 				author: "banishtheknight",
-				num_likes: 23,
+				likes: new Array(23),
 				image_url: "./images/mountain.jpg",
 				url: "/playlist/abc"
 			},
 			{
 				name: "smallest church in the whole mysterious universe",
 				author: "tequilasunset",
-				num_likes: 653,
+				likes: new Array(653),
 				image_url: "./images/disco-church.png",
 				url: "/playlist/abc"
 			},
 			{
 				name: "searching for you",
 				author: "sidneyfalco",
-				num_likes: 43,
+				likes: new Array(43),
 				image_url: "./images/noir2.png",
 				url: "/playlist/abc"
 			}
@@ -125,14 +125,14 @@ app.all("/getRecommendedPlaylists", (req, res) => {
 			{
 				name: "dreams of green",
 				author: "smithman32",
-				num_likes: 765,
+				likes: new Array(765),
 				image_url: "./images/leafy.jpg",
 				url: "/playlist/abc"
 			},
 			{
 				name: "creeping noir",
 				author: "maltesefalcon",
-				num_likes: 54,
+				likes: new Array(54),
 				image_url: "./images/noir.jpg",
 				url: "/playlist/abc"
 			}

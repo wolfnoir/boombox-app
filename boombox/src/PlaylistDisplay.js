@@ -24,7 +24,7 @@ class PlaylistDisplay extends React.Component{
                 <a href={this.props.url}><div className = "playlist-title"><EllipsisWithTooltip placement="bottom">{this.state.title}</EllipsisWithTooltip></div></a>
                 <div className = "playlist-info">
                     by <a href={"/user/" + this.state.author}>{this.state.author}</a> <br/>
-                    {this.state.likes} likes
+                    {this.state.likes.length} likes
                 </div>
             </div>
         );

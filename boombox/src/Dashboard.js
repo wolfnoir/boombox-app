@@ -78,7 +78,7 @@ class Dashboard extends React.Component {
                     albumCover={staticImages1[i]} 
                     title={playlist.name}
                     author={playlist.author}
-                    likes={playlist.num_likes} 
+                    likes={playlist.likes} 
                     url={playlist.url}
                     key={playlist.key}
                 />
@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
                     albumCover={staticImages2[i]} 
                     title={playlist.name}
                     author={playlist.author}
-                    likes={playlist.num_likes} 
+                    likes={playlist.likes} 
                     url={playlist.url}
                     key={playlist.key}
                 />

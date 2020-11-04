@@ -418,7 +418,7 @@ class UserHandler {
             }
 
             const userPlaylists = [];
-            playlistsObject.forEach((playlist) => {
+            await playlistsObject.forEach((playlist) => {
                 userPlaylists.push(playlist);
             });
             for (var i = 0; i < userPlaylists.length; i++) {
