@@ -22,7 +22,7 @@ class PlaylistHandler {
             useUnifiedTopology: true
         }).catch(err => {
             console.log(err);
-            return -1;
+            return {status: -1};
         });
 
         if (!client) {
@@ -35,7 +35,7 @@ class PlaylistHandler {
             const userIdObject = MongoClient.ObjectID(user_id);
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
 
-            await collection.insertOne({
+            const playlistObject = await collection.insertOne({
                 com_enabled: false,
                 comments: [],
                 description: '',
@@ -47,28 +47,29 @@ class PlaylistHandler {
                 tags: [],
                 user_id: userIdObject
             });
+
+            console.log("Success, created " + playlistObject._insertedId);
+            return {
+                status: 0,
+                playlistId: playlistObject.insertedId
+            };
         }
 
         catch (err) {
             console.log(err);
-            return -1;
+            return {status: -1};
         }
 
         finally {
             client.close();
         }
-
-        console.log("Success");
-        return 0;
     }
 
     static async createPlaylistRoute(req, res) {
         const user_id = req.session.user_id;
-        const success = await UserHandler.createPlaylist(user_id);
-
-        res.send({
-            statusCode: success //-1: an error occurred, 0: success
-        });
+        const success = await PlaylistHandler.createPlaylist(user_id);
+        console.log(success);
+        res.send(success);
     }
 
     /**
