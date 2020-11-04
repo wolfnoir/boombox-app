@@ -65,6 +65,7 @@ class SettingsPane extends React.Component {
             <div className="container-fluid" id="settings-pane">
                 <div className="row" id="row1">
                     <div className="col-auto">
+
                         <img id="back-icon" src={back_icon} width="30px" heigh="30px" alt="" onClick={this.props.closeWindow} />
                     </div>
                     <div className="col">

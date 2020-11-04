@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
+import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import UserDisplay from './UserDisplay';
 import './css/bootstrap.min.css';
@@ -66,44 +67,49 @@ class FollowingPageDisplay extends React.Component {
     }
 
     render() {
-        /*--------------------------------------------------*/
-        /* TEMPORARY STATIC IMAGE IMPORTS                   */
-        /*--------------------------------------------------*/
-        var staticImages = [wolf_img, mountain_img, church_img];
-        /*--------------------------------------------------*/
+        if(this.state.data == null) {
+            return <Redirect to="/404" />
+        }
+        else {
+            /*--------------------------------------------------*/
+            /* TEMPORARY STATIC IMAGE IMPORTS                   */
+            /*--------------------------------------------------*/
+            var staticImages = [wolf_img, mountain_img, church_img];
+            /*--------------------------------------------------*/
 
-        var returnUrl = "/user/" + this.state.user;
+            var returnUrl = "/user/" + this.state.user;
 
-        var followingList = this.state.following.map((user, i) => {
-            return (
-                <UserDisplay 
-                    //picture = {user.image}
-                    picture = {staticImages[i % 3]}
-                    username = {user.username}
-                />
-            )
-        });
+            var followingList = this.state.following.map((user, i) => {
+                return (
+                    <UserDisplay 
+                        //picture = {user.image}
+                        picture = {staticImages[i % 3]}
+                        username = {user.username}
+                    />
+                )
+            });
 
-        //@todo need to pass in back_url as prop from user profile
-        return(
-            <NavBarWrapper>
-                <div className="container" id="following-pane">
-                    <div className="row" id="row1">
-                        <ArrowBackComponent url={returnUrl} />
-                        <div className="col" id="following-header">
-                            Following ({followingList.length})
+            //@todo need to pass in back_url as prop from user profile
+            return(
+                <NavBarWrapper>
+                    <div className="container" id="following-pane">
+                        <div className="row" id="row1">
+                            <ArrowBackComponent url={returnUrl} />
+                            <div className="col" id="following-header">
+                                Following ({followingList.length})
+                            </div>
+                        </div>
+                        <div className="row" id="row2">
+                            <div className="col">
+                                <center>
+                                {followingList}
+                                </center>
+                            </div>
                         </div>
                     </div>
-                    <div className="row" id="row2">
-                        <div className="col">
-                            <center>
-                            {followingList}
-                            </center>
-                        </div>
-                    </div>
-                </div>
-            </NavBarWrapper>
-        );
+                </NavBarWrapper>
+            );
+        }
     }
 }
 

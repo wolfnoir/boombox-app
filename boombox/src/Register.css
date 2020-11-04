@@ -90,3 +90,8 @@
     text-transform: lowercase;
     margin: 10px;
 }
+
+#error-response{
+    color: lightcoral;
+    font-size: 12px;
+}

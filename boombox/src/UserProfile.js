@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
+import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import PlaylistDisplay from './PlaylistDisplay';
 import './css/bootstrap.min.css';
@@ -115,6 +116,7 @@ class UserProfileDisplay extends React.Component {
                     />
                 )
             });
+<<<<<<< HEAD
         }
 
         return(
@@ -147,34 +149,68 @@ class UserProfileDisplay extends React.Component {
                                 <div className = "user-profile-header-text match-followers">
                                     Music Match<br/>
                                     53%
+=======
+
+            return(
+                <NavBarWrapper>
+                <div className = "user-profile">
+                    <table className = "user-profile-header">
+                        <tbody>
+                            <tr>
+                                <td>
+                                <div className = "user-profile-img">
+                                    {this.getProfileImage()}
+>>>>>>> 04bbde318b82c6ea252935e57579ffe82fe88672
                                 </div>
+                                </td>
 
-                                <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
-                                    Following<br/>
-                                    {this.state.data.following ? this.state.data.following.length : 0}
-                                </a>
+                                <td className = "user-profile-info">
+                                    <div className = "user-profile-header-text username">
+                                        {this.state.data.username}
+                                    </div>
 
-                                <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
-                                    Followers<br/>
-                                    {this.state.data.followers ? this.state.data.followers.length : 0}
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
+                                        {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                    </div>
 
-                
+                                    <div className = "user-profile-description">
+                                        {this.state.data.bio}
+                                    </div>
+                                </td>
 
-                <div className = "user-playlists">
-                    <div className = "user-profile-header-text my-playlists">
-                        My Playlists
-                    </div><br/>
-                    {listOfUserPlaylists}
+                                <td className = "user-profile-match-followers">
+                                    <div className = "user-profile-header-text match-followers">
+                                        Music Match<br/>
+                                        53%
+                                    </div>
+
+                                    <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
+                                        Following<br/>
+                                        {this.state.data.following ? this.state.data.following.length : 0}
+                                    </a>
+
+                                    <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
+                                        Followers<br/>
+                                        {this.state.data.followers ? this.state.data.followers.length : 0}
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
+
+                    <div className = "user-playlists">
+                        <div className = "user-profile-header-text my-playlists">
+                            My Playlists
+                        </div><br/>
+                        {listOfUserPlaylists}
+                    </div>
+                    
                 </div>
-                
-            </div>
-            </NavBarWrapper>
-        );
+                </NavBarWrapper>
+            );
+        }
     }
 
 }
