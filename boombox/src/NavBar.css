@@ -137,6 +137,10 @@
     padding: 10px 0px;
 }
 
+#create-playlist-cell {
+    cursor: pointer;
+}
+
 #logout-cell {
     cursor: pointer;
 }

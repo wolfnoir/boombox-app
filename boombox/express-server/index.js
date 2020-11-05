@@ -80,8 +80,19 @@ app.all("/getUserPlaylists/:username", UserHandler.getUserPlaylistsRoute);
 
 app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
-//is a placeholder, can expand on it later
+app.post("/deletePlaylist", PlaylistHandler.deletePlaylistRoute);
+
 app.post("/editPlaylist", PlaylistHandler.editPlaylistRoute);
+
+app.post("/addSong", PlaylistHandler.addSong);
+
+app.post("/deleteSong", PlaylistHandler.deleteSong);
+
+app.post("/updateSongs", PlaylistHandler.updateSongs);
+
+app.post("/addPlaylistTag", (req, res) => {});
+
+app.post("/deletePlaylistTag", (req, res) => {});
 
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {
