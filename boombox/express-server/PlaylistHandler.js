@@ -49,12 +49,6 @@ class PlaylistHandler {
                 tags: [],
                 user_id: userIdObject
             });
-
-            console.log("Success, created " + playlistObject._insertedId);
-            return {
-                status: 0,
-                playlistId: playlistObject.insertedId
-            };
         }
 
         catch (err) {
