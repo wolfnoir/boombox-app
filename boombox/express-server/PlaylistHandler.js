@@ -139,7 +139,7 @@ class PlaylistHandler {
      */
     
     //static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
-    static async editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, private) {
+    static async editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, isPrivate) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -169,7 +169,7 @@ class PlaylistHandler {
                 last_modified: date.getDate(),
                 //likes: likes,
                 name: name,
-                private: private,
+                isPrivate: isPrivate,
                 //songs: songs,
                 //tags: tags,
                 //user_id: userIdObject
@@ -205,11 +205,11 @@ class PlaylistHandler {
         const image_url = req.body.image_url; //need to handle this separately with mult-form
         const likes = req.body.likes;
         const name = req.body.name;
-        const private = req.body.private;
+        const isPrivate = req.body.isPrivate;
         const songs = req.body.songs;
         const tags = req.body.tags;
         //const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, private, songs, tags);
-        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, private);
+        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, isPrivate);
 
 
         res.send({
