@@ -441,7 +441,7 @@ class UserHandler {
             //Check if the end user is a follower of the target user
             //const isFollowing = userObject.following.includes(selfIdObject);
             const selfUserObject = await collection.findOne({username: selfUsername});
-            const isFollowing = false;
+            var isFollowing = false;
             if (selfUserObject)
                 isFollowing = userObject.following.includes(selfUserObject._id);
 
