@@ -77,6 +77,63 @@ class PlaylistHandler {
         });
     }
 
+    /*
+     * Delete Playlist 
+     */
+
+    static async deletePlaylist(user_id, playlistId) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const foundPlaylist = await collection.findOne({"_id": playlistId});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+                console.log("not authorized");
+                return {status: 1};
+            }
+            const status = await collection.deleteOne({"_id": playlistId});
+            console.log(status);
+            if (status.deletedCount > 0) {
+                console.log("Success");
+                return {status: 0};
+            }
+            return {status: -1};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+    }
+
+    static async deletePlaylistRoute(req, res) {
+        const user_id = req.session.user_id;
+        const playlistId = new MongoClient.ObjectID(req.body.playlistId);
+        const response = await PlaylistHandler.deletePlaylist(user_id, playlistId);
+
+        res.send({
+            status: response.status, //status -1: an error occurred, 0: success, 1: you do not have authorization
+        });
+    }
+
     /**
      * Edit Playlist
      */
