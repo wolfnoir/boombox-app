@@ -162,15 +162,16 @@ class PlaylistHandler {
 
             const updateDoc = {
                 com_enabled: com_enabled,
-                comments: comments,
+                //comments: comments,
                 description: description,
-                image_url: image_url,
+                image_url: image_url, //need to do this separately for image upload
                 last_modified: date.getDate(),
-                likes: likes,
+                //likes: likes,
                 name: name,
-                songs: songs,
-                tags: tags,
-                user_id: userIdObject
+                private: private,
+                //songs: songs,
+                //tags: tags,
+                //user_id: userIdObject
             }
 
             await collection.updateOne(filter, updateDoc);
@@ -200,12 +201,13 @@ class PlaylistHandler {
         const com_enabled = req.body.com_enabled;
         const comments = req.body.comments;
         const description = req.body.description;
-        const image_url = req.body.image_url;
+        const image_url = req.body.image_url; //need to handle this separately with mult-form
         const likes = req.body.likes;
         const name = req.body.name;
+        const private = req.body.private;
         const songs = req.body.songs;
         const tags = req.body.tags;
-        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags);
+        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, private, songs, tags);
 
         res.send({
             statusCode: success //-1: an error occurred, 0: success, 1: not logged in
@@ -372,6 +374,48 @@ class PlaylistHandler {
             client.close();
         }
      } 
+
+     static async updateSongs(req, res) {
+        const user_id = req.session.user_id;
+        const playlistId = req.body.playlistId;
+        const songs = req.body.songs;
+
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const foundPlaylist = await collection.findOne({"_id": playlistId});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+                console.log("not authorized");
+                return {status: 1};
+            }
+            await collection.updateOne({"_id": playlistId}, {$set: {songs: songs}}); //add status checking for update?
+            return {status: 0};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+     }
 }
 
 module.exports = PlaylistHandler;

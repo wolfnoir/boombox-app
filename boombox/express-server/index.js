@@ -88,6 +88,8 @@ app.post("/addSong", PlaylistHandler.addSong);
 
 app.post("/deleteSong", PlaylistHandler.deleteSong);
 
+app.post("/updateSongs", PlaylistHandler.updateSongs);
+
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {
 		playlists: [
