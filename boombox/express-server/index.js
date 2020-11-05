@@ -82,8 +82,11 @@ app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
 app.post("/deletePlaylist", PlaylistHandler.deletePlaylistRoute);
 
-//is a placeholder, can expand on it later
 app.post("/editPlaylist", PlaylistHandler.editPlaylistRoute);
+
+app.post("/addSong", PlaylistHandler.addSong);
+
+app.post("/deleteSong", PlaylistHandler.deleteSong);
 
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {

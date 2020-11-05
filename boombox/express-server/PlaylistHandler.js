@@ -270,6 +270,108 @@ class PlaylistHandler {
 
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: playlist not found
     }
+
+    /* 
+     * Song Handling
+     */
+
+     static async addSong(req, res) {
+        const user_id = req.session.user_id;
+        const playlistId = req.body.playlistId;
+        const url = req.body.url;
+        const title = req.body.title;
+        const artist = req.body.artist;
+        const album = req.body.album;
+
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const foundPlaylist = await collection.findOne({"_id": playlistId});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+                console.log("not authorized");
+                return {status: 1};
+            }
+            const songArray = foundPlaylist.songs;
+            songArray.push({
+                album: album,
+                artist: artist,
+                name: title,
+                notes: null,
+                url: url,
+                url_type: "youtube.com/watch?v="
+            });
+            await collection.updateOne({"_id": playlistId}, {$set: {songs: songArray}}); //add status checking for update?
+            return {status: 0};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+     }
+
+     static async deleteSong(req, res) {
+        const user_id = req.session.user_id;
+        const playlistId = req.body.playlistId;
+        const songPosition = req.body.songPosition;
+
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const foundPlaylist = await collection.findOne({"_id": playlistId});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+                console.log("not authorized");
+                return {status: 1};
+            }
+            const songArray = foundPlaylist.songs;
+            delete songArray[songPosition];
+            await collection.updateOne({"_id": playlistId}, {$set: {songs: songArray}}); //add status checking for update?
+            return {status: 0};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+     } 
 }
 
 module.exports = PlaylistHandler;
