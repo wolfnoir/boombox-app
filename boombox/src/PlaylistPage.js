@@ -102,7 +102,7 @@ class PlaylistPageDisplay extends React.Component {
     copyLink(){
         var currentURL = window.location.href;
         navigator.clipboard.writeText(currentURL)
-        .then(() => { alert(`Copied!`) })
+        .then(() => { alert(`Link copied!`) })
         .catch((error) => { alert(`Copy failed! ${error}`) })
     }
 
@@ -167,7 +167,7 @@ class PlaylistPageDisplay extends React.Component {
                                 <div className="row" id="songs-header-row">
                                 <div className="col songs-col0"> </div>
                                     <div className="col songs-col1">
-                                        <h2>SONGS - ARTIST</h2>
+                                        <h2>SONG - ARTIST</h2>
                                     </div>
                                     <div className="col songs-col2">
                                         <h2>ALBUM</h2>
@@ -185,7 +185,6 @@ class PlaylistPageDisplay extends React.Component {
                                                         <div className="row">
                                                             <div className="col songs-col0">
                                                                 {/* should decide based on state? */}
-                                                                
                                                             <img className="song-arrow" id={"song-arrow-" + i} 
                                                                 src={
                                                                     this.state.song_notes_open[i] ?
@@ -220,7 +219,7 @@ class PlaylistPageDisplay extends React.Component {
                                                                 <b>{(i+1) + "."}</b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> - {song.artist}
+                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
                                                                 {song.album ? song.album : "N/A"}

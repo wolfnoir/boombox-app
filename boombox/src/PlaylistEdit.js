@@ -121,17 +121,71 @@ class PlaylistSettings extends React.Component {
                 Delete Playlist
               </Button>
             </center>
-            {/* <Modal.Header closeButton>
-              <Modal.Title>Settings</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-            <Modal.Footer>
-              <center>
-              <Button variant="primary" onClick={handleClose}>
+          </Modal>
+        </div>
+      );
+    }
+}
+
+class AddSongModal extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            show: false,
+            setShow: false,
+        }
+    }
+
+    handleSave(){
+        //TODO: handle saving stuff here
+    }
+
+    handleYoutubeURL(){
+        //TODO: populate fields with youtube url information via youtube data api
+    }
+    
+    render(){
+        const handleClose = () => this.setState({show: false});
+        const handleShow = () => this.setState({show: true});
+        return (
+        <div>
+            <div onClick={handleShow}>
+             <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
+                                        <h1>add song</h1>
+            </div>
+          <Modal show={this.state.show} onHide={handleClose} size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered> 
+
+            <div className = "settings-modal-header">
+                Add Song
+            </div>
+
+            <Form className = "settings-modal-content">
+                <Form.Group>
+                    <Form.Label>URL</Form.Label>
+                    <Form.Control id = "song-url-textarea" placeholder = "Paste YouTube URL here." onChange = {this.handleYoutubeURL()}></Form.Control><br/>
+
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control id = "song-title-textarea"></Form.Control><br/>
+
+                    <Form.Label>Artist</Form.Label>
+                    <Form.Control id = "song-artist-textarea"></Form.Control><br/>
+
+                    <Form.Label>Album</Form.Label>
+                    <Form.Control id = "song-album-textarea"></Form.Control><br/>
+                </Form.Group>
+            </Form>
+
+            <center>
+              <Button variant="primary" onClick={this.handleSave}>
                 Save
               </Button>
-              </center>
-            </Modal.Footer> */}
+
+              <Button variant="secondary" onClick={handleClose}>
+                Cancel
+              </Button>
+            </center>
           </Modal>
         </div>
       );
@@ -159,7 +213,7 @@ class PlaylistEditDisplay extends React.Component {
             console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
-                //this.setState({currentData: obj.result});
+                this.setState({currentData: obj.result});
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
@@ -186,7 +240,13 @@ class PlaylistEditDisplay extends React.Component {
 
     handleDeleteSong = (i) => {
         const index = i;
-        
+        //TODO: handle delete song here
+    }
+
+    handleEditSong = (i) => {
+        var currentSong = this.state.data.songs[i];
+        console.log(currentSong);
+        //TODO: handle edit song here
     }
 
     render() {
@@ -222,9 +282,7 @@ class PlaylistEditDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            {/* put playlist-settings class here, in similar view to settingspane in navbar.js */}
                                             <PlaylistSettings playlistName = {this.state.data.name} playlistDesc = {this.state.data.description}/>
-                                            {/* <img src={settings_img} height="30px" width="30px" /> */}
                                         </div>
                                     </div>
                                 </div>
@@ -254,7 +312,7 @@ class PlaylistEditDisplay extends React.Component {
                                 <div className="row" id="songs-header-row">
                                 <div className="col songs-col0"> </div>
                                     <div className="col songs-col1">
-                                        <h2>SONGS - ARTIST</h2>
+                                        <h2>SONG - ARTIST</h2>
                                     </div>
                                     <div className="col songs-col2">
                                         <h2>ALBUM</h2>
@@ -269,7 +327,7 @@ class PlaylistEditDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row">
+                                                        <div className="row" id = "song-row" onClick = {() => {this.handleEditSong(i)}}>
                                                             <div className="col songs-col0">
                                                                 {/* should decide based on state? */}
                                                                 
@@ -307,7 +365,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                 <b>{(i+1) + "."}</b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> - {song.artist}
+                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
                                                                 {song.album ? song.album : "N/A"}
@@ -339,8 +397,8 @@ class PlaylistEditDisplay extends React.Component {
                             <div className="col">
                                 <div className="row" id="title-row">
                                     <div className="col" id = "add-song">
-                                        <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
-                                        <h1>add song</h1>
+                                        <AddSongModal/>
+                                        
                                     </div>
                                 </div>
                             </div>

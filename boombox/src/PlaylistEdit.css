@@ -158,6 +158,15 @@
     cursor: pointer;
 }
 
+#playlist-edit-container #song-row {
+    transition: 0.3s;
+}
+
+#playlist-edit-container #song-row:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.3)
+}
+
 #playlist-edit-container .song-notes-row {
     margin: 0px auto 10px auto;
     padding-top: 3px;
