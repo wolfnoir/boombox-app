@@ -63,6 +63,10 @@
     margin: 0 2.5px;
 }
 
+#playlist-page-container #icons-div > img:hover {
+    cursor: pointer;
+}
+
 /* figure out how to vertically align this row */
 #playlist-page-container #tags-row > * {
     margin: auto;
@@ -126,10 +130,12 @@
 
 #playlist-page-container .song-notes-row {
     margin: 0px auto 10px auto;
+    padding-top: 3px;
     background-color: rgb(245, 245, 245);
     width: 80%;
     text-align: center;
     display: none;
+    border-radius: 5px;
 }
 
 #playlist-page-container #playlist-comments-container {
