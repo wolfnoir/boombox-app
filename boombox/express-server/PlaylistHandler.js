@@ -22,20 +22,22 @@ class PlaylistHandler {
             useUnifiedTopology: true
         }).catch(err => {
             console.log(err);
-            return -1;
+            return {status: -1};
         });
 
         if (!client) {
             console.log("Client is null");
-            return -1;
+            return {status: -1};
         }
+
+        var serverResp = null;
 
         try {
             const date = new Date();
             const userIdObject = MongoClient.ObjectID(user_id);
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
 
-            await collection.insertOne({
+            serverResp = await collection.insertOne({
                 com_enabled: false,
                 comments: [],
                 description: '',
@@ -51,7 +53,7 @@ class PlaylistHandler {
 
         catch (err) {
             console.log(err);
-            return -1;
+            return {status: -1};
         }
 
         finally {
@@ -59,15 +61,19 @@ class PlaylistHandler {
         }
 
         console.log("Success");
-        return 0;
+        return {
+            status: 0,
+            playlist_id: serverResp.insertedId
+        };
     }
 
     static async createPlaylistRoute(req, res) {
         const user_id = req.session.user_id;
-        const success = await UserHandler.createPlaylist(user_id);
+        const response = await PlaylistHandler.createPlaylist(user_id);
 
         res.send({
-            statusCode: success //-1: an error occurred, 0: success
+            status: response.status, //status -1: an error occurred, 0: success
+            playlist_id: response.playlist_id
         });
     }
 
@@ -142,7 +148,7 @@ class PlaylistHandler {
         const name = req.body.name;
         const songs = req.body.songs;
         const tags = req.body.tags;
-        const success = await UserHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags);
+        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags);
 
         res.send({
             statusCode: success //-1: an error occurred, 0: success, 1: not logged in
@@ -202,6 +208,7 @@ class PlaylistHandler {
 
     static async getPlaylistRoute(req, res) {
         const playlist_id = req.params.playlistId;
+        console.log(playlist_id);
         const statusObject = await PlaylistHandler.getPlaylist(playlist_id);
 
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: playlist not found

@@ -11,6 +11,7 @@ import logout_icon from './images/exit_to_app-24px.png';
 import Cookie from 'universal-cookie';
 import SettingsPane from './SettingsPane';
 import './NavBar.css';
+import { Redirect } from "react-router-dom";
 
 //TODO: add sliding animation
 //reference: https://www.w3schools.com/howto/howto_js_animate.asp
@@ -23,6 +24,8 @@ class NavBar extends React.Component {
         this.state = {
             pushMenuVisible: false,
             inputVal: "",
+            redirect: false,
+            redirect_link: ""
         }
     }
 
@@ -68,6 +71,26 @@ class NavBar extends React.Component {
         });
     }
 
+    createPlaylist = () => {
+        fetch('/createPlaylist', {
+			method: 'POST'
+        }).then(res => res.json())
+        .then(obj => {
+            if(obj.status == 0){
+                this.setState({
+                    redirect: true,
+                    redirect_link: "/playlist/" + obj.playlist_id + "/edit"
+                });
+                this.handleRedirect();
+            }
+        });
+    }
+
+    handleRedirect = () => {
+        if(this.state.redirect)
+            return <Redirect to={this.state.redirect_link} />
+    }
+
     componentDidMount() {
         var pushMenu = document.getElementById("push-menu");
         //var navBar = document.getElementById("nav-bar");
@@ -103,6 +126,7 @@ class NavBar extends React.Component {
 
 	    return (
             <div id="nav-bar-main">
+                {this.handleRedirect()}
                 <div id="push-menu">
                     <table id="push-menu-table">
                         <tbody>
@@ -116,7 +140,7 @@ class NavBar extends React.Component {
                                 <td><a href={this.cookie.get('username') ? "/user/" + this.cookie.get('username') : "/"}><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} /> my profile</a></td>
                             </tr>
                             <tr>
-                                <td><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} /> new playlist</td>
+                                <td id="create-playlist-cell" onClick={this.createPlaylist}><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} /> new playlist</td>
                             </tr>
                             <tr>
                                 <td><a href="/my-bookmarks"><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} /> bookmarks</a></td>
