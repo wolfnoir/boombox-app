@@ -443,7 +443,7 @@ class UserHandler {
             const selfUserObject = await collection.findOne({username: selfUsername});
             const isFollowing = false;
             if (selfUserObject)
-                userObject.following.includes(selfUserObject._id);
+                isFollowing = userObject.following.includes(selfUserObject._id);
 
             const data = {
                 username: userObject.username,
