@@ -75,10 +75,6 @@ class PlaylistPageDisplay extends React.Component {
             console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
-                console.log("Obj result: ");
-                console.log(obj.result);
-                console.log("Data state: ");
-                console.log(this.state.data);
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
@@ -103,10 +99,16 @@ class PlaylistPageDisplay extends React.Component {
         }
     }
 
+    copyLink(){
+        var currentURL = window.location.href;
+        navigator.clipboard.writeText(currentURL)
+        .then(() => { alert(`Copied!`) })
+        .catch((error) => { alert(`Copy failed! ${error}`) })
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
-        
         console.log(this.cookie.get('username'));
         //console.log(this.state.data.author);
         var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
@@ -132,7 +134,7 @@ class PlaylistPageDisplay extends React.Component {
                                         <div id="icons-div">
                                             <img src={like_img} height="30px" width="30px" />
                                             <img src={bookmark_img} height="30px" width="30px" />
-                                            <img src={link_img} height="30px" width="30px" />
+                                            <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} />
                                             {editButton}
                                         </div>
                                     </div>

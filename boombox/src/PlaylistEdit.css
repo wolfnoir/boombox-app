@@ -151,6 +151,13 @@
     cursor: pointer;
 }
 
+#playlist-edit-container #delete-song {
+}
+
+#playlist-edit-container #delete-song:hover {
+    cursor: pointer;
+}
+
 #playlist-edit-container .song-notes-row {
     margin: 0px auto 10px auto;
     padding-top: 3px;
@@ -215,6 +222,16 @@
 
 #playlist-edit-container #add-song-icon {
     cursor: pointer;
+}
+
+#playlist-edit-container #add-song {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#playlist-edit-container #add-song:hover {
+    cursor: pointer;
+    text-shadow: rgba(0, 0, 0, 0.3) 3px 3px;
 }
 
 /*---------------------------------------*/

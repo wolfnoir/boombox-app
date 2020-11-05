@@ -18,6 +18,7 @@ import settings_img from './images/settings-24px.svg';
 import add_circle_img from './images/add_circle-24px.svg';
 import add_box_img from './images/add_box-24px.svg';
 import remove_circle_img from './images/remove_circle-24px.svg';
+import delete_img from './images/delete-black-24dp.svg';
 import edit_img from './images/edit-24px.svg';
 
 
@@ -101,9 +102,9 @@ class PlaylistSettings extends React.Component {
 
                 <Form.Group>
                     <Form.Label>Name</Form.Label>
-                    <Form.Control>{this.state.playlistName}</Form.Control><br/>
+                    <Form.Control>{this.state.name}</Form.Control><br/>
                     <Form.Label>Description</Form.Label><br/>
-                    <textarea className = "settings-modal-description">{this.state.playlistDesc}</textarea>
+                    <textarea className = "settings-modal-description">{this.state.desc}</textarea>
                 </Form.Group>
             </Form>
 
@@ -143,6 +144,7 @@ class PlaylistEditDisplay extends React.Component {
         this.cookie = new Cookie();
         this.state = {
             data: {},
+            currentData: {}, //this is for saving
             song_notes_open: [],
             //current_song: null, //correct one
             current_song: 2, //temporary for showing
@@ -157,10 +159,7 @@ class PlaylistEditDisplay extends React.Component {
             console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
-                console.log("Obj result: ");
-                console.log(obj.result);
-                console.log("Data state: ");
-                console.log(this.state.data);
+                //this.setState({currentData: obj.result});
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
@@ -185,13 +184,18 @@ class PlaylistEditDisplay extends React.Component {
         }
     }
 
+    handleDeleteSong = (i) => {
+        const index = i;
+        
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
         if(this.state.data == null) {
             return <Redirect to="/error" />
         }
-        else if (this.state.data.author !== this.cookie.get('username')){
+        else if (this.state.data.author && this.state.data.author !== this.cookie.get('username')){
             //eventually have custom error messages for each page error
             return <Redirect to="/error" />
         }
@@ -309,10 +313,10 @@ class PlaylistEditDisplay extends React.Component {
                                                                 {song.album ? song.album : "N/A"}
                                                             </div>
                                                             <div className="col songs-col3">
-                                                                N/A
                                                                 {/* TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
+                                                            <img id = {"delete-song"} src = {delete_img} onClick = {this.handleDeleteSong(i)}/>
                                                         </div>
                                                         {
                                                             song.notes ?
@@ -334,7 +338,7 @@ class PlaylistEditDisplay extends React.Component {
                         <div className="row" id="row3">
                             <div className="col">
                                 <div className="row" id="title-row">
-                                    <div className="col">
+                                    <div className="col" id = "add-song">
                                         <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
                                         <h1>add song</h1>
                                     </div>

@@ -63,6 +63,10 @@
     margin: 0 2.5px;
 }
 
+#playlist-page-container #icons-div > img:hover {
+    cursor: pointer;
+}
+
 /* figure out how to vertically align this row */
 #playlist-page-container #tags-row > * {
     margin: auto;
