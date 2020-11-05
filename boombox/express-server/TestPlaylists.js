@@ -28,108 +28,60 @@ class TestPlaylists {
                 {
                     com_enabled: true,
                     comments: [],
-                    description: "This is a playlist description. Lorem ispum blah blah bacon cheese and crackers.",
+                    description: "I like pizza.",
                     image_url: null,
-                    last_modified: 1604288237,
+                    last_modified: 1604544250,
                     likes: [],
-                    name: "Best of Oingo Boingo",
-                    tags: ["new wave", "ska", "pop", "rock"],
-                    user_id: ObjectId("5f9f58abf5bf7e2ac904b8ba"),
+                    name: "The Pizza Show",
+                    tags: [],
+                    user_id: ObjectId("5fa214cccc05e350b4f849d4"),
                     songs: [
                         {
-                            artist: "Oingo Boingo",
-                            name: "Dead Man's Party",
-                            note: "This song is great!",
-                            url: "iypUpv9xelg",
+                            artist: "",
+                            name: "Brooklyn is Pizza Heaven",
+                            album: "",
+                            note: "BROOKLYN REPRESENT",
+                            url: "mH7vFc0bUpU",
                             url_type: youtube
                         },
                         {
-                            artist: "Oingo Boingo",
-                            name: "Weird Science",
-                            note: "This song is also pretty great.",
-                            url: "Jm-upHSP9KU",
+                            artist: "",
+                            name: "Is New Haven Pizza Better Than New York Pizza?",
+                            album: "",
+                            note: "hint: its not",
+                            url: "BmiQRvib3DQ",
                             url_type: youtube
                         },
                         {
-                            artist: "Oingo Boingo",
-                            name: "Just Another Day",
-                            note: "This song isn't that great...just kidding, it is!",
-                            url: "EJGykmmBjP4",
+                            artist: "",
+                            name: "The Pizza Show: From Deep Dish to Thin Crust",
+                            album: "",
+                            note: "i hate deep dish pizza with my life!!!!!!",
+                            url: "Z0xDAUXPc8c",
                             url_type: youtube
                         },
                         {
-                            artist: "Oingo Boingo",
-                            name: "No One Lives Forever",
-                            note: "Isn't this just groovy?",
-                            url: "6gyF_5GBMj0",
-                            url_type: youtube
-                        },
-                    ]
-                },
-                {
-                    com_enabled: true,
-                    comments: [],
-                    description: "This is just a test.",
-                    image_url: null,
-                    last_modified: 1604288237,
-                    likes: [],
-                    name: "Everywhere at the End of Time",
-                    tags: ["ambient"],
-                    user_id: ObjectId("5f9f58abf5bf7e2ac904b8ba"),
-                    songs: [
-                        {
-                            artist: "The Caretaker",
-                            name: "It's just a burning memory",
-                            note: "............... :-)",
-                            url: "SKBlaMbx0Qo",
-                            url_type: youtube
-                        },
-                        {
-                            artist: "Al Bowlly",
-                            name: "Heartaches",
+                            artist: "",
+                            name: "The Pizza Show: Special Slice",
+                            album: "",
                             note: "",
-                            url: "S652aa_kXjY",
-                            url_type: youtube
-                        }
-                    ]
-                },
-                {
-                    com_enabled: false,
-                    comments: [],
-                    description: "The comments are not enabled on this playlist--at least, they shouldn't be. Also, none of these songs have notes.",
-                    image_url: null,
-                    last_modified: 1604288237,
-                    likes: [],
-                    name: "Chill Tunes",
-                    tags: ["lo-fi", "video game", "soundtrack", "vocal"],
-                    user_id: ObjectId("5f9f58abf5bf7e2ac904b8ba"),
-                    songs: [
-                        {
-                            artist: "Transistor Original Soundtrack",
-                            name: "The Spine",
-                            note: "",
-                            url: "41tIUr_ex3g",
+                            url: "xQXYWxZCPqA",
                             url_type: youtube
                         },
                         {
-                            artist: "cadmio",
-                            name: "train of thought",
+                            artist: "",
+                            name: "The Original New York Slice: The Pizza Show",
+                            album: "",
                             note: "",
-                            url: "bziESwuEqdI",
+                            url: "8pCMoL_b_s",
                             url_type: youtube
                         },
                         {
-                            artist: "Bastion Original Soundtrack",
-                            name: "Build That Wall (Zia's Theme)",
-                            note: "",
-                            url: "o3SZee4YZX8",
-                            url_type: youtube
-                        },
-                        {
-                            artist: "Transistor Original Soundtrack",
-                            name: "Sandbox",
-                            note: "",
-                            url: "Bvf5F7UfQ3c",
+                            artist: "",
+                            name: "Business of Pizza : Pizza Robots",
+                            album: "",
+                            note: "i wish i had a pizza robot :^(",
+                            url: "ZZzFoi_fuF4",
                             url_type: youtube
                         },
                     ]

@@ -72,6 +72,7 @@ class PlaylistPageDisplay extends React.Component {
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
         .then(obj => {
+            console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
                 for (var i = 0; i < this.state.data.songs.length; i++) {
@@ -82,8 +83,6 @@ class PlaylistPageDisplay extends React.Component {
                 this.setState({data: null}); //need to change the component to have a not found page
             }
         });
-        console.log(this.state.loggedIn);
-        //this.getCurrentUserData(user)
     }
 
     handleSongArrowClick = (i) => {
@@ -100,14 +99,20 @@ class PlaylistPageDisplay extends React.Component {
         }
     }
 
+    copyLink(){
+        var currentURL = window.location.href;
+        navigator.clipboard.writeText(currentURL)
+        .then(() => { alert(`Link copied!`) })
+        .catch((error) => { alert(`Copy failed! ${error}`) })
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
-        
         console.log(this.cookie.get('username'));
-        console.log(this.state.data.author);
+        //console.log(this.state.data.author);
         var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
-        if(this.state.data.author !== this.cookie.get('username')){
+        if(this.state.data && this.state.data.author !== this.cookie.get('username')){
             editButton = null;
         }
 
@@ -129,7 +134,7 @@ class PlaylistPageDisplay extends React.Component {
                                         <div id="icons-div">
                                             <img src={like_img} height="30px" width="30px" />
                                             <img src={bookmark_img} height="30px" width="30px" />
-                                            <img src={link_img} height="30px" width="30px" />
+                                            <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} />
                                             {editButton}
                                         </div>
                                     </div>
@@ -162,7 +167,7 @@ class PlaylistPageDisplay extends React.Component {
                                 <div className="row" id="songs-header-row">
                                 <div className="col songs-col0"> </div>
                                     <div className="col songs-col1">
-                                        <h2>SONGS - ARTIST</h2>
+                                        <h2>SONG - ARTIST</h2>
                                     </div>
                                     <div className="col songs-col2">
                                         <h2>ALBUM</h2>
@@ -180,7 +185,6 @@ class PlaylistPageDisplay extends React.Component {
                                                         <div className="row">
                                                             <div className="col songs-col0">
                                                                 {/* should decide based on state? */}
-                                                                
                                                             <img className="song-arrow" id={"song-arrow-" + i} 
                                                                 src={
                                                                     this.state.song_notes_open[i] ?
@@ -215,20 +219,21 @@ class PlaylistPageDisplay extends React.Component {
                                                                 <b>{(i+1) + "."}</b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> - {song.artist}
+                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
                                                                 {song.album ? song.album : "N/A"}
                                                             </div>
                                                             <div className="col songs-col3">
+                                                                {/* TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
                                                         </div>
                                                         {
-                                                            song.notes ?
+                                                            song.note ?
                                                             <div className="row song-notes-row" id={"song-note-"+i}>
                                                                 <div className="col">
-                                                                    <p>{song.notes}</p>
+                                                                    <p>{song.note}</p>
                                                                 </div>
                                                             </div>
                                                             : null
