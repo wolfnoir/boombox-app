@@ -153,10 +153,12 @@
 
 #playlist-edit-container .song-notes-row {
     margin: 0px auto 10px auto;
+    padding-top: 3px;
     background-color: rgb(245, 245, 245);
     width: 80%;
     text-align: center;
     display: none;
+    border-radius: 5px;
 }
 
 #playlist-edit-container .song-notes-textarea {

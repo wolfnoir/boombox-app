@@ -75,6 +75,10 @@ class PlaylistPageDisplay extends React.Component {
             console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
+                console.log("Obj result: ");
+                console.log(obj.result);
+                console.log("Data state: ");
+                console.log(this.state.data);
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
@@ -83,8 +87,6 @@ class PlaylistPageDisplay extends React.Component {
                 this.setState({data: null}); //need to change the component to have a not found page
             }
         });
-        console.log(this.state.loggedIn);
-        //this.getCurrentUserData(user)
     }
 
     handleSongArrowClick = (i) => {
@@ -222,6 +224,7 @@ class PlaylistPageDisplay extends React.Component {
                                                                 {song.album ? song.album : "N/A"}
                                                             </div>
                                                             <div className="col songs-col3">
+                                                                {/* TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
                                                         </div>

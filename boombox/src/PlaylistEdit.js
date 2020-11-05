@@ -154,14 +154,19 @@ class PlaylistEditDisplay extends React.Component {
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
         .then(obj => {
+            console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
+                console.log("Obj result: ");
+                console.log(obj.result);
+                console.log("Data state: ");
+                console.log(this.state.data);
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
             }
             else {
-                this.setState({data: null}) //need to change the component to have a not found page
+                this.setState({data: null}); //need to change the component to have a not found page
             }
         });
     }
@@ -187,6 +192,7 @@ class PlaylistEditDisplay extends React.Component {
             return <Redirect to="/error" />
         }
         else if (this.state.data.author !== this.cookie.get('username')){
+            //eventually have custom error messages for each page error
             return <Redirect to="/error" />
         }
         else{
@@ -303,6 +309,8 @@ class PlaylistEditDisplay extends React.Component {
                                                                 {song.album ? song.album : "N/A"}
                                                             </div>
                                                             <div className="col songs-col3">
+                                                                N/A
+                                                                {/* TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
                                                         </div>

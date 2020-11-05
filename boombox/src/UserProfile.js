@@ -144,9 +144,11 @@ class UserProfileDisplay extends React.Component {
                                     {
                                         this.cookie.get('username') !== this.props.username ? 
                                     <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
-                                        {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                            {this.state.data.isFollowing ? "Unfollow" : "Follow"}
                                     </div>
-                                    : null
+                                    : <div className = "btn btn-primary follow-button hoverable disabled" /*onClick = {  toggle following in here }*/>
+                                            {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                        </div>
                                     }
 
                                     <div className = "user-profile-description">
