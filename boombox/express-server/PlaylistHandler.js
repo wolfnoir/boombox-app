@@ -138,7 +138,8 @@ class PlaylistHandler {
      * Edit Playlist
      */
     
-    static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
+    //static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
+    static async editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, private) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -207,7 +208,9 @@ class PlaylistHandler {
         const private = req.body.private;
         const songs = req.body.songs;
         const tags = req.body.tags;
-        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, private, songs, tags);
+        //const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, private, songs, tags);
+        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, private);
+
 
         res.send({
             statusCode: success //-1: an error occurred, 0: success, 1: not logged in

@@ -90,6 +90,10 @@ app.post("/deleteSong", PlaylistHandler.deleteSong);
 
 app.post("/updateSongs", PlaylistHandler.updateSongs);
 
+app.post("/addPlaylistTag", (req, res) => {});
+
+app.post("/deletePlaylistTag", (req, res) => {});
+
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {
 		playlists: [
