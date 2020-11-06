@@ -47,6 +47,9 @@ class Login extends React.Component {
         if(num === 1){
             errorMsg = "Incorrect email/password.";
         }
+        else if(num === 2){
+            errorMsg = "User already logged in.";
+        }
         errorDiv.innerHTML = 'ERROR: ' + errorMsg;
         console.log('ERROR: ' + errorMsg);
     }

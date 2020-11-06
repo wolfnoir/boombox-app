@@ -4,144 +4,54 @@
 }
 
 #nav-bar {
-    display: inline-block;
     vertical-align: top;
     width: 100%;
     font-family: 'Orbitron';
     position: fixed;
     z-index:100;
-}
-
-#nav-bar-table {
-    width: 100%;
-    white-space: nowrap;
-    border: 1px;
     background-color: black;
-    color: white;
-    font-size: 30px;
-    height: 65px;
-    padding-left: 5px;
-    /*
-    border-width: 5px;
-    border-color: red;
-    border-style: solid;
-    */
 }
 
 #boombox-header {
     text-decoration: none;
     color: white;
+    margin: auto;
 }
 
 #boombox-header:hover {
     color: #d3d3d3;
 }
 
-#nav-bar-table td > * {
-    vertical-align: middle;
-}
-
-
-#nav-bar-table td:nth-of-type(1) {
-    padding-left: 15px;
-}
-
-#nav-bar-table td:nth-of-type(2) {
-    text-align: center;
-}
-
-#nav-bar-table td:nth-of-type(3) {
-    text-align: right;
-}
-
-#nav-bar-table td:nth-of-type(4) {
-    text-align: right;
-    padding-right: 15px;
-}
-
-#login-link, #register-link {
+#login-link, #register-link{
     display: inline-block;
     font-size: 24px;
     padding: 0px 10px;
+    text-decoration: none;
+    color: white;
 }
 
-#menu-icon {
-    cursor: pointer;
+#login-link a, #register-link a{
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+#login-link a:hover, #register-link a:hover{
+    text-decoration: none;
+    color: #17a2b8;
+}
+
+#login-register-div {
+    margin-left: 10px;
 }
 
 #settings-icon {
     cursor: pointer;
+    margin-left: 10px;
+    margin-right: 5px;
 }
 
-#search-bar, #search-bar:focus {
-    font-family: 'Roboto Condensed';
-    background-image: url('images/search-24px.svg');
-    background-repeat: no-repeat;
-    padding-left: 24px;
-    border: none;
-    border-radius: 250px;
-    outline: none;
-    font-size: 16px;
-}
-
-#search-button {
-    background-color: black;
-    color: white;
-    border: none;
-    font-size: 15px;
-    font-family: 'Roboto Condensed';
-    outline: none;
-}
-
-#search-button:hover {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-}
-
-
-/*--------------------*/
-
-
-#push-menu {
-    /*margin-top: 60px;*/
-    display: inline-block;
-    vertical-align: top;
-    height: 100vh;
-    background-color: black;
-    
-    /*overflow: hidden;*/
-}
-
-#push-menu-table {
-    /* font-family: 'Roboto Condensed'; */
-    color: white;
-    font-size: 30px;
-    
-}
-
-#push-menu-table td {
-    padding: 5px 0px;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-#push-menu-table td > * {
-    vertical-align: middle;
-}
-
-#close-menu-cell > * {
-    margin-left: 0px;
-}
-
-#close-menu-icon {
-    cursor: pointer;
-    padding: 10px 0px;
-}
-
-#create-playlist-cell {
-    cursor: pointer;
-}
-
-#logout-cell {
+#create-playlist, #logout-click {
     cursor: pointer;
 }
 
@@ -156,3 +66,84 @@
     overflow-x: scroll;
     max-height: 100vh;
 }
+
+/*------------------------*/
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+    position: fixed;
+    width: 25px;
+    height: 20px;
+    left: 16px;
+    top: 18px;
+  }
+  
+  /* Color/shape of burger icon bars */
+  .bm-burger-bars {
+    background: rgb(255, 255, 255);
+    transition: 0.3s;
+  }
+  
+  /* Color/shape of burger icon bars on hover*/
+  .bm-burger-bars-hover {
+    background: #b8b7ad;
+  }
+  
+  /* Position and sizing of clickable cross button */
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  
+  /* Color/shape of close button cross */
+  .bm-cross {
+    background: #bdc3c7;
+  }
+  
+  /*
+  Sidebar wrapper styles
+  Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+  */
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+  }
+  
+  /* General sidebar styles */
+  .bm-menu {
+    background: #373a47;
+    padding: 2.5em 1.5em 0;
+    font-size: 1.15em;
+  }
+  
+  /* Morph shape necessary with bubble or elastic */
+  .bm-morph-shape {
+    fill: #373a47;
+  }
+  
+  /* Wrapper for item list */
+  .bm-item-list {
+    color: #b8b7ad;
+    padding: 0.8em;
+  }
+  
+  /* Individual item */
+  .bm-item {
+    display: inline-block;
+    font-size: 24px;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+    margin-bottom: 25px;
+    margin-left: -10px;
+  }
+
+  .bm-item:hover {
+    text-decoration: none;
+    color: gray;
+  }
+  
+  /* Styling of overlay */
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
