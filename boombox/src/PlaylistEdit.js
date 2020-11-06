@@ -234,10 +234,13 @@ class PlaylistEditDisplay extends React.Component {
     handleDeleteSong = (e, i) => {
         e.stopPropagation();
         console.log("call");
-        const dataCopy = this.state.data;
+        var dataCopy = this.state.data;
         if (dataCopy.songs && i < dataCopy.songs.length) {
             console.log("delete ", i);
             dataCopy.songs.splice(i, 1);
+        }
+        for(var j = 0; j < dataCopy.songs.length; j ++){
+            dataCopy.songs[i].index = j;
         }
         this.setState({data: dataCopy});
         console.log(this.state.data.songs);
@@ -345,6 +348,34 @@ class PlaylistEditDisplay extends React.Component {
         albumField.value = currentSong.album;
         noteField.value = currentSong.note;
     }
+    
+    saveChanges() {
+        console.log("save attempt");
+        const body = JSON.stringify({
+            'playlistId': this.state.data._id,
+            'songs': this.state.data.songs,
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/updateSongs', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status == 0) {
+                alert('Playlist saved!');
+            }
+            else if (obj.status == 1) {
+                alert('You are not authorized to edit this playlist!');
+            }
+            else {
+                alert('somehow it broke');
+            }
+        });
+    }
 
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -367,9 +398,7 @@ class PlaylistEditDisplay extends React.Component {
                             <div className="col">
                                 <div className="row">
                                     <div className="col" id="playlist-edit-state-buttons-col">
-                                        <a href={"/playlist/" + this.props.playlistId}>
-                                            <button type="button" className="btn btn-primary">Save Changes</button>
-                                        </a>
+                                        <button type="button" className="btn btn-primary" onClick = {() => this.saveChanges()}>Save Changes</button>
                                         <a href={"/playlist/" + this.props.playlistId}>
                                             <button type="button" className="btn btn-danger">Cancel</button>
                                         </a>

@@ -92,7 +92,7 @@ app.post("/addSong", PlaylistHandler.addSong);
 
 app.post("/deleteSong", PlaylistHandler.deleteSong);
 
-app.post("/updateSongs", PlaylistHandler.updateSongs);
+app.post("/updateSongs", PlaylistHandler.updateSongsRoute);
 
 app.post("/addPlaylistTag", (req, res) => {});
 

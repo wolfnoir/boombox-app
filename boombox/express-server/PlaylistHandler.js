@@ -420,11 +420,7 @@ class PlaylistHandler {
         }
      } 
 
-     static async updateSongs(req, res) {
-        const user_id = req.session.user_id;
-        const playlistId = req.body.playlistId;
-        const songs = req.body.songs;
-
+     static async updateSongs(user_id, playlistId, songs) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -461,6 +457,18 @@ class PlaylistHandler {
             client.close();
         }
      }
+
+     static async updateSongsRoute(req, res) {
+        const username = req.body.username;
+        const playlistId = req.body.playlistId;
+        const songs = req.body.songs;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
+        console.log(user_id);
+        const statusObject = await PlaylistHandler.updateSongs(user_id, playlistId, songs);
+
+        res.send(statusObject);
+    }
 }
 
 module.exports = PlaylistHandler;
