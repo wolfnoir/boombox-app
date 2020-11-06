@@ -197,26 +197,28 @@ class PlaylistHandler {
         }
 
         try {
-            const date = new Date();
-            const idObject = new MongoClient.ObjectID(playlist_id);
+            const date = Date.now();
+            const idObject = MongoClient.ObjectID(playlist_id);
             const userIdObject = MongoClient.ObjectID(user_id);
 
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const filter = { "_id": idObject };
 
             const updateDoc = {
-                com_enabled: com_enabled,
-                //comments: comments,
-                description: description,
-                image_url: image_url, //need to do this separately for image upload
-                last_modified: date.getDate(),
-                //likes: likes,
-                name: name,
-                isPrivate: isPrivate,
-                //songs: songs,
-                //tags: tags,
-                //user_id: userIdObject
-            }
+                $set: {
+                    com_enabled: com_enabled,
+                    //comments: comments,
+                    description: description,
+                    image_url: image_url, //need to do this separately for image upload
+                    last_modified: date,
+                    //likes: likes,
+                    name: name,
+                    isPrivate: isPrivate,
+                    //songs: songs,
+                    //tags: tags,
+                    //user_id: userIdObject}
+                }
+            };
 
             await collection.updateOne(filter, updateDoc);
         }
@@ -237,7 +239,7 @@ class PlaylistHandler {
     static async editPlaylistRoute(req, res) {
         const user_id = req.session.user_id;
         if (!user_id) {
-            res.send({status: 1});
+            res.send({statusCode: 1});
             return;
         }
 
@@ -350,7 +352,9 @@ class PlaylistHandler {
                 console.log('playlist not found');
                 return {status: -1};
             }
-            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+            var stringUserId = user_id.toString();
+            var stringPlaylistUserId = foundPlaylist.user_id.toString();
+            if (stringUserId !== stringPlaylistUserId) { //if we want to admin debug, add an AND != for admin account
                 console.log("not authorized");
                 return {status: 1};
             }
@@ -420,11 +424,7 @@ class PlaylistHandler {
         }
      } 
 
-     static async updateSongs(req, res) {
-        const user_id = req.session.user_id;
-        const playlistId = req.body.playlistId;
-        const songs = req.body.songs;
-
+     static async updateSongs(user_id, playlistId, songs) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -440,16 +440,19 @@ class PlaylistHandler {
 
         try {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
-            const foundPlaylist = await collection.findOne({"_id": playlistId});
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
             if (!foundPlaylist) {
                 console.log('playlist not found');
                 return {status: -1};
             }
-            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+            var stringUserId = user_id.toString();
+            var stringPlaylistUserId = foundPlaylist.user_id.toString();
+            if (stringUserId !== stringPlaylistUserId) { //if we want to admin debug, add an AND != for admin account
                 console.log("not authorized");
                 return {status: 1};
             }
-            await collection.updateOne({"_id": playlistId}, {$set: {songs: songs}}); //add status checking for update?
+            await collection.updateOne({"_id": idObject}, {$set: {songs: songs}}); //add status checking for update?
             return {status: 0};
         }
         catch (err) {
@@ -461,6 +464,17 @@ class PlaylistHandler {
             client.close();
         }
      }
+
+     static async updateSongsRoute(req, res) {
+        const username = req.body.username;
+        const playlistId = req.body.playlistId;
+        const songs = req.body.songs;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
+        const statusObject = await PlaylistHandler.updateSongs(user_id, playlistId, songs);
+
+        res.send(statusObject);
+    }
 }
 
 module.exports = PlaylistHandler;

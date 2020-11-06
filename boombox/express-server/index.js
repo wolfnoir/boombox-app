@@ -64,12 +64,6 @@ app.get("/testImage", (req, res) => {
 });
 app.post("/testImage", UserHandler.testImage);
 
-
-//is a placeholder, can expand on it later
-app.post("/editPlaylist", (req, res) => {
-	
-});
-
 app.all("/getBookmarks", UserHandler.getBookmarksRoute);
 
 app.all("/getPlaylistData/:playlistId", PlaylistHandler.getPlaylistRoute);
@@ -92,7 +86,7 @@ app.post("/addSong", PlaylistHandler.addSong);
 
 app.post("/deleteSong", PlaylistHandler.deleteSong);
 
-app.post("/updateSongs", PlaylistHandler.updateSongs);
+app.post("/updateSongs", PlaylistHandler.updateSongsRoute);
 
 app.post("/addPlaylistTag", (req, res) => {});
 

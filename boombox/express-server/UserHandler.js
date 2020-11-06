@@ -392,7 +392,7 @@ class UserHandler {
     static async getUserIconDataRoute(req, res) {
         const username = req.cookies.username;
         const statusObject = await UserHandler.getUserIconData(username);
-        console.log(statusObject);
+        //console.log(statusObject);
         res.send(statusObject);
     }
 

@@ -28,6 +28,7 @@ import edit_img from './images/edit-24px.svg';
 /* STATIC IMPORT                           */
 /*-----------------------------------------*/
 import horse_img from './images/horse.png';
+import { render } from '@testing-library/react';
 // import { addSong } from '../express-server/PlaylistHandler';
 /*-----------------------------------------*/
 
@@ -86,6 +87,49 @@ class PlaylistSettings extends React.Component {
                     userId: this.props.userId
                 });
             }
+    }
+
+    updateName = (event) => {
+        event.persist();
+        this.setState({name: event.target.value});
+    }
+
+    updateDescription = (event) => {
+        event.persist();
+        this.setState({desc: event.target.value});
+    }
+
+    handleSavePlaylist = () => {
+        const body = JSON.stringify({
+            'id': this.props.playlistId,
+            'description': this.state.desc,
+            //@todo: Should we add image here?
+            'name': this.state.name,
+            'userId': this.state.userId
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/editPlaylist', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            if (obj.statusCode === 0) {
+                console.log('successfully saved playlist');
+            }
+            else if (obj.statusCode === 1) {
+                console.log('not authorized');
+            }
+            else if (obj.statusCode === -1) {
+                console.log('error');
+            }
+            else {
+                console.log('somehow it broke');
+            }
+        });
+
+        this.setState({show: false});
     }
 
     handleDeletePlaylist = () => {
@@ -160,14 +204,14 @@ class PlaylistSettings extends React.Component {
 
                     <Form.Group>
                         <Form.Label>Name</Form.Label>
-                        <Form.Control defaultValue = {this.state.name} /><br/>
+                        <Form.Control defaultValue = {this.state.name} onChange={this.updateName} /><br/>
                         <Form.Label>Description</Form.Label><br/>
-                        <textarea className = "settings-modal-description" defaultValue = {this.state.desc} />
+                        <textarea className = "settings-modal-description" defaultValue = {this.state.desc} onChange={this.updateDescription}/>
                     </Form.Group>
                 </Form>
 
                 <center>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={this.handleSavePlaylist}>
                     Save
                     </Button>
 
@@ -191,7 +235,6 @@ class PlaylistEditDisplay extends React.Component {
         this.cookie = new Cookie();
         this.state = {
             data: {},
-            currentData: {}, //this is for saving
             song_notes_open: [],
             //current_song: null, //correct one
             current_song: 2, //temporary for showing
@@ -234,23 +277,90 @@ class PlaylistEditDisplay extends React.Component {
     handleDeleteSong = (e, i) => {
         e.stopPropagation();
         console.log("call");
-        const dataCopy = this.state.data;
+        var dataCopy = this.state.data;
         if (dataCopy.songs && i < dataCopy.songs.length) {
             console.log("delete ", i);
             dataCopy.songs.splice(i, 1);
+        }
+        for(var j = 0; j < dataCopy.songs.length; j ++){
+            dataCopy.songs[j].index = j;
         }
         this.setState({data: dataCopy});
         console.log(this.state.data.songs);
     }
 
     handleEditSong = (i) => {
-        var currentSong = this.state.data.songs[i];
-        console.log(currentSong);
-        //TODO: handle edit song here
+        var urlField = document.getElementById("edit-song-url-"+i);
+        var titleField = document.getElementById("edit-song-title-"+i);
+        var artistField = document.getElementById("edit-song-artist-"+i);
+        var albumField = document.getElementById("edit-song-album-"+i);
+        var noteField = document.getElementById("edit-song-note-"+i);
+
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
+        var url = urlField.value;
+
+        if(p.test(url)){
+            var songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
+        
+            var dataCopy = this.state.data; //creates a copy of the song array
+            var currentSong = dataCopy.songs[i];
+            console.log(currentSong);
+
+            currentSong.url = songId;
+            currentSong.url_type = "youtube.com/watch?v=";
+            currentSong.name = titleField.value;
+            currentSong.artist = artistField.value;
+            currentSong.album = albumField.value;
+            currentSong.note = noteField.value;
+
+            console.log(dataCopy);
+            this.setState({data: dataCopy});
+
+            this.toggleEditFields(i);
+        }
+        else {
+            alert("Must be valid YouTube URL!");
+        }   
     }
 
     handleAddSong() {
         //TODO: handle add song
+        var urlField = document.getElementById("add-song-url");
+        var titleField = document.getElementById("add-song-title");
+        var artistField = document.getElementById("add-song-artist");
+        var albumField = document.getElementById("add-song-album");
+        var noteField = document.getElementById("add-song-note");
+
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
+        var url = urlField.value;
+        if(p.test(url)){
+            var songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
+        
+            var dataCopy = this.state.data; //creates a copy of the song array
+            var currentSong = {
+                index: this.state.data.songs.length + 1,
+                album: albumField.value,
+                artist: artistField.value,
+                name: titleField.value,
+                note: noteField.value,
+                url: songId,
+                url_type: "youtube.com/watch?v=" //temporary
+            }
+            console.log(currentSong);
+            dataCopy.songs.push(currentSong);
+            console.log(dataCopy);
+            this.setState({data: dataCopy});
+            this.toggleAddSong();
+
+            urlField.value = "";
+            albumField.value = "";
+            artistField.value = "";
+            titleField.value = "";
+            noteField.value = "";
+        }
+        else {
+            alert("Must be valid YouTube URL!");
+        }   
     }
 
     toggleAddSong() {
@@ -259,13 +369,54 @@ class PlaylistEditDisplay extends React.Component {
         addSongForm.hidden = !isHidden;
     }
 
-    toggleEditFields(index){
+    toggleEditFields(i){
         console.log("test");
-        var editField = document.getElementById("edit-song-form-" + index);
-        console.log("edit-song-form-" + index);
+        var editField = document.getElementById("edit-song-form-" + i);
+        console.log("edit-song-form-" + i);
         console.log(editField);
         var isHidden = editField.hidden;
         editField.hidden = !isHidden;
+        var currentSong = this.state.data.songs[i];
+
+        var urlField = document.getElementById("edit-song-url-"+i);
+        var titleField = document.getElementById("edit-song-title-"+i);
+        var artistField = document.getElementById("edit-song-artist-"+i);
+        var albumField = document.getElementById("edit-song-album-"+i);
+        var noteField = document.getElementById("edit-song-note-"+i);
+
+        var url = currentSong.url_type + currentSong.url;
+        urlField.value = url;
+        titleField.value = currentSong.name;
+        artistField.value = currentSong.artist;
+        albumField.value = currentSong.album;
+        noteField.value = currentSong.note;
+    }
+    
+    saveChanges() {
+        const body = JSON.stringify({
+            'playlistId': this.props.playlistId,
+            'songs': this.state.data.songs,
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/updateSongs', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status == 0) {
+                alert('Playlist saved!');
+            }
+            else if (obj.status == 1) {
+                alert('You are not authorized to edit this playlist!');
+            }
+            else {
+                alert('somehow it broke');
+            }
+        });
     }
 
     render() {
@@ -289,9 +440,7 @@ class PlaylistEditDisplay extends React.Component {
                             <div className="col">
                                 <div className="row">
                                     <div className="col" id="playlist-edit-state-buttons-col">
-                                        <a href={"/playlist/" + this.props.playlistId}>
-                                            <button type="button" className="btn btn-primary">Save Changes</button>
-                                        </a>
+                                        <button type="button" className="btn btn-primary" onClick = {() => this.saveChanges()}>Save Changes</button>
                                         <a href={"/playlist/" + this.props.playlistId}>
                                             <button type="button" className="btn btn-danger">Cancel</button>
                                         </a>
@@ -377,22 +526,22 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>URL</Form.Label>
-                                                                            <Form.Control id = "edit-song-url" className = "edit-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
 
                                                                             <Form.Label>Title</Form.Label>
-                                                                            <Form.Control id = "edit-song-title" className = "edit-song-textbox" ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" ></Form.Control>
 
                                                                             <Form.Label>Artist</Form.Label>
-                                                                            <Form.Control id = "edit-song-artist" className = "edit-song-textbox" ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" ></Form.Control>
 
                                                                             <Form.Label>Album</Form.Label>
-                                                                            <Form.Control id = "edit-song-album" className = "edit-song-textbox" ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" ></Form.Control>
                                                                         </Form.Group>
                                                                     </Col>
                                                                     <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>Note</Form.Label>
-                                                                            <Form.Control as="textarea" id = "edit-song-note" className = "edit-song-textarea" ></Form.Control>
+                                                                            <Form.Control as="textarea" id = {"edit-song-note-"+i} className = "edit-song-textarea" ></Form.Control>
                                                                         </Form.Group>
                                                                     </Col>
                                                                 </Row>
