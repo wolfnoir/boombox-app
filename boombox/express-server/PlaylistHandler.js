@@ -240,7 +240,6 @@ class PlaylistHandler {
 
     static async editPlaylistRoute(req, res) {
         const user_id = req.session.user_id;
-        const username = req.body.username;
         if (!user_id) {
             res.send({statusCode: 1});
             return;

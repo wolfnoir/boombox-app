@@ -105,7 +105,6 @@ class PlaylistSettings extends React.Component {
             //@todo: Should we add image here?
             'name': this.state.name,
             'userId': this.state.userId,
-            'username': this.cookie.get('username'),
         });
         const headers = {"Content-Type": "application/json"};
         fetch('/editPlaylist', {
