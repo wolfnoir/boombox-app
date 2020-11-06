@@ -360,19 +360,11 @@ class UserHandler {
                 return {status: 1};
             }
             const object_id = userObject.icon_url;
-            console.log(username, object_id);
 
             const filepath = './tmp_file';
             const bucket = new MongoClient.GridFSBucket(db);
             const downloadStream = bucket.openDownloadStream(object_id);
             const writeStream = fs.createWriteStream(filepath); //TODO: need to generate a better random file (tmp package?)
-
-            /*
-            const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
-                if (err) {console.log(err);}
-                return resolve([fields, files]);
-            }));
-            */
             
             const downloadPromise = new Promise((resolve, reject) => {
                 downloadStream.pipe(writeStream)

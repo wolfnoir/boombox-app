@@ -36,10 +36,10 @@ class UserProfileDisplay extends React.Component {
     }
 
     getProfileImage = () => {
-        if (this.props.profile_image) {
-            return <img id="profile-image" src={this.props.profile_image} width="150px" height="150px" alt=""/>
+        if (this.state.profile_image_data) {
+            return <img id="profile-image" src={`data:image/jpeg;base64,${this.state.profile_image_data}`} width="150px" height="150px" alt=""/>
         }
-        return <img id="profile-image" src={profile_icon} width="150px" height="150px" style={{filter: 'invert(1)'}} alt=""/>
+        return <img id="profile-image" src={profile_icon} width="150px" height="150px" className="invert-color" alt=""/>
     }
 
     getUserData(){
@@ -87,11 +87,21 @@ class UserProfileDisplay extends React.Component {
         })
     }
 
+    getProfileImageData = () => {
+        fetch('/getUserIcon', {
+            method: 'POST'
+        })
+        .then(res => res.json()) 
+        .then(data => {
+            console.log("was here");
+            console.log(data);
+            this.setState({profile_image_data: data.iconData});
+        });
+    }
+
     componentDidMount(){
         this.getUserData();
-        //this.getUserPlaylists();
-        //this.getUserFollowers();
-        //this.getUserFollowing();
+        this.getProfileImageData(); //COMMENT THIS IN LATER
     }
 
     render(){
@@ -126,6 +136,71 @@ class UserProfileDisplay extends React.Component {
 
             return(
                 <NavBarWrapper>
+                {/*
+                    <div className="container user-profile">
+                        <div className="row user-profile-header">
+                            <div className="col user-profile-img">
+                                {this.getProfileImage()}
+                            </div>
+                            <div className="col user-profile-info">
+                                <div className="row">
+                                    <div className="col user-profile-header-text username">
+                                        {this.state.data.username}
+                                    </div>
+                                    <div className="col">
+                                        {
+                                            this.cookie.get('username') !== this.props.username ? 
+                                                <div className = "btn btn-primary follow-button hoverable"/>
+                                                    {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                                </div>
+                                            : <div className = "btn btn-primary follow-button hoverable disabled"/>
+                                                {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col user-profile-description">
+                                        {this.state.data.bio}
+                                    </div> 
+                                </div>
+                            </div>
+                            <div className="col">
+                                <div className="row">
+                            <div className="col">
+                            <div className = "user-profile-header-text match-followers">
+                                    Music Match<br/>
+                                    53%
+                                </div>
+                            </div>
+                            <div className="col">
+                            <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
+                                    Following<br/>
+                                    {this.state.data.following ? this.state.data.following.length : 0}
+                                </a>
+                            </div>
+                            <div className="col">
+                            <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
+                                    Followers<br/>
+                                    {this.state.data.followers ? this.state.data.followers.length : 0}
+                                </a>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row user-playlists">
+                            <div className = "col user-profile-header-text my-playlists">
+                                My Playlists
+                            </div>
+                        </div>
+                        <div className="row user-playlists">
+                            <div className = "col my-playlists">
+                                {listOfUserPlaylists}
+                            </div>
+                        </div>
+                    </div>
+                */}
+
                 <div className = "user-profile">
                     <table className = "user-profile-header">
                         <tbody>

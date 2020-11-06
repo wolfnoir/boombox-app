@@ -4,8 +4,18 @@
     margin: auto;
 }
 
+/*
+.user-profile > *  > *{
+    border: 1px solid red;
+}
+*/
+
 .user-profile-header {
     margin: 10px;
+}
+
+.user-profile-header > * {
+    margin: auto;
 }
 
 .user-profile-info {
@@ -15,7 +25,7 @@
 .user-profile-img {
     padding: 10px;
     margin-right: 10px;
-    width: 150px;
+    max-width: 170px;
 }
 
 .user-profile-match-followers {
