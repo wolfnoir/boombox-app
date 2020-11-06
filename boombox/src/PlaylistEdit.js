@@ -74,6 +74,20 @@ class PlaylistSettings extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        if(this.props.playlistName != this.state.name 
+            || this.props.playlistDesc != this.state.desc 
+            ||  this.props.playlistId != this.state.playlistId 
+            || this.props.userId != this.state.userId) {
+                this.setState({
+                    name: this.props.playlistName,
+                    desc: this.props.playlistDesc,
+                    playlistId: this.props.playlistId,
+                    userId: this.props.userId
+                });
+            }
+    }
+
     handleDeletePlaylist = () => {
         const body = JSON.stringify({
             'username': this.cookie.get('username'),
@@ -114,60 +128,60 @@ class PlaylistSettings extends React.Component {
         const handleClose = () => this.setState({show: false});
         const handleShow = () => this.setState({show: true});
         return (
-        <div>
-            {this.handleRedirect()}
-          <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
-    
-          <Modal show={this.state.show} onHide={handleClose} size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-                backdrop="static"
-                keyboard={false}> 
+            <div>
+                {this.handleRedirect()}
+                <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
 
-            <div className = "settings-modal-header">
-                settings
+                <Modal show={this.state.show} onHide={handleClose} size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    backdrop="static"
+                    keyboard={false}> 
+
+                <div className = "settings-modal-header">
+                    settings
+                </div>
+
+                <Form className = "settings-modal-content">
+                    <Form.Group style = {{display: 'inline-block', marginRight: '50px'}}>
+                        <Form.File style = {{display: 'inline-block'}}>
+                            <img src = {add_box_img} style={{filter: 'invert(1)', width: '100px', cursor: 'pointer'}}/>
+                        </Form.File>
+                        <div style = {{display: 'inline-block', fontFamily: 'Roboto Condensed', width: '30%', verticalAlign: 'middle'}}>
+                            <b>Upload Cover</b><br/>
+                            Must be JPG, JPEG, PNG, or GIF, under 500KB
+                        </div>
+                    </Form.Group>
+
+                    <Form.Group style = {{display: 'inline-block', verticalAlign: 'middle'}} className = "settings-modal-checkboxes">
+                        <Form.Check label = "Public Playlist" className = "settings-checkbox"/>
+                        <Form.Check label = "Enable Comments" className = "settings-checkbox"/>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control defaultValue = {this.state.name} /><br/>
+                        <Form.Label>Description</Form.Label><br/>
+                        <textarea className = "settings-modal-description" defaultValue = {this.state.desc} />
+                    </Form.Group>
+                </Form>
+
+                <center>
+                    <Button variant="primary" onClick={handleClose}>
+                    Save
+                    </Button>
+
+                    <Button variant="secondary" onClick={handleClose}>
+                    Cancel
+                    </Button>
+
+                    <Button variant="danger" onClick = {this.handleDeletePlaylist}>
+                    Delete Playlist
+                    </Button>
+                </center>
+                </Modal>
             </div>
-
-            <Form className = "settings-modal-content">
-                <Form.Group style = {{display: 'inline-block', marginRight: '50px'}}>
-                    <Form.File style = {{display: 'inline-block'}}>
-                        <img src = {add_box_img} style={{filter: 'invert(1)', width: '100px', cursor: 'pointer'}}/>
-                    </Form.File>
-                    <div style = {{display: 'inline-block', fontFamily: 'Roboto Condensed', width: '30%', verticalAlign: 'middle'}}>
-                        <b>Upload Cover</b><br/>
-                        Must be JPG, JPEG, PNG, or GIF, under 500KB
-                    </div>
-                </Form.Group>
-
-                <Form.Group style = {{display: 'inline-block', verticalAlign: 'middle'}} className = "settings-modal-checkboxes">
-                    <Form.Check label = "Public Playlist" className = "settings-checkbox"/>
-                    <Form.Check label = "Enable Comments" className = "settings-checkbox"/>
-                </Form.Group>
-
-                <Form.Group>
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control>{this.state.name}</Form.Control><br/>
-                    <Form.Label>Description</Form.Label><br/>
-                    <textarea className = "settings-modal-description">{this.state.desc}</textarea>
-                </Form.Group>
-            </Form>
-
-            <center>
-              <Button variant="primary" onClick={handleClose}>
-                Save
-              </Button>
-
-              <Button variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-
-              <Button variant="danger" onClick = {this.handleDeletePlaylist}>
-                Delete Playlist
-              </Button>
-            </center>
-          </Modal>
-        </div>
-      );
+        );
     }
 }
 
