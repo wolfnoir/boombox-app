@@ -100,12 +100,17 @@ class PlaylistSettings extends React.Component {
     }
 
     handleSavePlaylist = () => {
+        if(!this.cookie.get('username')){
+            alert("You're not authorized to save this playlist!");
+            return;
+        }
         const body = JSON.stringify({
             'id': this.props.playlistId,
             'description': this.state.desc,
             //@todo: Should we add image here?
             'name': this.state.name,
-            'userId': this.state.userId
+            'userId': this.state.userId,
+            'username': this.cookie.get('username'),
         });
         const headers = {"Content-Type": "application/json"};
         fetch('/editPlaylist', {
