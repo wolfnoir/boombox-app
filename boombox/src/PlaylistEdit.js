@@ -196,7 +196,6 @@ class PlaylistEditDisplay extends React.Component {
             //current_song: null, //correct one
             current_song: 2, //temporary for showing
             is_song_playing: false,
-            mounted: false,
         }
     }
 
@@ -216,7 +215,6 @@ class PlaylistEditDisplay extends React.Component {
                 this.setState({data: null}); //need to change the component to have a not found page
             }
         });
-        this.setState({mounted: true});
     }
 
     handleSongArrowClick = (i) => {
@@ -244,6 +242,10 @@ class PlaylistEditDisplay extends React.Component {
         //TODO: handle edit song here
     }
 
+    handleAddSong() {
+        //TODO: handle add song
+    }
+
     toggleAddSong() {
         var addSongForm = document.getElementById("add-song-form");
         var isHidden = addSongForm.hidden;
@@ -251,15 +253,12 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     toggleEditFields(index){
-        console.log(index);
-        if(this.state.mounted) {
-            console.log("test");
-            var editField = document.getElementById("edit-song-form-" + index);
-            console.log("edit-song-form-" + index);
-            console.log(editField);
-            var isHidden = editField.hidden;
-            editField.hidden = !isHidden;
-        }
+        console.log("test");
+        var editField = document.getElementById("edit-song-form-" + index);
+        console.log("edit-song-form-" + index);
+        console.log(editField);
+        var isHidden = editField.hidden;
+        editField.hidden = !isHidden;
     }
 
     render() {
@@ -440,7 +439,7 @@ class PlaylistEditDisplay extends React.Component {
                                                         </Form.Group>
                                                     </Col>
                                                 </Row>
-                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {this.handleAddSong}>
+                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {() => this.handleAddSong()}>
                                                         Submit
                                                 </Button>
 
