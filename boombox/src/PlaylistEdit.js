@@ -26,6 +26,7 @@ import edit_img from './images/edit-24px.svg';
 /* STATIC IMPORT                           */
 /*-----------------------------------------*/
 import horse_img from './images/horse.png';
+// import { addSong } from '../express-server/PlaylistHandler';
 /*-----------------------------------------*/
 
 function PlaylistEdit() {
@@ -168,71 +169,6 @@ class PlaylistSettings extends React.Component {
     }
 }
 
-class AddSongModal extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            show: false,
-            setShow: false,
-        }
-    }
-
-    handleSave(){
-        //TODO: handle saving stuff here
-    }
-
-    handleYoutubeURL(){
-        //TODO: populate fields with youtube url information via youtube data api
-    }
-
-    render(){
-        const handleClose = () => this.setState({show: false});
-        const handleShow = () => this.setState({show: true});
-        return (
-        <div>
-            <div onClick={handleShow}>
-             <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
-                                        <h1>add song</h1>
-            </div>
-          <Modal show={this.state.show} onHide={handleClose} size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered> 
-
-            <div className = "settings-modal-header">
-                Add Song
-            </div>
-
-            <Form className = "settings-modal-content">
-                <Form.Group>
-                    <Form.Label>URL</Form.Label>
-                    <Form.Control id = "song-url-textarea" placeholder = "Paste YouTube URL here." onChange = {this.handleYoutubeURL()}></Form.Control><br/>
-
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control id = "song-title-textarea"></Form.Control><br/>
-
-                    <Form.Label>Artist</Form.Label>
-                    <Form.Control id = "song-artist-textarea"></Form.Control><br/>
-
-                    <Form.Label>Album</Form.Label>
-                    <Form.Control id = "song-album-textarea"></Form.Control><br/>
-                </Form.Group>
-            </Form>
-
-            <center>
-              <Button variant="primary" onClick={this.handleSave}>
-                Save
-              </Button>
-
-              <Button variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-            </center>
-          </Modal>
-        </div>
-      );
-    }
-}
-
 class PlaylistEditDisplay extends React.Component {
     constructor(props) {
         super(props);
@@ -288,6 +224,12 @@ class PlaylistEditDisplay extends React.Component {
         var currentSong = this.state.data.songs[i];
         console.log(currentSong);
         //TODO: handle edit song here
+    }
+
+    toggleAddSong() {
+        var addSongForm = document.getElementById("add-song-form");
+        var isHidden = addSongForm.hidden;
+        addSongForm.hidden = !isHidden;
     }
 
     render() {
@@ -438,8 +380,32 @@ class PlaylistEditDisplay extends React.Component {
                             <div className="col">
                                 <div className="row" id="title-row">
                                     <div className="col" id = "add-song">
-                                        <AddSongModal/>
-                                        
+                                        {/* <AddSongModal/> */}
+                                        <div onClick={this.toggleAddSong}>
+                                            <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
+                                                                    <h1>add song</h1>
+                                        </div>
+                                        <center>
+                                        <Form id = "add-song-form" hidden>
+                                            <Form.Group>
+                                                <Form.Label>URL</Form.Label>
+                                                <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
+
+                                                <Form.Label>Title</Form.Label>
+                                                <Form.Control id = "add-song-title" className = "add-song-textbox" ></Form.Control>
+
+                                                <Form.Label>Artist</Form.Label>
+                                                <Form.Control id = "add-song-artist" className = "add-song-textbox" ></Form.Control>
+
+                                                <Form.Label>Album</Form.Label>
+                                                <Form.Control id = "add-song-album" className = "add-song-textbox" ></Form.Control>
+
+                                                <Button variant="primary" type="button" onClick = {this.handleAddSong}>
+                                                    Submit
+                                                </Button>
+                                            </Form.Group>
+                                        </Form>
+                                        </center>
                                     </div>
                                 </div>
                             </div>

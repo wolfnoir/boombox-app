@@ -233,14 +233,22 @@
     cursor: pointer;
 }
 
-#playlist-edit-container #add-song {
+#playlist-edit-container #add-song h1 {
     cursor: pointer;
     transition: 0.3s;
 }
 
-#playlist-edit-container #add-song:hover {
+#add-song-form {
+    width: 50%;
+}
+
+#playlist-edit-container #add-song h1:hover {
     cursor: pointer;
     text-shadow: rgba(0, 0, 0, 0.3) 3px 3px;
+}
+
+.add-song-textbox {
+    margin-bottom: 5px;
 }
 
 /*---------------------------------------*/
