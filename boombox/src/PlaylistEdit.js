@@ -126,9 +126,10 @@ class PlaylistSettings extends React.Component {
             else {
                 console.log('somehow it broke');
             }
-        });
 
-        this.setState({show: false});
+            this.props.onSave(this.state.name, this.state.desc);
+            this.setState({show: false});
+        });
     }
 
     handleDeletePlaylist = () => {
@@ -418,6 +419,15 @@ class PlaylistEditDisplay extends React.Component {
         });
     }
 
+    handleSettingsChange = (name, desc) => {
+        this.setState({
+            data: {
+                name: name,
+                description: desc
+            }
+        });
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -449,7 +459,7 @@ class PlaylistEditDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            <PlaylistSettings playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} playlistId = {this.state.data._id}/>
+                                            <PlaylistSettings onSave = {this.handleSettingsChange} playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} playlistId = {this.state.data._id}/>
                                         </div>
                                     </div>
                                 </div>
