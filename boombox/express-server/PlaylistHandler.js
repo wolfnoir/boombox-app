@@ -206,23 +206,38 @@ class PlaylistHandler {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const filter = { "_id": idObject };
 
+            const foundPlaylist = await collection.findOne(filter);
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+
+            //TEMPORARILY USING TEMP VARS FOR THIS
+            const tempEnabled = foundPlaylist.com_enabled;
+            const tempComments = foundPlaylist.comments;
+            const tempImage = foundPlaylist.image_url;
+            const tempLikes = foundPlaylist.likes;
+            const tempPrivate = foundPlaylist.isPrivate;
+            const tempSongs = foundPlaylist.songs;
+            const tempTags = foundPlaylist.tags;
+            const tempUserId = foundPlaylist.user_id;
+
+            //@todo: TEMPORARILY ONLY UPDATING NAME AND DESCRIPTION
             const updateDoc = {
-                $set: {
-                    com_enabled: com_enabled,
-                    //comments: comments,
-                    description: description,
-                    image_url: image_url, //need to do this separately for image upload
-                    last_modified: date,
-                    //likes: likes,
-                    name: name,
-                    isPrivate: isPrivate,
-                    //songs: songs,
-                    //tags: tags,
-                    //user_id: userIdObject}
-                }
+                com_enabled: tempEnabled,
+                comments: tempComments,
+                description: description,
+                image_url: tempImage, //need to do this separately for image upload
+                last_modified: date,
+                likes: tempLikes,
+                name: name,
+                isPrivate: tempPrivate,
+                songs: tempSongs,
+                tags: tempTags,
+                user_id: tempUserId
             };
 
-            await collection.updateOne(filter, updateDoc);
+            await collection.updateOne(filter, {$set: updateDoc});
         }
 
         catch (err) {
