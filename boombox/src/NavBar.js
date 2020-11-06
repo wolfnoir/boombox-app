@@ -124,7 +124,7 @@ class NavBar extends React.Component {
                     </Nav>
 
                     <Nav className = 'mr-auto'>
-                        <Navbar.Brand href="/" inline id = "boombox-header">boombox</Navbar.Brand>
+                        <Navbar.Brand href="/" id = "boombox-header">boombox</Navbar.Brand>
                     </Nav>
                     <Nav>
                     <Form inline id = "nav-search-bar">
