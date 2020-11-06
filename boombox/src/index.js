@@ -10,7 +10,6 @@ import './css/bootstrap.min.css';
 import './index.css';
 
 import NavBarWrapper from './NavBarWrapper';
-import NavBarTest from './NavBarTest';
 import RelayInfo from './RelayInfo';
 
 import Bookmarks from './Bookmarks';
@@ -46,7 +45,6 @@ class MyRouter extends React.Component {
 					</Route>
 					<Route path="/register" component={Register} />
 					<Route path="/registersuccess" component={RegisterSuccess} />
-					<Route path="/navbar-test" component={NavBarTest} />
 					<Route path="/relay-info/:info" component={RelayInfo} />
 					<Route 
 						path="/settings-test" 
