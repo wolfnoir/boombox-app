@@ -239,6 +239,15 @@
 }
 
 #add-song-form {
+    /* width: 50%; */
+    font-family: 'Roboto Condensed'
+}
+
+#add-song-button {
+    margin: 10px;
+}
+
+#edit-song-form {
     width: 50%;
 }
 

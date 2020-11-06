@@ -9,6 +9,8 @@ import './PlaylistEdit.css';
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
 import link_img from './images/link-24px.svg';
@@ -113,7 +115,7 @@ class PlaylistSettings extends React.Component {
         const handleShow = () => this.setState({show: true});
         return (
         <div>
-            {this.handleRedirect}
+            {this.handleRedirect()}
           <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
     
           <Modal show={this.state.show} onHide={handleClose} size="lg"
@@ -180,6 +182,7 @@ class PlaylistEditDisplay extends React.Component {
             //current_song: null, //correct one
             current_song: 2, //temporary for showing
             is_song_playing: false,
+            mounted: false,
         }
     }
 
@@ -199,6 +202,7 @@ class PlaylistEditDisplay extends React.Component {
                 this.setState({data: null}); //need to change the component to have a not found page
             }
         });
+        this.setState({mounted: true});
     }
 
     handleSongArrowClick = (i) => {
@@ -230,6 +234,18 @@ class PlaylistEditDisplay extends React.Component {
         var addSongForm = document.getElementById("add-song-form");
         var isHidden = addSongForm.hidden;
         addSongForm.hidden = !isHidden;
+    }
+
+    toggleEditFields(index){
+        console.log(index);
+        if(this.state.mounted) {
+            console.log("test");
+            var editField = document.getElementById("edit-song-form-" + index);
+            console.log("edit-song-form-" + index);
+            console.log(editField);
+            var isHidden = editField.hidden;
+            editField.hidden = !isHidden;
+        }
     }
 
     render() {
@@ -310,7 +326,7 @@ class PlaylistEditDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row" id = "song-row" onClick = {() => {this.handleEditSong(i)}}>
+                                                        <div className="row" id = "song-row" onClick = {() => this.toggleEditFields(i)}>
                                                             <div className="col songs-col0">
                                                                 {/* should decide based on state? */}
                                                                 
@@ -320,31 +336,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                     arrow_down_img
                                                                     : arrow_right_img
                                                                 } 
-                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                            
-                                                                {/*
-                                                                {
-                                                                    this.state.song_notes_open[i] ?
-                                                                    <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                src={arrow_down_img} 
-                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                                    :
-                                                                    <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                src={arrow_right_img} 
-                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                                }
-                                                            */}
-                                                            {/*
-                                                                {this.state.song_notes_open[i] ? <ArrowDownComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/> : <ArrowRightComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/>}
-                                                            */}    
-                                                                {/* the changing from right to down doesn't work */}
-                                                                {/*
-                                                                {
-                                                                    song.notes ?
-                                                                    <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
-                                                                    : <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
-                                                                }
-                                                            */}
+                                                                height="30px" width="30px" alt=">"/> {/* should add onclick to toggle arrow*/}
                                                                 <b>{(i+1) + "."}</b>
                                                             </div>
                                                             <div className="col songs-col1">
@@ -357,17 +349,41 @@ class PlaylistEditDisplay extends React.Component {
                                                                 {/* TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
-                                                            <img id = {"delete-song"} src = {delete_img} onClick = {this.handleDeleteSong(i)}/>
+                                                            <img id = {"delete-song-"+i} src = {delete_img} onClick = {() =>  this.handleDeleteSong(i)}/>
                                                         </div>
-                                                        {
-                                                            song.notes ?
-                                                            <div className="row song-notes-row" id={"song-note-"+i}>
-                                                                <div className="col">
-                                                                    <textarea className="song-notes-textarea" id={"song-note-"+i+"-textarea"} value={song.notes} />
-                                                                </div>
-                                                            </div>
-                                                            : null
-                                                        }
+                                                        <center>
+                                                            <Form id = {"edit-song-form-" + i} hidden>
+                                                                <Row>
+                                                                    <Col>
+                                                                        <Form.Group>
+                                                                            <Form.Label>URL</Form.Label>
+                                                                            <Form.Control id = "edit-song-url" className = "edit-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
+
+                                                                            <Form.Label>Title</Form.Label>
+                                                                            <Form.Control id = "edit-song-title" className = "edit-song-textbox" ></Form.Control>
+
+                                                                            <Form.Label>Artist</Form.Label>
+                                                                            <Form.Control id = "edit-song-artist" className = "edit-song-textbox" ></Form.Control>
+
+                                                                            <Form.Label>Album</Form.Label>
+                                                                            <Form.Control id = "edit-song-album" className = "edit-song-textbox" ></Form.Control>
+                                                                        </Form.Group>
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <Form.Group>
+                                                                            <Form.Label>Note</Form.Label>
+                                                                            <Form.Control as="textarea" id = "edit-song-note" className = "edit-song-textarea" ></Form.Control>
+                                                                        </Form.Group>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {() =>  this.handleEditSong(i)}>
+                                                                        Submit
+                                                                </Button>
+                                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {() => this.toggleEditFields(i)}>
+                                                                        Cancel
+                                                                </Button>
+                                                            </Form>
+                                                        </center>
                                                     </div>
                                                 ))
                                                 : null
@@ -386,25 +402,38 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <h1>add song</h1>
                                         </div>
                                         <center>
-                                        <Form id = "add-song-form" hidden>
-                                            <Form.Group>
-                                                <Form.Label>URL</Form.Label>
-                                                <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
+                                            <Form id = "add-song-form" hidden>
+                                                <Row>
+                                                    <Col>
+                                                        <Form.Group>
+                                                            <Form.Label>URL</Form.Label>
+                                                            <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
 
-                                                <Form.Label>Title</Form.Label>
-                                                <Form.Control id = "add-song-title" className = "add-song-textbox" ></Form.Control>
+                                                            <Form.Label>Title</Form.Label>
+                                                            <Form.Control id = "add-song-title" className = "add-song-textbox" ></Form.Control>
 
-                                                <Form.Label>Artist</Form.Label>
-                                                <Form.Control id = "add-song-artist" className = "add-song-textbox" ></Form.Control>
+                                                            <Form.Label>Artist</Form.Label>
+                                                            <Form.Control id = "add-song-artist" className = "add-song-textbox" ></Form.Control>
 
-                                                <Form.Label>Album</Form.Label>
-                                                <Form.Control id = "add-song-album" className = "add-song-textbox" ></Form.Control>
-
-                                                <Button variant="primary" type="button" onClick = {this.handleAddSong}>
-                                                    Submit
+                                                            <Form.Label>Album</Form.Label>
+                                                            <Form.Control id = "add-song-album" className = "add-song-textbox" ></Form.Control>
+                                                        </Form.Group>
+                                                    </Col>
+                                                    <Col>
+                                                        <Form.Group>
+                                                            <Form.Label>Note</Form.Label>
+                                                            <Form.Control as="textarea" id = "add-song-note" className = "add-song-textarea" ></Form.Control>
+                                                        </Form.Group>
+                                                    </Col>
+                                                </Row>
+                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {this.handleAddSong}>
+                                                        Submit
                                                 </Button>
-                                            </Form.Group>
-                                        </Form>
+
+                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {this.toggleAddSong}>
+                                                        Cancel
+                                                </Button>
+                                            </Form>
                                         </center>
                                     </div>
                                 </div>
