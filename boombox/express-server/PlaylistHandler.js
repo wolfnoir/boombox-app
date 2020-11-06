@@ -69,9 +69,11 @@ class PlaylistHandler {
     }
 
     static async createPlaylistRoute(req, res) {
-        const user_id = req.session.user_id;
+        const username = req.body.username;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
         const response = await PlaylistHandler.createPlaylist(user_id);
-
+        
         res.send({
             status: response.status, //status -1: an error occurred, 0: success
             playlist_id: response.playlist_id
