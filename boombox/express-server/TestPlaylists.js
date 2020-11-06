@@ -183,6 +183,29 @@ class TestPlaylists {
                     ]
                 },
                 {
+                    com_enabled: false,
+                    comments: [],
+                    description: "",
+                    image_url: null,
+                    isPrivate: false,
+                    last_modified: 1604288237,
+                    likes: [],
+                    name: "to be deleted",
+                    tags: ["lo-fi", "video game", "soundtrack", "vocal"],
+                    user_id: ObjectId("5f9f58abf5bf7e2ac904b8ba"),
+                    songs: [
+                        {
+                            index: 0,
+                            album: "Transistor (Original Soundtrack)",
+                            artist: "Darren Korb",
+                            name: "The Spine",
+                            note: "",
+                            url: "41tIUr_ex3g",
+                            url_type: youtube
+                        },
+                    ]
+                },
+                {
                     com_enabled: true,
                     comments: [],
                     description: "I like pizza.",
