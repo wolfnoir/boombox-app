@@ -1,6 +1,8 @@
 # boombox-jeb-cse416-f20
 
-To run locally (dev) - faster for startup:
+## Usage
+
+**To run locally (dev) - faster for startup:**
   1. Clone this repo
   2. `cd boombox`
   3. `npm install`
@@ -9,7 +11,7 @@ To run locally (dev) - faster for startup:
       * `npm run-script start-server`
   5. Go to `localhost:3000` on a web browser
  
- To run with prod setting:
+**To run with prod setting:**
   1. Clone this repo
   2. `cd boombox`
   3. `npm install`
