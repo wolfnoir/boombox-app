@@ -159,7 +159,6 @@ class UserHandler {
             req.session.user_id = statusObject.user_id;
             console.log('login ' + statusObject.username);
             delete statusObject.user_id;
-            console.log("user_id: " + req.session.user_id);
         }
         res.send(statusObject); // [status] -1: an error occurred, 0: success, 1: combination does not exist
     }

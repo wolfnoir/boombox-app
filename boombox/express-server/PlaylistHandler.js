@@ -33,7 +33,7 @@ class PlaylistHandler {
         var serverResp = null;
 
         try {
-            const date = new Date();
+            const date = Date.now();
             const userIdObject = MongoClient.ObjectID(user_id);
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
 
@@ -42,7 +42,8 @@ class PlaylistHandler {
                 comments: [],
                 description: '',
                 image_url: '',
-                last_modified: date.getDate(),
+                isPrivate: false,
+                last_modified: date,
                 likes: [],
                 name: 'Untitled',
                 songs: [],
@@ -237,7 +238,7 @@ class PlaylistHandler {
 
         try {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
-            const idObject = new MongoClient.ObjectID(playlist_id);
+            const idObject = MongoClient.ObjectID(playlist_id);
             const playlistQuery = { "_id" : idObject };
             const playlistObject = await collection.findOne(playlistQuery);
             if (!playlistObject) {
