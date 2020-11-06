@@ -89,6 +89,49 @@ class PlaylistSettings extends React.Component {
             }
     }
 
+    updateName = (event) => {
+        event.persist();
+        this.setState({name: event.target.value});
+    }
+
+    updateDescription = (event) => {
+        event.persist();
+        this.setState({desc: event.target.value});
+    }
+
+    handleSavePlaylist = () => {
+        const body = JSON.stringify({
+            'id': this.props.playlistId,
+            'description': this.state.desc,
+            //@todo: Should we add image here?
+            'name': this.state.name,
+            'userId': this.state.userId
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/editPlaylist', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            if (obj.statusCode === 0) {
+                console.log('successfully saved playlist');
+            }
+            else if (obj.statusCode === 1) {
+                console.log('not authorized');
+            }
+            else if (obj.statusCode === -1) {
+                console.log('error');
+            }
+            else {
+                console.log('somehow it broke');
+            }
+        });
+
+        this.setState({show: false});
+    }
+
     handleDeletePlaylist = () => {
         const body = JSON.stringify({
             'username': this.cookie.get('username'),
@@ -161,14 +204,14 @@ class PlaylistSettings extends React.Component {
 
                     <Form.Group>
                         <Form.Label>Name</Form.Label>
-                        <Form.Control defaultValue = {this.state.name} /><br/>
+                        <Form.Control defaultValue = {this.state.name} onChange={this.updateName} /><br/>
                         <Form.Label>Description</Form.Label><br/>
-                        <textarea className = "settings-modal-description" defaultValue = {this.state.desc} />
+                        <textarea className = "settings-modal-description" defaultValue = {this.state.desc} onChange={this.updateDescription}/>
                     </Form.Group>
                 </Form>
 
                 <center>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={this.handleSavePlaylist}>
                     Save
                     </Button>
 
