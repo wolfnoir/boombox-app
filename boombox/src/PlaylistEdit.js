@@ -75,11 +75,8 @@ class PlaylistSettings extends React.Component {
         }
     }
 
-    componentDidUpdate() {
-        if(this.props.playlistName != this.state.name 
-            || this.props.playlistDesc != this.state.desc 
-            ||  this.props.playlistId != this.state.playlistId 
-            || this.props.userId != this.state.userId) {
+    componentDidUpdate(prevprops) {
+        if(prevprops != this.props) {
                 this.setState({
                     name: this.props.playlistName,
                     desc: this.props.playlistDesc,
@@ -90,22 +87,24 @@ class PlaylistSettings extends React.Component {
     }
 
     updateName = (event) => {
-        event.persist();
         this.setState({name: event.target.value});
     }
 
     updateDescription = (event) => {
-        event.persist();
         this.setState({desc: event.target.value});
     }
 
     handleSavePlaylist = () => {
+        if(!this.cookie.get('username')){
+            alert("You're not authorized to save this playlist!");
+            return;
+        }
         const body = JSON.stringify({
             'id': this.props.playlistId,
             'description': this.state.desc,
             //@todo: Should we add image here?
             'name': this.state.name,
-            'userId': this.state.userId
+            'userId': this.state.userId,
         });
         const headers = {"Content-Type": "application/json"};
         fetch('/editPlaylist', {

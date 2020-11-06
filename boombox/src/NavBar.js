@@ -52,6 +52,10 @@ class NavBar extends React.Component {
     }
 
     createPlaylist = () => {
+        if(!this.cookie.get('username')){
+            alert("Please log in to create a playlist!");
+            return;
+        }
         const body = JSON.stringify({
             'username': this.cookie.get('username'),
         });
