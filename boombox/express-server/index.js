@@ -64,12 +64,6 @@ app.get("/testImage", (req, res) => {
 });
 app.post("/testImage", UserHandler.testImage);
 
-
-//is a placeholder, can expand on it later
-app.post("/editPlaylist", (req, res) => {
-	
-});
-
 app.all("/getBookmarks", UserHandler.getBookmarksRoute);
 
 app.all("/getPlaylistData/:playlistId", PlaylistHandler.getPlaylistRoute);
