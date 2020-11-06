@@ -102,12 +102,14 @@ class PlaylistHandler {
                 console.log('playlist not found');
                 return {status: -1};
             }
-            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+            var stringUserId = user_id.toString();
+            var stringPlaylistUserId = foundPlaylist.user_id.toString();
+            if (stringUserId !== stringPlaylistUserId) { //if we want to admin debug, add an AND != for admin account
+                
                 console.log("not authorized");
                 return {status: 1};
             }
             const status = await collection.deleteOne({"_id": playlistId});
-            console.log(status);
             if (status.deletedCount > 0) {
                 console.log("Success");
                 return {status: 0};
@@ -125,13 +127,53 @@ class PlaylistHandler {
     }
 
     static async deletePlaylistRoute(req, res) {
-        const user_id = req.session.user_id;
+        //const user_id = req.session.user_id;
         const playlistId = new MongoClient.ObjectID(req.body.playlistId);
+        const username = req.body.username;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
         const response = await PlaylistHandler.deletePlaylist(user_id, playlistId);
 
         res.send({
             status: response.status, //status -1: an error occurred, 0: success, 1: you do not have authorization
         });
+    }
+
+    static async getUserId(username){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const user = await collection.findOne({"username": username});
+            if (!user){
+                console.log("user not found");
+                return {status: 1};
+            }
+
+            const targetIdObject = user._id;
+            return {
+                status: 0,
+                result: targetIdObject
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
     }
 
     /**
@@ -270,7 +312,6 @@ class PlaylistHandler {
 
     static async getPlaylistRoute(req, res) {
         const playlist_id = req.params.playlistId;
-        console.log(playlist_id);
         const statusObject = await PlaylistHandler.getPlaylist(playlist_id);
 
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: playlist not found

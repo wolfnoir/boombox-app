@@ -59,11 +59,51 @@ class ArrowDownRightComponent extends React.Component {
 class PlaylistSettings extends React.Component {
     constructor(props){
         super(props);
+        this.cookie = new Cookie();
         this.state = {
             show: false,
             setShow: false,
             name: this.props.playlistName,
             desc: this.props.playlistDesc,
+            playlistId: this.props.playlistId,
+            userId: this.props.userId,
+            redirect: false,
+        }
+    }
+
+    handleDeletePlaylist = () => {
+        const body = JSON.stringify({
+            'username': this.cookie.get('username'),
+            'playlistId': this.props.playlistId
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/deletePlaylist', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            if (obj.status === 0) {
+                alert('successfully deleted playlist');
+                window.location = '/';
+            }
+            else if (obj.status === 1) {
+                alert('not authorized');
+            }
+            else if (obj.status === -1) {
+                alert('error');
+            }
+            else {
+                alert('somehow it broke');
+            }
+        });
+    }
+
+    //make this happen for real
+    handleRedirect() {
+        if (this.state.redirect){
+            return <Redirect to="/" />
         }
     }
 
@@ -72,6 +112,7 @@ class PlaylistSettings extends React.Component {
         const handleShow = () => this.setState({show: true});
         return (
         <div>
+            {this.handleRedirect}
           <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
     
           <Modal show={this.state.show} onHide={handleClose} size="lg"
@@ -117,7 +158,7 @@ class PlaylistSettings extends React.Component {
                 Cancel
               </Button>
 
-              <Button variant="danger">
+              <Button variant="danger" onClick = {this.handleDeletePlaylist}>
                 Delete Playlist
               </Button>
             </center>
@@ -143,7 +184,7 @@ class AddSongModal extends React.Component {
     handleYoutubeURL(){
         //TODO: populate fields with youtube url information via youtube data api
     }
-    
+
     render(){
         const handleClose = () => this.setState({show: false});
         const handleShow = () => this.setState({show: true});
@@ -202,7 +243,7 @@ class PlaylistEditDisplay extends React.Component {
             song_notes_open: [],
             //current_song: null, //correct one
             current_song: 2, //temporary for showing
-            is_song_playing: false
+            is_song_playing: false,
         }
     }
 
@@ -282,7 +323,7 @@ class PlaylistEditDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            <PlaylistSettings playlistName = {this.state.data.name} playlistDesc = {this.state.data.description}/>
+                                            <PlaylistSettings playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} playlistId = {this.state.data._id}/>
                                         </div>
                                     </div>
                                 </div>
