@@ -1,17 +1,22 @@
 import React from 'react';
-import menu_icon from './images/menu-24px.png';
-//import search_icon from './images/search-24px.svg';
-import settings_icon from './images/settings-24px.png';
-import close_icon from './images/close-24px.png';
-import home_icon from './images/home-24px.png';
-import profile_icon from './images/account_circle-24px.png';
-import add_icon from './images/add_box-24px.png';
-import bookmark_icon from './images/bookmark-24px.png';
-import logout_icon from './images/exit_to_app-24px.png';
+import settings_icon from './images/settings-24px.svg';
+import close_icon from './images/close-24px.svg';
+import home_icon from './images/home-24px.svg';
+import profile_icon from './images/account_circle-24px.svg';
+import add_icon from './images/add_box-24px.svg';
+import bookmark_icon from './images/bookmark-24px.svg';
+import logout_icon from './images/exit_to_app-24px.svg';
 import Cookie from 'universal-cookie';
 import SettingsPane from './SettingsPane';
 import './NavBar.css';
 import { Redirect } from "react-router-dom";
+import { slide as Menu } from 'react-burger-menu';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import FormControl from 'react-bootstrap/FormControl';
+
 
 //TODO: add sliding animation
 //reference: https://www.w3schools.com/howto/howto_js_animate.asp
@@ -22,34 +27,9 @@ class NavBar extends React.Component {
         this.iconSize = "30px";
         this.cookie = new Cookie();
         this.state = {
-            pushMenuVisible: false,
             inputVal: "",
             redirect: false,
             redirect_link: ""
-        }
-    }
-
-    openPushMenu = () => {
-        var children = document.getElementById("wrapper").childNodes;
-        console.log(children);
-        var pushMenu = document.getElementById("push-menu");
-        if (!this.state.pushMenuVisible) {
-            for (var i = 0; i < children.length; i++) {
-                children[i].style.marginLeft = pushMenu.offsetWidth + 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
-            }
-            document.getElementById("menu-icon").style.display = "none";
-            this.setState({pushMenuVisible: true});
-        }
-    }
-
-    closePushMenu = () => {
-        var children = document.getElementById("wrapper").childNodes;
-        if (this.state.pushMenuVisible) {
-            for (var i = 0; i < children.length; i++) {
-                children[i].style.marginLeft = "0px";
-            }
-            document.getElementById("menu-icon").style.display = "block";
-            this.setState({pushMenuVisible: false});
         }
     }
 
@@ -92,101 +72,78 @@ class NavBar extends React.Component {
     }
 
     componentDidMount() {
-        var pushMenu = document.getElementById("push-menu");
-        //var navBar = document.getElementById("nav-bar");
-        pushMenu.style.marginLeft = -pushMenu.offsetWidth - 2 + "px"; //SPECIFIC MEASUREMENT: associated to padding of tables
-        //navBar.style.width = document.getElementById("root").offsetWidth + "px";
-        //console.log(this.cookie.get("username"));
+        {this.closeSettings()}
     }
 
     updateInput = (event) => {
         this.setState({inputVal: event.target.value});
+        console.log(this.state.inputVal);
     }
 
+    showMenu (event) {
+        event.preventDefault();
+    }
+
+    handleSearch = () => {
+        if (this.state.inputVal !== "" && this.state.inputVal){
+            this.setState({redirect: true, redirect_link: "/search/" + this.state.inputVal});
+            this.handleRedirect();
+        }
+    }
+    
+
     render() {
-        /*
-        var pushMenu = document.getElementById("push-menu");
-        var navBar = document.getElementById("nav-bar");
-        var navBarWidth = document.getElementById("root").offsetWidth + "px";
-        if (this.state.pushMenuVisible) {
-            navBarWidth = document.getElementById("root").offsetWidth - pushMenu.offsetWidth + "px";
-        }
-        var navBarStyle = {"width": navBarWidth};
-        */
-
-        var menuIcon = <img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/>;
-        var settingsIcon = <img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} />;
+        var showProfile = <a href={this.cookie.get('username') ? "/user/" + this.cookie.get('username') : "/"}><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> my profile</a>;
+        var myBookmarks = <a href="/my-bookmarks"><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> bookmarks</a>;
+        var logoutButton = <div id="logout-click" onClick={this.logoutUser}><img id="logout-icon" src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> log out</div>;
+        var settingsIcon = <img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} className="invert-color" />;
         if (!this.cookie.get('username')) {
-            menuIcon = null;
             settingsIcon = <div id="login-register-div">
-                            <div id="login-link"><a href="/login">Login</a></div>
-                            <div id="register-link"><a href="/register">Register</a></div>
+                            <div id="login-link"><a href="/login">login</a></div>
+                            <div id="register-link"><a href="/register">register</a></div>
                         </div>;
+            showProfile = null;
+            myBookmarks = null;
+            logoutButton = <a href="/login"><img id="logout-icon" src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> login</a>;
         }
-
-	    return (
-            <div id="nav-bar-main">
+        return (
+            <div>
                 {this.handleRedirect()}
-                <div id="push-menu">
-                    <table id="push-menu-table">
-                        <tbody>
-                            <tr>
-                                <td id="close-menu-cell"><img id="close-menu-icon" src={close_icon} alt="" width={this.iconSize} height="50px" onClick={this.closePushMenu} /></td>
-                            </tr>
-                            <tr>
-                                <td><a href="/"><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} /> dashboard</a></td>
-                            </tr>
-                            <tr>
-                                <td><a href={this.cookie.get('username') ? "/user/" + this.cookie.get('username') : "/"}><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} /> my profile</a></td>
-                            </tr>
-                            <tr>
-                                <td id="create-playlist-cell" onClick={this.createPlaylist}><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} /> new playlist</td>
-                            </tr>
-                            <tr>
-                                <td><a href="/my-bookmarks"><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} /> bookmarks</a></td>
-                            </tr>
-                            <tr>
-                                <td id="logout-cell" onClick={this.logoutUser}><img id="logout-icon" src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} /> log out</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="nav-bar">
-                    <table id="nav-bar-table">
-                        <tbody>
-                            <tr>
-                                <td><img id="menu-icon" src={menu_icon} alt="Menu" width={this.iconSize} height={this.iconSize} onClick={this.openPushMenu}/></td>
-                                <td><a href = "/" id = "boombox-header">boombox</a></td>
-                                <td>
-                                    <input id="search-bar" placeholder="Search" onChange={this.updateInput} type="text"/> 
-                                    <a href = {"/search/" + this.state.inputVal}>
-                                        <button id="search-button">Search</button>
-                                    </a>
-                                </td>
-                                <td>{settingsIcon}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div className="fixed-top" id="settings-pane-fixed-top">
-                    <SettingsPane 
+                <Menu width={ 250 }>
+                    <a href="/"><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color"/> dashboard</a>
+                    {showProfile}
+                    <div id="create-playlist" onClick={this.createPlaylist}><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color"/> new playlist</div>
+                    {myBookmarks}
+                    {logoutButton}
+                </Menu>
+                <Navbar bg = "dark" variant = "dark" fixed="top" id = "nav-bar">
+                    <Nav className = 'mr-auto'>
+                        <div>
+                            <a onClick={ this.showMenu } className="menu-item--small" id = "push-menu-icon" href=""></a>
+                        </div>
+                    </Nav>
+
+                    <Nav className = 'mr-auto'>
+                        <Navbar.Brand href="/" inline id = "boombox-header">boombox</Navbar.Brand>
+                    </Nav>
+                    <Nav>
+                    <Form inline id = "nav-search-bar">
+                        <FormControl type="text" placeholder="search" className="mr-sm-2" onChange={this.updateInput} id = "search-input"/>
+
+                        <Button variant="outline-info" onClick = {this.handleSearch}>search</Button>
+                        <div>{settingsIcon}</div>
+                    </Form>
+                    </Nav>
+                </Navbar>
+
+                    <div className="fixed-top" id="settings-pane-fixed-top">
+                     <SettingsPane 
                         closeWindow={this.closeSettings}
-                        profile_image={this.props.profile_image}
-                    />
+                        profile_image={this.props.profile_image}/>
                     </div>
             </div>
         );
     }
 }
-
-
-/*
-For side bar:
--Get all other elements on the page and keep note of them
--setInterval(animate the movement of everything)
-    -move left when open
-    -move right when close
-    -make visible/hide the element
-*/
 
 export default NavBar;
