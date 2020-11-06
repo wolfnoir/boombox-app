@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const MongoClient = require('mongodb');
 const fs = require('fs');
 const crypto = require('crypto');
-const { resolve } = require("path");
+const tmp = require('tmp');
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const mongoDbName = 'boombox';
@@ -269,8 +269,13 @@ class UserHandler {
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found/not logged in, 2: email in use, 3: incorrect password, 4: passwords did not match
     }
 
-    static async editUserIcon(req, res) {
-         /*
+    static async editUserIcon(req, res) {  
+        const username = req.cookies.username;
+        if (!username) {
+            res.send({status: 1});
+            return;
+        }
+
         const form = new multiparty.Form();
         const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
             if (err) {console.log(err);}
@@ -279,9 +284,110 @@ class UserHandler {
         const [fields, files] = await formPromise;
         const uploadedFile = files.file[0];
         const imageExts = ["jpeg", "png", "gif"];
-        const newIcon = (uploadedFile && uploadedFile.size > 0 && imageExts.includes(uploadedFile.originalFilename.substring(uploadedFile.originalFilename.lastIndexOf('.') + 1))) ? 
-            uploadedFile.path : null;
-        */
+        if (!uploadedFile || uploadedFile.size == 0) {
+            return {status: 2}; //no file selected
+        }
+        const filename = uploadedFile.originalFilename;
+        console.log(uploadedFile);
+        console.log('filename: ', filename);
+        if (!imageExts.includes(filename.substring(filename.lastIndexOf('.') + 1))) {
+            console.log('not an image');
+            return {status: 3} //not a proper image file
+        }
+        const filepath = uploadedFile.path;
+        console.log('filepath: ', filepath);
+
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+        
+        try {
+            const db = client.db(mongoDbName);
+            const bucket = new MongoClient.GridFSBucket(db);
+            const readStream = fs.createReadStream(filepath);
+            const uploadStream = bucket.openUploadStream(filename);
+            readStream.pipe(uploadStream)
+                .on('error', (err) => {
+                    throw err;
+                })
+                .on('finish', () => {
+                    //console.log(uploadStream.id);
+                })
+            console.log(uploadStream.id);
+            db.collection(mongoUserCollection).updateOne({username: username}, {$set: {icon_url: uploadStream.id}});
+            const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
+            return {status: 0, iconData: fileData};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+    }
+
+    static async editUserIconRoute(req, res) {
+        const statusObject = await UserHandler.editUserIcon(req, res);
+        res.json(statusObject);
+    }
+
+    static async getUserIconData(username) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const db = client.db(mongoDbName);
+
+            const userCollection = db.collection(mongoUserCollection);
+            const userObject = await userCollection.findOne({username: username});
+            if (!userObject) {
+                console.log('user not found');
+                return {status: 1};
+            }
+            const object_id = userObject.icon_url;
+
+            const filepath = './tmp_file';
+            const bucket = new MongoClient.GridFSBucket(db);
+            const downloadStream = bucket.openDownloadStream(object_id);
+            const writeStream = fs.createWriteStream(filepath); //TODO: need to generate a better random file (tmp package?)
+            downloadStream.pipe(writeStream)
+                .on('error', (err) => {
+                    throw err;
+                })
+                .on('finish', () => {
+                    //console.log(uploadStream.id);
+                })
+            
+            const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
+            return {status: 0, iconData: fileData};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+    }
+
+    static async getUserIconDataRoute(req, res) {
+        const username = req.cookies.username;
+        const statusObject = await UserHandler.getUserIconData(username);
+        res.send(statusObject);
     }
 
     /**
@@ -657,7 +763,9 @@ class UserHandler {
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
     }
 
-
+    /*------------------------*/
+    /* STANDALONE IMAGE STUFF */
+    /*------------------------*/
 
     static async testImage(req, res) {
         /*
@@ -719,7 +827,7 @@ class UserHandler {
         res.send("hello"); //change to something that the client can actually use
     }
 
-    static async getImage(object_id) {
+    static async getImageData(object_id) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
