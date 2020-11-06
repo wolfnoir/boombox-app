@@ -5,6 +5,7 @@
     color: white;
     font-family: 'Roboto Condensed';
     font-size: 30px;
+    z-index: 2000 !important;
 }
 
 #settings-pane #row1 {
