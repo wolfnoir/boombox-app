@@ -3,11 +3,13 @@ import './css/bootstrap.min.css';
 import './SettingsPane.css';
 import back_icon from './images/keyboard_backspace-24px.png'
 import profile_icon from './images/account_circle-24px.svg';
+import Cookie from 'universal-cookie';
 
 class SettingsPane extends React.Component {
     constructor(props) {
         super(props);
         //this.props.closeWindow.bind(this);
+        this.cookie = new Cookie();
         this.state = {
             profile_image_data: null
         }
@@ -128,8 +130,13 @@ class SettingsPane extends React.Component {
     }
       
     getProfileImageData = () => {
+        const username = this.cookie.get('username');
+        const body = JSON.stringify({username: username});
+        const headers = {"Content-Type": "application/json"};
         fetch('/getUserIcon', {
-            method: 'POST'
+            method: 'POST',
+            body: body,
+            headers: headers
         })
         .then(res => res.json()) 
         .then(data => {
