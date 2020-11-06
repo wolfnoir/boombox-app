@@ -231,9 +231,16 @@ class PlaylistEditDisplay extends React.Component {
         }
     }
 
-    handleDeleteSong = (i) => {
-        const index = i;
-        //TODO: handle delete song here
+    handleDeleteSong = (e, i) => {
+        e.stopPropagation();
+        console.log("call");
+        const dataCopy = this.state.data;
+        if (dataCopy.songs && i < dataCopy.songs.length) {
+            console.log("delete ", i);
+            dataCopy.songs.splice(i, 1);
+        }
+        this.setState({data: dataCopy});
+        console.log(this.state.data.songs);
     }
 
     handleEditSong = (i) => {
@@ -362,7 +369,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                 {/* TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
-                                                            <img id = {"delete-song-"+i} src = {delete_img} onClick = {() =>  this.handleDeleteSong(i)}/>
+                                                            <img className="delete-song-button" id = {"delete-song-"+i} src = {delete_img} onClick = {(e) =>  this.handleDeleteSong(e, i)}/>
                                                         </div>
                                                         <center>
                                                             <Form id = {"edit-song-form-" + i} hidden>

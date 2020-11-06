@@ -151,7 +151,8 @@
     cursor: pointer;
 }
 
-#playlist-edit-container #delete-song {
+#playlist-edit-container .delete-song-button {
+    
 }
 
 #playlist-edit-container #delete-song:hover {
