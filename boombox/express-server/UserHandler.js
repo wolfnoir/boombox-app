@@ -180,7 +180,7 @@ class UserHandler {
     /* EDIT USER SETTINGS     */
     /*------------------------*/
 
-    static async editUserSettings(username, newIcon, newUsername, newBio, newEmail, currentPassword, newPassword, newPasswordConfirm) {
+    static async editUserSettings(username, newUsername, newBio, newEmail, currentPassword, newPassword, newPasswordConfirm) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -203,9 +203,11 @@ class UserHandler {
                 return {status: 1};
             }
             var updateObject = {}
+            /*
             if (newIcon) {
                 //TODO: need to handle image storage
             }
+            */
             if (newUsername) {
                 updateObject.username = newUsername;
             }
@@ -213,6 +215,7 @@ class UserHandler {
                 updateObject.bio = newBio;
             }
             if (newEmail) {
+                console.log(newEmail);
                 //check if the email already exists
                 const foundEmailObject = await collection.findOne({email: newEmail});
                 if (foundEmailObject) {
@@ -252,51 +255,33 @@ class UserHandler {
             return;
         }
 
-        /*
-        const newIcon = null; //req.body.newIcon; 
-        const newUsername = "qwerty"; //req.body.newUsername;
-        const newBio = "sdcfvgbdeswaswedrf"; //req.body.newBio;
-        const newEmail = "test2@test.com"; //req.body.newEmail;
-        const currentPassword = "testPassword123?"; //req.body.currentPassword
-        const newPassword = ""; //req.body.newPassword
-        const newPasswordConfirm = ""; //req.body.newPasswordConfirm
-        */
-        /*
-        const newUsername = null; //"test-user-new";
-        const newIcon = null;
-        const newBio = null; //"this is a bio";
-        const newEmail = null; //"test@test.com";
-        const currentPassword = null; //"123456";
-        const newPassword = null; //"testPassword123?";
-        const newPasswordConfirm = null; //"testPassword123?";
-        */
-        
-
-        const form = new multiparty.Form();
-        const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
-            if (err) {console.log(err);}
-            return resolve([fields, files]);
-        }));
-        const [fields, files] = await formPromise;
-        const uploadedFile = files.fieldname[0];
-        const imageExts = ["jpeg", "png", "gif"];
-        const newIcon = (uploadedFile && uploadedFile.size > 0 && imageExts.includes(uploadedFile.originalFilename.substring(uploadedFile.originalFilename.lastIndexOf('.') + 1))) ? 
-            uploadedFile.path : null;
-        //const newIcon = req.body.newIcon; 
-        //this needs to be handled separately
-
         const newUsername = req.body.newUsername;
         const newBio = req.body.newBio;
         const newEmail = req.body.newEmail;
         const currentPassword = req.body.currentPassword;
         const newPassword = req.body.newPassword;
         const newPasswordConfirm = req.body.newPasswordConfirm;
-        const statusObject = await UserHandler.editUserSettings(username, newIcon, newUsername, newBio, newEmail, currentPassword, newPassword, newPasswordConfirm);
+        const statusObject = await UserHandler.editUserSettings(username, newUsername, newBio, newEmail, currentPassword, newPassword, newPasswordConfirm);
         if (statusObject.status == 0 && newUsername) {
             res.cookie('username', newUsername);
             req.session.username = newUsername;
         }
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found/not logged in, 2: email in use, 3: incorrect password, 4: passwords did not match
+    }
+
+    static async editUserIcon(req, res) {
+         /*
+        const form = new multiparty.Form();
+        const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
+            if (err) {console.log(err);}
+            return resolve([fields, files]);
+        }));
+        const [fields, files] = await formPromise;
+        const uploadedFile = files.file[0];
+        const imageExts = ["jpeg", "png", "gif"];
+        const newIcon = (uploadedFile && uploadedFile.size > 0 && imageExts.includes(uploadedFile.originalFilename.substring(uploadedFile.originalFilename.lastIndexOf('.') + 1))) ? 
+            uploadedFile.path : null;
+        */
     }
 
     /**

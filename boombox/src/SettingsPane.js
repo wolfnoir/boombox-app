@@ -34,6 +34,7 @@ class SettingsPane extends React.Component {
         //         }
         //     }
         // );
+        return false; //disable the function right now
 
         const formData = new FormData();
         const fileInput = document.getElementById("fileInput");
@@ -57,7 +58,48 @@ class SettingsPane extends React.Component {
         .catch(error => {
             console.error(error)
         });
-    }        
+    }
+    
+    editPassword = (e) => {
+        e.preventDefault();
+        const currentPassword =  document.getElementById('current-password-entry');
+        const newPassword =  document.getElementById('new-password-entry');
+        const confirmPassword =  document.getElementById('confirm-password-entry');
+        if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
+            alert('please fill out all fields');
+            return;
+        }
+		const body = JSON.stringify({
+            'currentPassword': currentPassword.value,
+            'newPassword': newPassword.value,
+            'newPasswordConfirm': confirmPassword.value
+		});
+        const headers = {"Content-Type": "application/json"};
+		fetch('/editUserSettings', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status == 0) {
+                alert('password successfully changed');
+                currentPassword.value = null;
+                newPassword.value = null;
+                confirmPassword.value = null;
+            }
+            else if (obj.status == 3) {
+                alert('incorrect password');
+            }
+            else if (obj.status == 4) {
+                alert('new password fields did not match');
+            }
+            else {
+                alert('somehow it broke');
+            }
+        });
+    }
       
 
     render() {
@@ -161,7 +203,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input type="text" id="current-password-entry" placeholder="Current Password" />
+                                    <input type="password" id="current-password-entry" placeholder="Current Password" />
                                 </div>
                             </div>
                             <div className="row">
@@ -171,7 +213,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input type="text" id="new-password-entry" placeholder="New Password" />
+                                    <input type="password" id="new-password-entry" placeholder="New Password" />
                                 </div>
                             </div>
                             <div className="row">
@@ -181,12 +223,12 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                <input type="text" id="confirm-password-entry" placeholder="Confirm New Password" />
+                                <input type="password" id="confirm-password-entry" placeholder="Confirm New Password" />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col text-center">
-                                <button id="change-password-button" className="btn btn-primary" type="button">Set New Password</button>
+                                <button id="change-password-button" className="btn btn-primary" type="button" onClick={this.editPassword}>Set New Password</button>
                                 </div>
                             </div>
                         </div>
