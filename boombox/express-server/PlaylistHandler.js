@@ -352,7 +352,9 @@ class PlaylistHandler {
                 console.log('playlist not found');
                 return {status: -1};
             }
-            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+            var stringUserId = user_id.toString();
+            var stringPlaylistUserId = foundPlaylist.user_id.toString();
+            if (stringUserId !== stringPlaylistUserId) { //if we want to admin debug, add an AND != for admin account
                 console.log("not authorized");
                 return {status: 1};
             }
@@ -438,16 +440,19 @@ class PlaylistHandler {
 
         try {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
-            const foundPlaylist = await collection.findOne({"_id": playlistId});
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
             if (!foundPlaylist) {
                 console.log('playlist not found');
                 return {status: -1};
             }
-            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+            var stringUserId = user_id.toString();
+            var stringPlaylistUserId = foundPlaylist.user_id.toString();
+            if (stringUserId !== stringPlaylistUserId) { //if we want to admin debug, add an AND != for admin account
                 console.log("not authorized");
                 return {status: 1};
             }
-            await collection.updateOne({"_id": playlistId}, {$set: {songs: songs}}); //add status checking for update?
+            await collection.updateOne({"_id": idObject}, {$set: {songs: songs}}); //add status checking for update?
             return {status: 0};
         }
         catch (err) {
@@ -466,7 +471,6 @@ class PlaylistHandler {
         const songs = req.body.songs;
         const idResponse = await PlaylistHandler.getUserId(username);
         const user_id = new MongoClient.ObjectID(idResponse.result);
-        console.log(user_id);
         const statusObject = await PlaylistHandler.updateSongs(user_id, playlistId, songs);
 
         res.send(statusObject);

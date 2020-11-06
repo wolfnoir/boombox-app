@@ -283,7 +283,7 @@ class PlaylistEditDisplay extends React.Component {
             dataCopy.songs.splice(i, 1);
         }
         for(var j = 0; j < dataCopy.songs.length; j ++){
-            dataCopy.songs[i].index = j;
+            dataCopy.songs[j].index = j;
         }
         this.setState({data: dataCopy});
         console.log(this.state.data.songs);
@@ -393,9 +393,8 @@ class PlaylistEditDisplay extends React.Component {
     }
     
     saveChanges() {
-        console.log("save attempt");
         const body = JSON.stringify({
-            'playlistId': this.state.data._id,
+            'playlistId': this.props.playlistId,
             'songs': this.state.data.songs,
             'username': this.cookie.get('username'),
         });
