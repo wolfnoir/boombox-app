@@ -8,11 +8,14 @@ class SettingsPane extends React.Component {
     constructor(props) {
         super(props);
         //this.props.closeWindow.bind(this);
+        this.state = {
+            profile_image_data: null
+        }
     }
 
     getProfileImage = () => {
-        if (this.props.profile_image) {
-            return <img id="profile-image" src={this.props.profile_image} width="256px" height="256px" alt=""/>
+        if (this.state.profile_image_data) {
+            return <img id="profile-image" src={`data:image/jpeg;base64,${this.state.profile_image_data}`} width="256px" height="256px" alt=""/>
         }
         return <img id="profile-image" src={profile_icon} width="256px" height="256px" className="invert-color" alt=""/>
     }
@@ -34,7 +37,6 @@ class SettingsPane extends React.Component {
         //         }
         //     }
         // );
-        return false; //disable the function right now
 
         const formData = new FormData();
         const fileInput = document.getElementById("fileInput");
@@ -57,6 +59,30 @@ class SettingsPane extends React.Component {
         })
         .catch(error => {
             console.error(error)
+        });
+    }
+
+    editUserIcon = (e) => {
+        
+        e.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById("fileInput");
+        if (!fileInput.value) {
+            alert("Please select a file.");
+            return;
+        }
+
+        const file = fileInput.files[0];        
+        formData.append('file', file);
+        fetch('/editUserIcon', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json()) 
+        .then( data => {
+            console.log("was here");
+            console.log(data);
+            this.setState({profile_image_data: data.iconData});
         });
     }
     
@@ -101,6 +127,21 @@ class SettingsPane extends React.Component {
         });
     }
       
+    getProfileImageData = () => {
+        fetch('/getUserIcon', {
+            method: 'POST'
+        })
+        .then(res => res.json()) 
+        .then(data => {
+            console.log("was here");
+            console.log(data);
+            this.setState({profile_image_data: data.iconData});
+        });
+    }
+
+    componentDidMount() {
+        this.getProfileImageData();
+    }
 
     render() {
         return (
@@ -129,7 +170,7 @@ class SettingsPane extends React.Component {
                                     <form id ="upload-profile-img-form">
                                         <p><input type = "file" id = "fileInput" accept=".png, .jpeg, .jpg, .gif" /></p>
                                         <p>Image must be under 500KB and must be a PNG, JPEG, or GIF.</p>
-                                        <button type="submit" id="change-icon-button" className="btn btn-primary" onClick = {this.send_add_media_request}>Change Icon</button>
+                                        <button type="submit" id="change-icon-button" className="btn btn-primary" onClick = {this.editUserIcon}>Change Icon</button>
                                     </form>
                                 </div>
                             </div>

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/billywongstuy/boombox-jeb-cse416-f20#readme",
   "dependencies": {
-    "react": "^16.13.1"
+    "react": "^16.13.1",
+    "tmp": "^0.2.1"
   }
 }

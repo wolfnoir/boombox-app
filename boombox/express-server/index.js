@@ -55,6 +55,10 @@ app.post("/logoutUser", UserHandler.logoutUserRoute);
 //app.get("/editUserSettings", UserHandler.editUserSettingsRoute);
 app.post("/editUserSettings", UserHandler.editUserSettingsRoute);
 
+app.post("/editUserIcon", UserHandler.editUserIconRoute);
+
+app.post("/getUserIcon", UserHandler.getUserIconDataRoute);
+
 app.get("/testImage", (req, res) => {
 	res.sendFile(path.join(__dirname, "add_item.html"));
 });
