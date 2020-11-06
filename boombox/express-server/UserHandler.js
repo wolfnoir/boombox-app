@@ -360,6 +360,9 @@ class UserHandler {
                 return {status: 1};
             }
             const object_id = userObject.icon_url;
+            if (!object_id) {
+                return {status: 2}; //no image
+            }
 
             const filepath = './tmp_file';
             const bucket = new MongoClient.GridFSBucket(db);
@@ -390,7 +393,7 @@ class UserHandler {
     }
 
     static async getUserIconDataRoute(req, res) {
-        const username = req.cookies.username;
+        const username = req.body.username;
         const statusObject = await UserHandler.getUserIconData(username);
         //console.log(statusObject);
         res.send(statusObject);
