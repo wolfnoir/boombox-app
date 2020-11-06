@@ -5,8 +5,8 @@ To run locally (dev) - faster for startup:
   2. `cd boombox`
   3. `npm install`
   4. Have two processes run simultaneously
-    - `npm start-client`
-    - `nnpm start-server`
+      * `npm start-client`
+      * `nnpm start-server`
   5. Go to `localhost:3000` on a web browser
  
  To run with prod setting:
