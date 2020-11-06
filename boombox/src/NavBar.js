@@ -52,8 +52,14 @@ class NavBar extends React.Component {
     }
 
     createPlaylist = () => {
+        const body = JSON.stringify({
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
         fetch('/createPlaylist', {
-			method: 'POST'
+            method: 'POST',
+            body: body,
+			headers: headers
         }).then(res => res.json())
         .then(obj => {
             if(obj.status == 0){
@@ -94,6 +100,7 @@ class NavBar extends React.Component {
 
     render() {
         var showProfile = <a href={this.cookie.get('username') ? "/user/" + this.cookie.get('username') : "/"}><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> my profile</a>;
+        var createPlaylist = <div id="create-playlist" onClick={this.createPlaylist}><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color"/> new playlist</div>;
         var myBookmarks = <a href="/my-bookmarks"><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> bookmarks</a>;
         var logoutButton = <div id="logout-click" onClick={this.logoutUser}><img id="logout-icon" src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> log out</div>;
         var settingsIcon = <img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} className="invert-color" />;
@@ -103,6 +110,7 @@ class NavBar extends React.Component {
                             <div id="register-link"><a href="/register">register</a></div>
                         </div>;
             showProfile = null;
+            createPlaylist = null;
             myBookmarks = null;
             logoutButton = <a href="/login"><img id="logout-icon" src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> login</a>;
         }
@@ -112,7 +120,7 @@ class NavBar extends React.Component {
                 <Menu width={ 250 }>
                     <a href="/"><img src={home_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color"/> dashboard</a>
                     {showProfile}
-                    <div id="create-playlist" onClick={this.createPlaylist}><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color"/> new playlist</div>
+                    {createPlaylist}
                     {myBookmarks}
                     {logoutButton}
                 </Menu>
