@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 const MongoClient = require('mongodb');
 const fs = require('fs');
 const crypto = require('crypto');
-const tmp = require('tmp');
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const mongoDbName = 'boombox';
@@ -362,20 +361,35 @@ class UserHandler {
                 return {status: 1};
             }
             const object_id = userObject.icon_url;
+            console.log(username, object_id);
 
             const filepath = './tmp_file';
             const bucket = new MongoClient.GridFSBucket(db);
             const downloadStream = bucket.openDownloadStream(object_id);
             const writeStream = fs.createWriteStream(filepath); //TODO: need to generate a better random file (tmp package?)
-            downloadStream.pipe(writeStream)
+
+            /*
+            const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
+                if (err) {console.log(err);}
+                return resolve([fields, files]);
+            }));
+            */
+            
+            const downloadPromise = new Promise((resolve, reject) => {
+                downloadStream.pipe(writeStream)
                 .on('error', (err) => {
                     throw err;
                 })
                 .on('finish', () => {
                     //console.log(uploadStream.id);
-                })
-            
+                    console.log("ended");
+                    return resolve();
+                });
+            });
+            await downloadPromise;
+
             const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
+            //console.log('filedata ', fileData);
             return {status: 0, iconData: fileData};
         }
         catch (err) {
@@ -387,6 +401,7 @@ class UserHandler {
     static async getUserIconDataRoute(req, res) {
         const username = req.cookies.username;
         const statusObject = await UserHandler.getUserIconData(username);
+        console.log(statusObject);
         res.send(statusObject);
     }
 
