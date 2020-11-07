@@ -420,12 +420,10 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     handleSettingsChange = (name, desc) => {
-        this.setState({
-            data: {
-                name: name,
-                description: desc
-            }
-        });
+        var data = {...this.state.data};
+        data.name = name;
+        data.description = desc;
+        this.setState({data});
     }
 
     render() {
@@ -459,7 +457,7 @@ class PlaylistEditDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            <PlaylistSettings onSave = {this.handleSettingsChange} playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} playlistId = {this.state.data._id}/>
+                                            <PlaylistSettings onSave = {this.handleSettingsChange} playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} playlistId = {this.props.playlistId}/>
                                         </div>
                                     </div>
                                 </div>
