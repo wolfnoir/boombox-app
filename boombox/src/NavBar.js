@@ -51,7 +51,10 @@ class NavBar extends React.Component {
     }
 
     closeSettings = () => {
-        this.getUserSettings();
+        var user = this.cookie.get('username');
+        if(user){
+            this.getUserSettings();
+        }
         document.getElementById("settings-pane-fixed-top").style.display = "none";
         document.getElementById("settings-pane").style.display = "none";
     }
@@ -96,7 +99,6 @@ class NavBar extends React.Component {
 
     componentDidMount() {
         {this.closeSettings()}
-        this.getUserSettings();
     }
 
     updateInput = (event) => {
