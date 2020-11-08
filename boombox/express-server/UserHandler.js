@@ -533,7 +533,7 @@ class UserHandler {
                     playlist.author = playlistUserObject.username;
                 }
                 playlist.url = "/playlist/" + playlist._id;
-                console.log(playlist);
+                //console.log(playlist);
                 //userPlaylists.push(playlist);
             }
             
@@ -836,6 +836,7 @@ class UserHandler {
         res.send("hello"); //change to something that the client can actually use
     }
 
+    //similar to getImage in PlaylistHandler, but that one is error checked and linked to a route
     static async getImageData(object_id) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  

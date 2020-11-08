@@ -604,6 +604,62 @@ class PlaylistHandler {
 
         res.send(statusObject);
     }
+
+    /*
+     * Other
+     */
+
+    static async getImage(req, res) {
+        const objectIdStr = req.body.image_id;
+        if (!objectIdStr) {
+            res.send({status: 2}); //no image
+            return;
+        }
+
+        const object_id = MongoClient.ObjectID(objectIdStr);
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            res.send({status: -1});
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            res.send({status: -1});
+        }
+
+        try {
+            const db = client.db(monogDbName); 
+
+            const filepath = './tmp_file';
+            const bucket = new MongoClient.GridFSBucket(db);
+            const downloadStream = bucket.openDownloadStream(object_id);
+            const writeStream = fs.createWriteStream(filepath); //TODO: need to generate a better random file (tmp package?)
+            
+            const downloadPromise = new Promise((resolve, reject) => {
+                downloadStream.pipe(writeStream)
+                .on('error', (err) => {
+                    throw err;
+                })
+                .on('finish', () => {
+                    //console.log(uploadStream.id);
+                    console.log("ended");
+                    return resolve();
+                });
+            });
+            await downloadPromise;
+
+            const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
+            //console.log('filedata ', fileData);
+            res.send({status: 0, imageData: fileData});
+        }
+        catch (err) {
+            console.log(err);
+            res.send({status: -1});
+        }
+    }
 }
 
 module.exports = PlaylistHandler;

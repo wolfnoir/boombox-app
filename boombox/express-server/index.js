@@ -94,6 +94,8 @@ app.post("/addPlaylistTag", (req, res) => {});
 
 app.post("/deletePlaylistTag", (req, res) => {});
 
+app.post("/getImage", PlaylistHandler.getImage);
+
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {
 		playlists: [
