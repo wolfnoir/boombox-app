@@ -214,9 +214,13 @@ class PlaylistPageDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row">
+                                                        <div className="row" style={{minHeight: "30px"}}>
                                                             <div className="col songs-col0">
-                                                                <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                                {
+                                                                    song.note && song.note.length > 0 ? 
+                                                                    <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                                    : null
+                                                                }
                                                                 <b>{(i+1) + "."}</b>
                                                             </div>
                                                             <div className="col songs-col1">
