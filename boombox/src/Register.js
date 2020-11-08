@@ -125,7 +125,7 @@ class Register extends React.Component {
                         </div>
 
                         <div className = "form-group">
-                            <input type = "username" className = "form-control" id = "register-username" placeholder = "Username" onChange = {this.handleUsernameChange}/>
+                            <input type = "username" className = "form-control" id = "register-username" placeholder = "Username" maxLength = "32" onChange = {this.handleUsernameChange}/>
                         </div>
 
                         <div className = "form-group">
