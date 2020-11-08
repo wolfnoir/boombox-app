@@ -42,6 +42,7 @@ class PlaylistHandler {
             serverResp = await collection.insertOne({
                 com_enabled: false,
                 comments: [],
+                creation_date: date,
                 description: '',
                 image_url: '',
                 isPrivate: false,
@@ -610,6 +611,7 @@ class PlaylistHandler {
      */
 
     static async getImage(req, res) {
+        //console.log(req.body);
         const objectIdStr = req.body.image_id;
         if (!objectIdStr) {
             res.send({status: 2}); //no image

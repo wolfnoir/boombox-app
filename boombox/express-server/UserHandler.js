@@ -143,10 +143,6 @@ class UserHandler {
         
         // const username = 'test-user'; //req.body.username;
         // const password = 'testPassword123?'; //req.body.password;
-        
-       
-        console.log("body", req.body);
-        console.log("params", req.params);
 
         const email = req.body.email; 
         const password = req.body.password;
@@ -811,9 +807,28 @@ class UserHandler {
                 return {status: 1};
             }
 
+            const userPlaylists = [];
+            await playlistsObject.forEach((playlist) => {
+                userPlaylists.push(playlist);
+            });
+            for (var i = 0; i < userPlaylists.length; i++) {
+                const playlist = userPlaylists[i];
+                const userQuery = {"_id": playlist.user_id};
+                const playlistUserObject = await collection.findOne(userQuery);
+                if (!playlistUserObject) {
+                    playlist.author = null;
+                }
+                else {
+                    playlist.author = playlistUserObject.username;
+                }
+                playlist.url = "/playlist/" + playlist._id;
+                //console.log(playlist);
+                //userPlaylists.push(playlist);
+            }
+
             return {
                 status: 0,
-                result: playlistsObject
+                result: userPlaylists
             };
         }
         catch (err) {
@@ -835,6 +850,84 @@ class UserHandler {
         
         const statusObject = await UserHandler.getFollowing(username);
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    /*--------------------------*/
+    /* Get new playlists        */
+    /*--------------------------*/
+
+    static async getNewPlaylists(username) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+            const playlistQuery = {}
+            const options = {
+                sort: {creation_date: -1}
+            }
+            if (username) {
+                const userQuery = { username : username };
+                const userObject = await collection.findOne(userQuery);
+                if (!userObject) { //should I handle this by treating user as null?
+                    console.log("user not found");
+                    return {status: 1};
+                }
+                playlistQuery.user_id = {$in: userObject.following};
+            }
+
+            const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistCollection);
+            const playlistsObject = await playlistCollection.find(playlistQuery, options) //.limit(4);
+            if (!playlistsObject) {
+                console.log("playlists not found");
+                return {status: 1};
+            }
+
+            const newPlaylists = [];
+            await playlistsObject.forEach((playlist) => {
+                newPlaylists.push(playlist);
+            });
+            for (var i = 0; i < newPlaylists.length; i++) {
+                const playlist = newPlaylists[i];
+                const userQuery = {"_id": playlist.user_id};
+                const playlistUserObject = await collection.findOne(userQuery);
+                if (!playlistUserObject) {
+                    playlist.author = null;
+                }
+                else {
+                    playlist.author = playlistUserObject.username;
+                }
+                playlist.url = "/playlist/" + playlist._id;
+            }
+
+            return {
+                status: 0,
+                playlists: newPlaylists
+            }
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getNewPlaylistsRoute(req, res) {
+        const username = req.cookies.username;
+        const statusObject = await UserHandler.getNewPlaylists(username);
+        res.send(statusObject);
     }
 
     /*------------------------*/

@@ -26,10 +26,15 @@ class Dashboard extends React.Component {
     }
 
     getNewPlaylists = () => {
-        fetch('/getNewPlaylists')
+        fetch('/getNewPlaylists', {
+            method: 'POST'
+        })
         .then(res => res.json())
         .then(obj => {
-            this.setState({newPlaylists: obj.playlists})
+            console.log(obj);
+            if (obj.status == 0) {
+                this.setState({newPlaylists: obj.playlists});
+            }
         });
 
         for (var i = 0; i < this.state.newPlaylists.length; i++) {
@@ -43,7 +48,7 @@ class Dashboard extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            this.setState({recommendedPlaylists: obj.playlists})
+            this.setState({recommendedPlaylists: obj.playlists});
         });
 
         for (var i = 0; i < this.state.recommendedPlaylists.length; i++) {
