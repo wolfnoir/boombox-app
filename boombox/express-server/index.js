@@ -70,6 +70,8 @@ app.all("/getPlaylistData/:playlistId", PlaylistHandler.getPlaylistRoute);
 
 app.all("/getProfilePageData/:username", UserHandler.getProfilePageDataRoute);
 
+app.all("/getUserSettings/:username", UserHandler.getUserSettingsRoute);
+
 app.all("/getFollowers/:username", UserHandler.getFollowersRoute);
 
 app.all("/getFollowing/:username", UserHandler.getFollowingRoute);
