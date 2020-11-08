@@ -98,6 +98,9 @@ app.post("/deletePlaylistTag", (req, res) => {});
 
 app.post("/getImage", PlaylistHandler.getImage);
 
+app.post("/getNewPlaylists", UserHandler.getNewPlaylistsRoute);
+
+/*
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {
 		playlists: [
@@ -133,6 +136,7 @@ app.all("/getNewPlaylists", (req, res) => {
 	};
 	res.json(data);
 });
+*/
 
 app.all("/getRecommendedPlaylists", (req, res) => {
 	var data = {
@@ -141,14 +145,14 @@ app.all("/getRecommendedPlaylists", (req, res) => {
 				name: "dreams of green",
 				author: "smithman32",
 				likes: new Array(765),
-				image_url: "./images/leafy.jpg",
+				image_url: null, //"./images/leafy.jpg",
 				url: "/playlist/abc"
 			},
 			{
 				name: "creeping noir",
 				author: "maltesefalcon",
 				likes: new Array(54),
-				image_url: "./images/noir.jpg",
+				image_url: null, //"./images/noir.jpg",
 				url: "/playlist/abc"
 			}
 		],

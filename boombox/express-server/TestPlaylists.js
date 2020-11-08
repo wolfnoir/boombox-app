@@ -53,6 +53,7 @@ class TestPlaylists {
                 {
                     com_enabled: true,
                     comments: [],
+                    creation_date: 1604288237,
                     description: "This is a playlist description. Lorem ispum blah blah bacon cheese and crackers.",
                     image_url: null,
                     isPrivate: false,
@@ -103,6 +104,7 @@ class TestPlaylists {
                 {
                     com_enabled: true,
                     comments: [],
+                    creation_date: 1604288237,
                     description: "This is just a test.",
                     image_url: null,
                     isPrivate: false,
@@ -135,6 +137,7 @@ class TestPlaylists {
                 {
                     com_enabled: false,
                     comments: [],
+                    creation_date: 1604288237,
                     description: "The comments are not enabled on this playlist--at least, they shouldn't be. Also, none of these songs have notes.",
                     image_url: null,
                     isPrivate: false,
@@ -185,6 +188,7 @@ class TestPlaylists {
                 {
                     com_enabled: false,
                     comments: [],
+                    creation_date: 1604288237,
                     description: "",
                     image_url: null,
                     isPrivate: false,
@@ -208,6 +212,7 @@ class TestPlaylists {
                 {
                     com_enabled: true,
                     comments: [],
+                    creation_date: 1604544250,
                     description: "I like pizza.",
                     image_url: null,
                     isPrivate: false,
@@ -276,6 +281,7 @@ class TestPlaylists {
                 {
                     com_enabled: true,
                     comments: [],
+                    creation_date: 1604544250,
                     description: "> You have one (1) new message.",
                     image_url: null,
                     isPrivate: false,
@@ -344,6 +350,7 @@ class TestPlaylists {
                 {
                     com_enabled: true,
                     comments: [],
+                    creation_date: 1604594060,
                     description: "Sorry for liking electroswing.",
                     image_url: null,
                     isPrivate: false,
