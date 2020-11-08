@@ -22,6 +22,10 @@ class Register extends React.Component {
             this.errorUpdate(3);
             return;
         }
+        else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.state.email)){
+            this.errorUpdate(4);
+            return;
+        }
         
         if(this.state.pwd === this.state.confirmPwd){
             const body = JSON.stringify({
@@ -93,6 +97,9 @@ class Register extends React.Component {
         }
         else if (num === 3){
             errorMsg = "Please fill out all fields.";
+        }
+        else if (num === 4){
+            errorMsg = "Please provide a valid email.";
         }
         errorDiv.innerHTML = 'ERROR: ' + errorMsg;
         console.log('ERROR: ' + errorMsg);
