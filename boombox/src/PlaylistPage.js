@@ -34,28 +34,6 @@ function PlaylistPage() {
     return <PlaylistPageDisplay playlistId={playlistId}/>
 }
 
-class ArrowDownComponent extends React.Component {
-    render() {
-        return <img className="song-arrow" id={"song-arrow-" + this.props.i} src={arrow_down_img} height="30px" width="30px" alt=">" onClick={this.props.handleSongArrowClick}/>
-    }
-}
-
-class ArrowRightComponent extends React.Component {
-    render() {
-        return <img className="song-arrow" id={"song-arrow-" + this.props.i} src={arrow_right_img} height="30px" width="30px" alt=">" onClick={this.props.handleSongArrowClick}/>
-    }
-}
-
-class ArrowDownRightComponent extends React.Component {
-    render() {
-        if (this.props.open) {
-            console.log("show down");
-            return <ArrowDownComponent i={this.props.i} handleSongArrowClick={this.props.handleSongArrowClick}/>;
-        }
-        console.log("show right");
-        return <ArrowRightComponent i={this.props.i} handleSongArrowClick={this.props.handleSongArrowClick}/>};
-}
-
 class PlaylistPageDisplay extends React.Component {
     constructor(props) {
         super(props);
@@ -109,10 +87,21 @@ class PlaylistPageDisplay extends React.Component {
         });
     }
 
+    getArrow(i) {
+        if (this.state.song_notes_open[i]) {
+            return arrow_down_img;
+        }
+        return arrow_right_img;
+    }
+
     handleSongArrowClick = (i) => {
         const songNote = document.getElementById("song-note-"+i);
         if (songNote) {
-            this.state.song_notes_open[i] = !this.state.song_notes_open[i];
+            const songNotesOpen = this.state.song_notes_open;
+            songNotesOpen[i] = !songNotesOpen[i];
+            this.setState({song_notes_open: songNotesOpen});
+
+            //this.state.song_notes_open[i] = !this.state.song_notes_open[i];
             console.log(this.state.song_notes_open[i]);
             if (this.state.song_notes_open[i]) {
                 songNote.style.display = "block";
@@ -120,6 +109,24 @@ class PlaylistPageDisplay extends React.Component {
             else {
                 songNote.style.display = "none";
             }
+        }
+    }
+
+    getPlayButtonImage() {
+        if (this.state.is_song_playing) {
+            return pause_img;
+        }
+        return play_img;
+    }
+
+    handlePlayButton = () => {
+        if (this.state.is_song_playing) {
+            //@todo: pause the song
+            this.setState({is_song_playing: false});
+        }
+        else {
+            //@todo: play the song
+            this.setState({is_song_playing: true});
         }
     }
 
@@ -208,38 +215,7 @@ class PlaylistPageDisplay extends React.Component {
                                                     <div key={"song"+i}>
                                                         <div className="row">
                                                             <div className="col songs-col0">
-                                                                {/* should decide based on state? */}
-                                                            <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                src={
-                                                                    this.state.song_notes_open[i] ?
-                                                                    arrow_down_img
-                                                                    : arrow_right_img
-                                                                } 
-                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                            
-                                                                {/*
-                                                                {
-                                                                    this.state.song_notes_open[i] ?
-                                                                    <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                src={arrow_down_img} 
-                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                                    :
-                                                                    <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                src={arrow_right_img} 
-                                                                height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
-                                                                }
-                                                            */}
-                                                            {/*
-                                                                {this.state.song_notes_open[i] ? <ArrowDownComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/> : <ArrowRightComponent i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)}/>}
-                                                            */}    
-                                                                {/* the changing from right to down doesn't work */}
-                                                                {/*
-                                                                {
-                                                                    song.notes ?
-                                                                    <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
-                                                                    : <ArrowDownRightComponent open={this.state.song_notes_open[i]} i={i} handleSongArrowClick={() => this.handleSongArrowClick(i)} />
-                                                                }
-                                                            */}
+                                                                <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
                                                                 <b>{(i+1) + "."}</b>
                                                             </div>
                                                             <div className="col songs-col1">
@@ -331,7 +307,7 @@ class PlaylistPageDisplay extends React.Component {
                             <div className="row">
                                 <div className="col-md-auto" id="play-track-left-col">
                                     <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" />
-                                    <img id="play-pause-img" className="invert-color" src={play_img} height="60px" width="60px" /> {/* need to add the switch to pause, same issue as note arrow*/}
+                                    <img id="play-pause-img" className="invert-color" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
                                     <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" />
                                 </div>
                                 <div className="col" id="play-track-right-col">

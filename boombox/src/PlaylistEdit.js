@@ -39,28 +39,6 @@ function PlaylistEdit() {
     return <PlaylistEditDisplay playlistId={playlistId}/>
 }
 
-class ArrowDownComponent extends React.Component {
-    render() {
-        return <img className="song-arrow" id={"song-arrow-" + this.props.i} src={arrow_down_img} height="30px" width="30px" alt=">" onClick={this.props.handleSongArrowClick}/>
-    }
-}
-
-class ArrowRightComponent extends React.Component {
-    render() {
-        return <img className="song-arrow" id={"song-arrow-" + this.props.i} src={arrow_right_img} height="30px" width="30px" alt=">" onClick={this.props.handleSongArrowClick}/>
-    }
-}
-
-class ArrowDownRightComponent extends React.Component {
-    render() {
-        if (this.props.open) {
-            console.log("show down");
-            return <ArrowDownComponent i={this.props.i} handleSongArrowClick={this.props.handleSongArrowClick}/>;
-        }
-        console.log("show right");
-        return <ArrowRightComponent i={this.props.i} handleSongArrowClick={this.props.handleSongArrowClick}/>};
-}
-
 class PlaylistSettings extends React.Component {
     constructor(props){
         super(props);
@@ -286,9 +264,6 @@ class PlaylistEditDisplay extends React.Component {
         this.state = {
             data: {},
             song_notes_open: [],
-            //current_song: null, //correct one
-            current_song: 2, //temporary for showing
-            is_song_playing: false,
             charCount: 0,
             imageData: null,
         }
@@ -334,10 +309,21 @@ class PlaylistEditDisplay extends React.Component {
         });
     }
 
+    getArrow(i) {
+        if (this.state.song_notes_open[i]) {
+            return arrow_down_img;
+        }
+        return arrow_right_img;
+    }
+
     handleSongArrowClick = (i) => {
         const songNote = document.getElementById("song-note-"+i);
         if (songNote) {
-            this.state.song_notes_open[i] = !this.state.song_notes_open[i];
+            const songNotesOpen = this.state.song_notes_open;
+            songNotesOpen[i] = !songNotesOpen[i];
+            this.setState({song_notes_open: songNotesOpen});
+
+            //this.state.song_notes_open[i] = !this.state.song_notes_open[i];
             console.log(this.state.song_notes_open[i]);
             if (this.state.song_notes_open[i]) {
                 songNote.style.display = "block";
@@ -445,6 +431,11 @@ class PlaylistEditDisplay extends React.Component {
 
     toggleEditFields(i){
         console.log("test");
+
+        const songNotesOpen = this.state.song_notes_open;
+        songNotesOpen[i] = !songNotesOpen[i];
+        this.setState({song_notes_open: songNotesOpen});
+
         var editField = document.getElementById("edit-song-form-" + i);
         console.log("edit-song-form-" + i);
         console.log(editField);
@@ -593,11 +584,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                 {/* should decide based on state? */}
                                                                 
                                                             <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                src={
-                                                                    this.state.song_notes_open[i] ?
-                                                                    arrow_down_img
-                                                                    : arrow_right_img
-                                                                } 
+                                                                src={this.getArrow(i)} 
                                                                 height="30px" width="30px" alt=">"/> {/* should add onclick to toggle arrow*/}
                                                                 <b>{(i+1) + "."}</b>
                                                             </div>
