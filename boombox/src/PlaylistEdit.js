@@ -13,6 +13,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
+import default_playlist_img from './images/default-playlist-cover.png';
 import link_img from './images/link-24px.svg';
 import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
 import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
@@ -300,7 +301,7 @@ class PlaylistEditDisplay extends React.Component {
             )
         }
         return (
-            <img src={horse_img} id="playlist-cover" width="250px" height="250px"/>
+            <img src={default_playlist_img} id="playlist-cover" width="250px" height="250px"/>
         );
     }
 
@@ -328,7 +329,6 @@ class PlaylistEditDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log("was here");
             console.log(data);
             this.setState({imageData: data.imageData});
         });

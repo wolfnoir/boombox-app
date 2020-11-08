@@ -9,6 +9,7 @@ import './css/bootstrap.min.css';
 import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
+import default_playlist_img from './images/default-playlist-cover.png';
 import link_img from './images/link-24px.svg';
 import edit_img from './images/create-24px.svg';
 import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
@@ -68,6 +69,17 @@ class PlaylistPageDisplay extends React.Component {
         }
     }
 
+    getPlaylistImage() {
+        if (this.state.imageData) {
+            return (
+                <img src={`data:image/jpeg;base64,${this.state.imageData}`} id="playlist-cover" width="250px" height="250px"/>
+            )
+        }
+        return (
+            <img src={default_playlist_img} id="playlist-cover" width="250px" height="250px"/>
+        );
+    }
+
     componentDidMount() {
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
@@ -82,6 +94,18 @@ class PlaylistPageDisplay extends React.Component {
             else {
                 this.setState({data: null}); //need to change the component to have a not found page
             }
+        });
+        fetch('/getPlaylistCover', {
+            method: 'POST',
+            body: JSON.stringify({
+                playlistId: this.props.playlistId,
+            }),
+            headers: {"Content-Type": "application/json"},
+        })
+        .then(res => res.json()) 
+        .then(data => {
+            console.log(data);
+            this.setState({imageData: data.imageData});
         });
     }
 
@@ -125,7 +149,7 @@ class PlaylistPageDisplay extends React.Component {
                     <div className="container" id="playlist-page-container">
                         <div className="row" id="row1">
                             <div className="col" id="playlist-cover-container">
-                                <img src={horse_img} id="playlist-cover" width="250px" height="250px"/>
+                                {this.getPlaylistImage()}
                             </div>
                             <div className="col">
                                 <div className="row" id="title-row">

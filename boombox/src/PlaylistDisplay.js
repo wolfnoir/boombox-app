@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 import './PlaylistDisplay.css';
+import default_playlist_img from './images/default-playlist-cover.png';
 
 class PlaylistDisplay extends React.Component{
     constructor(props){
@@ -21,7 +22,7 @@ class PlaylistDisplay extends React.Component{
         if (this.state.albumCover) {
             return `data:image/jpeg;base64,${this.state.albumCover}`;
         }
-        return null;
+        return default_playlist_img;
     }
 
     componentDidMount() {
