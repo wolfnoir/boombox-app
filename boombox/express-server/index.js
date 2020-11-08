@@ -68,6 +68,8 @@ app.all("/getBookmarks", UserHandler.getBookmarksRoute);
 
 app.all("/getPlaylistData/:playlistId", PlaylistHandler.getPlaylistRoute);
 
+app.post("/getPlaylistCover", PlaylistHandler.getPlaylistCoverDataRoute);
+
 app.all("/getProfilePageData/:username", UserHandler.getProfilePageDataRoute);
 
 app.all("/getFollowers/:username", UserHandler.getFollowersRoute);

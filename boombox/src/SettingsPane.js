@@ -74,6 +74,8 @@ class SettingsPane extends React.Component {
             return;
         }
 
+        //should probably add image validation in this file
+
         const file = fileInput.files[0];        
         formData.append('file', file);
         fetch('/editUserIcon', {

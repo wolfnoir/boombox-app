@@ -281,7 +281,7 @@ class UserHandler {
         }));
         const [fields, files] = await formPromise;
         const uploadedFile = files.file[0];
-        const imageExts = ["jpeg", "png", "gif"];
+        const imageExts = ["jpeg", "jpg", "png", "gif"];
         if (!uploadedFile || uploadedFile.size == 0) {
             return {status: 2}; //no file selected
         }
@@ -321,7 +321,7 @@ class UserHandler {
                     //console.log(uploadStream.id);
                 })
             console.log(uploadStream.id);
-            db.collection(mongoUserCollection).updateOne({username: username}, {$set: {icon_url: uploadStream.id}});
+            await db.collection(mongoUserCollection).updateOne({username: username}, {$set: {icon_url: uploadStream.id}});
             const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
             return {status: 0, iconData: fileData};
         }

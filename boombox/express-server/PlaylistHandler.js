@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const MongoClient = require('mongodb');
 const crypto = require('crypto');
+const multiparty = require("multiparty");
+const fs = require("fs");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
@@ -184,24 +186,25 @@ class PlaylistHandler {
      */
     
     //static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
-    static async editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, isPrivate) {
+    static async editPlaylist(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
         }).catch(err => {
             console.log(err);
-            return -1;
+            return {status: -1};
         });
 
         if (!client) {
             console.log("Client is null");
-            return -1;
+            return {status: -1};
         }
 
         try {
             const date = Date.now();
+            console.log(playlist_id);
             const idObject = MongoClient.ObjectID(playlist_id);
-            const userIdObject = MongoClient.ObjectID(user_id);
+            //const userIdObject = MongoClient.ObjectID(user_id);
 
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const filter = { "_id": idObject };
@@ -236,47 +239,93 @@ class PlaylistHandler {
                 tags: tempTags,
                 user_id: tempUserId
             };
+            //await collection.updateOne(filter, {$set: updateDoc});
 
+            if (filename) {
+                const db = client.db("boombox");
+                const bucket = new MongoClient.GridFSBucket(db);
+                const readStream = fs.createReadStream(filepath);
+                const uploadStream = bucket.openUploadStream(filename);
+                readStream.pipe(uploadStream)
+                    .on('error', (err) => {
+                        throw err;
+                    })
+                    .on('finish', () => {
+                        //console.log(uploadStream.id);
+                    })
+                console.log(uploadStream.id);
+                //await collection.updateOne({filter}, {$set: {image_url: uploadStream.id}});
+                updateDoc.image_url = uploadStream.id;
+
+                //const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
+                //return {status: 0, imageData: fileData};
+            }
             await collection.updateOne(filter, {$set: updateDoc});
+            if (filename) {
+                const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
+                return {status: 0, imageData: fileData};
+            }
+
         }
 
         catch (err) {
             console.log(err);
-            return -1;
+            return {status: -1};
         }
-
+        /*
         finally {
             client.close();
         }
-
+        */
         console.log("Success");
-        return 0;
+        return {status: 0};
     }
 
     static async editPlaylistRoute(req, res) {
+        console.log("hi");
+        
         const user_id = req.session.user_id;
         if (!user_id) {
             res.send({statusCode: 1});
             return;
         }
 
-        const playlist_id = req.body.id;
-        const com_enabled = req.body.com_enabled;
-        const comments = req.body.comments;
-        const description = req.body.description;
-        const image_url = req.body.image_url; //need to handle this separately with mult-form
-        const likes = req.body.likes;
-        const name = req.body.name;
-        const isPrivate = req.body.isPrivate;
-        const songs = req.body.songs;
-        const tags = req.body.tags;
-        //const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, private, songs, tags);
-        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, description, image_url, name, isPrivate);
+        const form = new multiparty.Form();
+        const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
+            if (err) {console.log(err);}
+            return resolve([fields, files]);
+        }));
+        const [fields, files] = await formPromise;
+        console.log(fields);
+
+        const playlist_id = fields.playlistId[0];
+        const com_enabled = fields.com_enabled[0];
+        const description = fields.description[0];
+        const name = fields.name[0];
+        const isPrivate = fields.isPrivate[0];
+
+        var filename;
+        var filepath;
+        if (files && files.file) {
+            const uploadedFile = files.file[0];
+            const imageExts = ["jpeg", "jpg", "png", "gif"];
+            if (uploadedFile &&  uploadedFile.size > 0) {
+                filename = uploadedFile.originalFilename;
+                console.log(uploadedFile);
+                console.log('filename: ', filename);
+                if (!imageExts.includes(filename.substring(filename.lastIndexOf('.') + 1))) {
+                    console.log('not an image');
+                    return {status: 3} //not a proper image file
+                }
+                filepath = uploadedFile.path;
+                console.log('filepath: ', filepath);
+            }
+        }
+
+        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath);
 
 
-        res.send({
-            statusCode: success //-1: an error occurred, 0: success, 1: not logged in
-        });
+        res.send(success); //-1: an error occurred, 0: success, 1: not logged in
     }
 
     /**
@@ -335,6 +384,69 @@ class PlaylistHandler {
         const statusObject = await PlaylistHandler.getPlaylist(playlist_id);
 
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: playlist not found
+    }
+
+    static async getPlaylistCoverData(playlistId) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const db = client.db(monogDbName);
+
+            const playlistCollection = db.collection(mongoPlaylistCollection);
+            const playlistObject = await playlistCollection.findOne({_id: MongoClient.ObjectID(playlistId)});
+            if (!playlistObject) {
+                console.log('playlist not found');
+                return {status: 1};
+            }
+            const object_id = playlistObject.image_url;
+            if (!object_id) {
+                return {status: 2}; //no image
+            }
+
+            const filepath = './tmp_file';
+            const bucket = new MongoClient.GridFSBucket(db);
+            const downloadStream = bucket.openDownloadStream(object_id);
+            const writeStream = fs.createWriteStream(filepath); //TODO: need to generate a better random file (tmp package?)
+            
+            const downloadPromise = new Promise((resolve, reject) => {
+                downloadStream.pipe(writeStream)
+                .on('error', (err) => {
+                    throw err;
+                })
+                .on('finish', () => {
+                    //console.log(uploadStream.id);
+                    console.log("ended");
+                    return resolve();
+                });
+            });
+            await downloadPromise;
+
+            const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
+            //console.log('filedata ', fileData);
+            return {status: 0, imageData: fileData};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+    }
+
+    static async getPlaylistCoverDataRoute(req, res) {
+        const playlistId = req.body.playlistId;
+        const statusObject = await PlaylistHandler.getPlaylistCoverData(playlistId);
+        //console.log(statusObject);
+        res.send(statusObject);
     }
 
     /* 
