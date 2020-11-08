@@ -72,7 +72,27 @@ class PlaylistSettings extends React.Component {
             playlistId: this.props.playlistId,
             userId: this.props.userId,
             redirect: false,
+            imageSrc: null,
         }
+    }
+
+    getUploadImageIcon() {
+        var imageSrc = this.state.imageSrc;
+        //console.log(imageSrc);
+        if (imageSrc) {
+            return (
+                <div>
+                    <label htmlFor="file-input"><img src = {imageSrc} style={{width: '100px', height: '100px', cursor: 'pointer'}}/></label>
+                    <input id="file-input" type="file" style={{display: "none"}} onChange={this.handleImageUpload} />
+                </div>
+            )
+        }
+        return (
+            <div>
+                <label htmlFor="file-input"><img src = {add_box_img} style={{filter: 'invert(1)', width: '100px', cursor: 'pointer'}}/></label>
+                <input id="file-input" type="file" style={{display: "none"}} onChange={this.handleImageUpload} />
+            </div>
+        );
     }
 
     componentDidUpdate(prevprops) {
@@ -94,6 +114,20 @@ class PlaylistSettings extends React.Component {
         this.setState({desc: event.target.value});
     }
 
+    handleImageUpload = () => {
+        const input = document.getElementById("file-input");
+        console.log("hi");
+        if (input.files && input.files[0]) {
+            console.log(input.files);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.setState({imageSrc: e.target.result});
+                //console.log(e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     handleSavePlaylist = () => {
         if(!this.cookie.get('username')){
             alert("You're not authorized to save this playlist!");
@@ -106,11 +140,26 @@ class PlaylistSettings extends React.Component {
             'name': this.state.name,
             'userId': this.state.userId,
         });
+        
+        const fileInput = document.getElementById("file-input");
+        var file;
+        if (fileInput.value) {
+            file = fileInput.files[0];
+        }
+        const formData = new FormData();
+        formData.append('playlistId', this.props.playlistId);
+        formData.append('description', this.state.desc);
+        formData.append('name', this.state.name);
+        formData.append('userId', this.state.userId);
+        formData.append('com_enabled', null);
+        formData.append('isPrivate', null);
+        formData.append('file', file);
+
         const headers = {"Content-Type": "application/json"};
         fetch('/editPlaylist', {
 			method: 'POST',
-			body: body,
-			headers: headers
+			body: formData, //body,
+			//headers: headers
 		}).then(res => res.json())
         .then(obj => {
             console.log(obj);
@@ -127,7 +176,7 @@ class PlaylistSettings extends React.Component {
                 console.log('somehow it broke');
             }
 
-            this.props.onSave(this.state.name, this.state.desc);
+            this.props.onSave(this.state.name, this.state.desc, this.state.imageSrc.replace('data:image/jpeg;base64,', ''));
             this.setState({show: false});
         });
     }
@@ -189,7 +238,7 @@ class PlaylistSettings extends React.Component {
                 <Form className = "settings-modal-content">
                     <Form.Group style = {{display: 'inline-block', marginRight: '50px'}}>
                         <Form.File style = {{display: 'inline-block'}}>
-                            <img src = {add_box_img} style={{filter: 'invert(1)', width: '100px', cursor: 'pointer'}}/>
+                            {this.getUploadImageIcon()}
                         </Form.File>
                         <div style = {{display: 'inline-block', fontFamily: 'Roboto Condensed', width: '30%', verticalAlign: 'middle'}}>
                             <b>Upload Cover</b><br/>
@@ -240,7 +289,19 @@ class PlaylistEditDisplay extends React.Component {
             current_song: 2, //temporary for showing
             is_song_playing: false,
             charCount: 0,
+            imageData: null,
         }
+    }
+
+    getPlaylistImage() {
+        if (this.state.imageData) {
+            return (
+                <img src={`data:image/jpeg;base64,${this.state.imageData}`} id="playlist-cover" width="250px" height="250px"/>
+            )
+        }
+        return (
+            <img src={horse_img} id="playlist-cover" width="250px" height="250px"/>
+        );
     }
 
     componentDidMount() {
@@ -257,6 +318,19 @@ class PlaylistEditDisplay extends React.Component {
             else {
                 this.setState({data: null}); //need to change the component to have a not found page
             }
+        });
+        fetch('/getPlaylistCover', {
+            method: 'POST',
+            body: JSON.stringify({
+                playlistId: this.props.playlistId,
+            }),
+            headers: {"Content-Type": "application/json"},
+        })
+        .then(res => res.json()) 
+        .then(data => {
+            console.log("was here");
+            console.log(data);
+            this.setState({imageData: data.imageData});
         });
     }
 
@@ -419,11 +493,16 @@ class PlaylistEditDisplay extends React.Component {
         });
     }
 
-    handleSettingsChange = (name, desc) => {
+    handleSettingsChange = (name, desc, imageData) => {
+        console.log(name, desc);
+        console.log(imageData);
         var data = {...this.state.data};
         data.name = name;
         data.description = desc;
         this.setState({data});
+        if (imageData) {
+            this.setState({imageData: imageData});
+        }
     }
 
     addSongNote() {
@@ -449,7 +528,7 @@ class PlaylistEditDisplay extends React.Component {
                     <div className="container" id="playlist-edit-container">
                         <div className="row" id="row1">
                             <div className="col" id="playlist-cover-container">
-                                <img src={horse_img} id="playlist-cover" width="250px" height="250px"/>
+                                {this.getPlaylistImage()}
                             </div>
                             <div className="col">
                                 <div className="row">

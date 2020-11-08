@@ -286,7 +286,7 @@ class UserHandler {
         }));
         const [fields, files] = await formPromise;
         const uploadedFile = files.file[0];
-        const imageExts = ["jpeg", "png", "gif"];
+        const imageExts = ["jpeg", "jpg", "png", "gif"];
         if (!uploadedFile || uploadedFile.size == 0) {
             return {status: 2}; //no file selected
         }
@@ -326,7 +326,7 @@ class UserHandler {
                     //console.log(uploadStream.id);
                 })
             console.log(uploadStream.id);
-            db.collection(mongoUserCollection).updateOne({username: username}, {$set: {icon_url: uploadStream.id}});
+            await db.collection(mongoUserCollection).updateOne({username: username}, {$set: {icon_url: uploadStream.id}});
             const fileData = fs.readFileSync(filepath, {encoding: 'base64'});
             return {status: 0, iconData: fileData};
         }
@@ -538,7 +538,7 @@ class UserHandler {
                     playlist.author = playlistUserObject.username;
                 }
                 playlist.url = "/playlist/" + playlist._id;
-                console.log(playlist);
+                //console.log(playlist);
                 //userPlaylists.push(playlist);
             }
             
@@ -901,6 +901,7 @@ class UserHandler {
         res.send("hello"); //change to something that the client can actually use
     }
 
+    //similar to getImage in PlaylistHandler, but that one is error checked and linked to a route
     static async getImageData(object_id) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  

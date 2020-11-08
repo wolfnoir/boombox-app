@@ -67,6 +67,7 @@ class Bookmarks extends React.Component {
                     author={playlist.author}
                     likes={playlist.likes} 
                     url={playlist.url}
+                    image_url={playlist.image_url}
                     key={playlist.key}
                 />
             )

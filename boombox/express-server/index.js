@@ -68,6 +68,8 @@ app.all("/getBookmarks", UserHandler.getBookmarksRoute);
 
 app.all("/getPlaylistData/:playlistId", PlaylistHandler.getPlaylistRoute);
 
+app.post("/getPlaylistCover", PlaylistHandler.getPlaylistCoverDataRoute);
+
 app.all("/getProfilePageData/:username", UserHandler.getProfilePageDataRoute);
 
 app.all("/getUserSettings/:username", UserHandler.getUserSettingsRoute);
@@ -93,6 +95,8 @@ app.post("/updateSongs", PlaylistHandler.updateSongsRoute);
 app.post("/addPlaylistTag", (req, res) => {});
 
 app.post("/deletePlaylistTag", (req, res) => {});
+
+app.post("/getImage", PlaylistHandler.getImage);
 
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {
