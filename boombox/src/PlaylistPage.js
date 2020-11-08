@@ -66,6 +66,7 @@ class PlaylistPageDisplay extends React.Component {
             //current_song: null, //correct one
             current_song: 2, //temporary for showing
             is_song_playing: false,
+            imageData: null
         }
     }
 
