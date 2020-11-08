@@ -1,0 +1,24 @@
+{
+    "test-user": {
+        "username":"test-user",
+        "email":"test@test.com",
+        "password":"testPassword123?",
+        "pw_reset_link":null,
+        "icon_url": null,
+        "bio":"this is my bio aaaaa",
+        "following":[],
+        "followers":[],
+        "bookmarks":[]
+    },
+    "a": {
+        "username":"a",
+        "email":"a@a.com",
+        "password":"a",
+        "pw_reset_link":null,
+        "icon_url": null,
+        "bio":"this is my bio aaaaa",
+        "following":[],
+        "followers":[],
+        "bookmarks":[]
+    }
+}
