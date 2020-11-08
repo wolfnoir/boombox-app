@@ -11,7 +11,11 @@ class SettingsPane extends React.Component {
         //this.props.closeWindow.bind(this);
         this.cookie = new Cookie();
         this.state = {
-            profile_image_data: null
+            profile_image_data: null,
+            username: "",
+            bio: "",
+            bioCharCount: 0,
+            email: ""
         }
     }
 
@@ -23,23 +27,6 @@ class SettingsPane extends React.Component {
     }
 
     send_add_media_request = (e) => {
-        // console.log("hi");
-        // var formData = new FormData(document.getElementById("change-icon-button"));
-        // const response = fetch("/testImage", {
-        //     method: 'POST',
-        //     body: formData,
-            
-        // }).then(
-        //     function(result) {
-        //         if (result.status == "OK"){
-        //             console.log("Upload Success");
-        //         }
-        //         else {
-        //             console.log("Upload failed - Error: " + result.error);
-        //         }
-        //     }
-        // );
-
         const formData = new FormData();
         const fileInput = document.getElementById("fileInput");
         if(fileInput.value == ""){
@@ -87,6 +74,97 @@ class SettingsPane extends React.Component {
             console.log("was here");
             console.log(data);
             this.setState({profile_image_data: data.iconData});
+        });
+    }
+
+    changeUsername = (e) => {
+        e.preventDefault();
+        //need to check if username already taken
+        const username =  document.getElementById('username-entry');
+        if (!username || username.value === "") {
+            alert('Please provide a valid username.');
+            return;
+        }
+        const body = JSON.stringify({
+            'newUsername': username.value
+        });
+        const headers = {"Content-Type": "application/json"};
+		fetch('/editUserSettings', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status === 0) {
+                alert('Username changed!');
+            }
+            else if (obj.status === 5) {
+                alert('Username already taken!');
+            }
+            else {
+                alert('somehow it broke');
+            }
+        });
+    }
+
+    changeEmail = (e) => {
+        e.preventDefault();
+        const email =  document.getElementById('email-entry');
+        if (!email || !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.value)) {
+            alert('Please provide a valid email.');
+            return;
+        }
+        const body = JSON.stringify({
+            'newEmail': email.value
+		});
+        const headers = {"Content-Type": "application/json"};
+		fetch('/editUserSettings', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status === 0) {
+                alert('E-mail changed!');
+            }
+            else if (obj.status === 2) {
+                alert('E-mail already in use!');
+            }
+            else {
+                alert('somehow it broke');
+            }
+        });
+    }
+
+    changeBio = (e) => {
+        e.preventDefault();
+        const bio = document.getElementById('user-bio-entry');
+        var value = bio.value;
+        if(!bio.value){
+            value = "";
+        }
+        const body = JSON.stringify({
+            'newBio': value
+        });
+        const headers = {"Content-Type": "application/json"};
+		fetch('/editUserSettings', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status == 0) {
+                alert('Bio successfully changed!');
+            }
+            else {
+                alert('somehow it broke');
+            }
         });
     }
     
@@ -152,6 +230,19 @@ class SettingsPane extends React.Component {
         this.getProfileImageData();
     }
 
+    handleFieldChange = (event) => {
+        switch(event.target.id) {
+            case "username-entry":
+                this.setState({ username: event.target.value });
+            case "email-entry":
+                this.setState({ email: event.target.value });
+        }
+    }
+
+    handleBioChange = (event) => {
+        this.setState({ bio: event.target.value, bioCharCount: event.target.value.length });
+    }
+
     render() {
         return (
             <div className="container-fluid" id="settings-pane">
@@ -193,12 +284,12 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input type="text" id="username-entry" placeholder="Username" />
+                                    <input type="text" id="username-entry" placeholder="Username" maxLength = "32" onChange = {this.handleFieldChange}/>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col text-center">
-                                    <button id="change-username-button" className="btn btn-primary" type="button">Change Username</button>
+                                    <button id="change-username-button" className="btn btn-primary" type="button" onClick = {this.changeUsername}>Change Username</button>
                                 </div>
                             </div>
                         </div>
@@ -211,12 +302,13 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <textarea id="user-bio-entry" />
+                                    <textarea id="user-bio-entry" maxLength = "500" onChange = {this.handleBioChange} onKeyDown = {this.handleBioChange}/>
+                                    <span id = "user-bio-char-count">{this.state.bioCharCount}</span><span id = "user-bio-char-max">/500</span>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col text-center">
-                                    <button id="save-bio-button" className="btn btn-primary" type="button">Save Bio</button>
+                                    <button id="save-bio-button" className="btn btn-primary" type="button" onClick = {this.changeBio}>Save Bio</button>
                                 </div>
                             </div>
                         </div>   
@@ -230,12 +322,12 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input id="email-entry" type="text" />
+                                    <input id="email-entry" type="text" onChange = {this.handleFieldChange}/>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col text-center">
-                                    <button id="change-email-button" className="btn btn-primary" type="button">Change Email</button>
+                                    <button id="change-email-button" className="btn btn-primary" type="button" onClick = {this.changeEmail}>Change Email</button>
                                 </div>
                             </div>
                         </div>

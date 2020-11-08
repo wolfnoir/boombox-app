@@ -288,6 +288,7 @@ class PlaylistEditDisplay extends React.Component {
             //current_song: null, //correct one
             current_song: 2, //temporary for showing
             is_song_playing: false,
+            charCount: 0,
             imageData: null,
         }
     }
@@ -307,7 +308,6 @@ class PlaylistEditDisplay extends React.Component {
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status == 0) {
                 this.setState({data: obj.result});
                 this.setState({currentData: obj.result});
@@ -505,6 +505,13 @@ class PlaylistEditDisplay extends React.Component {
         }
     }
 
+    addSongNote() {
+        var songChars = document.getElementById("add-song-char-count");
+        var songNote = document.getElementById("add-song-note");
+        var length = songNote.value.length;
+        this.setState({charCount: length});
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -612,16 +619,16 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>URL</Form.Label>
-                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
 
                                                                             <Form.Label>Title</Form.Label>
-                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
 
                                                                             <Form.Label>Artist</Form.Label>
-                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
 
                                                                             <Form.Label>Album</Form.Label>
-                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" ></Form.Control>
+                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
                                                                         </Form.Group>
                                                                     </Col>
                                                                     <Col>
@@ -662,22 +669,23 @@ class PlaylistEditDisplay extends React.Component {
                                                     <Col>
                                                         <Form.Group>
                                                             <Form.Label>URL</Form.Label>
-                                                            <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." ></Form.Control>
+                                                            <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
 
                                                             <Form.Label>Title</Form.Label>
-                                                            <Form.Control id = "add-song-title" className = "add-song-textbox" ></Form.Control>
+                                                            <Form.Control id = "add-song-title" className = "add-song-textbox" maxLength = "50"></Form.Control>
 
                                                             <Form.Label>Artist</Form.Label>
-                                                            <Form.Control id = "add-song-artist" className = "add-song-textbox" ></Form.Control>
+                                                            <Form.Control id = "add-song-artist" className = "add-song-textbox" maxLength = "50"></Form.Control>
 
                                                             <Form.Label>Album</Form.Label>
-                                                            <Form.Control id = "add-song-album" className = "add-song-textbox" ></Form.Control>
+                                                            <Form.Control id = "add-song-album" className = "add-song-textbox" maxLength = "50"></Form.Control>
                                                         </Form.Group>
                                                     </Col>
                                                     <Col>
                                                         <Form.Group>
                                                             <Form.Label>Note</Form.Label>
-                                                            <Form.Control as="textarea" id = "add-song-note" className = "add-song-textarea" ></Form.Control>
+                                                            <Form.Control as="textarea" id = "add-song-note" maxLength = "250" className = "add-song-textarea" onChange = {() => this.addSongNote()}></Form.Control>
+                                                            <span id = "add-song-char-count">{this.state.charCount}</span><span id = "add-song-max-char">/250</span>
                                                         </Form.Group>
                                                     </Col>
                                                 </Row>

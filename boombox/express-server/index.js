@@ -72,6 +72,8 @@ app.post("/getPlaylistCover", PlaylistHandler.getPlaylistCoverDataRoute);
 
 app.all("/getProfilePageData/:username", UserHandler.getProfilePageDataRoute);
 
+app.all("/getUserSettings/:username", UserHandler.getUserSettingsRoute);
+
 app.all("/getFollowers/:username", UserHandler.getFollowersRoute);
 
 app.all("/getFollowing/:username", UserHandler.getFollowingRoute);

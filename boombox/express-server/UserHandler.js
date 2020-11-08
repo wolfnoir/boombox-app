@@ -207,13 +207,18 @@ class UserHandler {
             }
             */
             if (newUsername) {
+                //check if username has already been taken
+                const foundUserObject = await collection.findOne({username: newUsername});
+                if (foundUserObject) {
+                    console.log("Username already taken");
+                    return {status: 5};
+                }
                 updateObject.username = newUsername;
             }
-            if (newBio) {
+            if (newBio || newBio === "") {
                 updateObject.bio = newBio;
             }
             if (newEmail) {
-                console.log(newEmail);
                 //check if the email already exists
                 const foundEmailObject = await collection.findOne({email: newEmail});
                 if (foundEmailObject) {
@@ -548,6 +553,7 @@ class UserHandler {
             const data = {
                 username: userObject.username,
                 bio: userObject.bio,
+                email: userObject.email,
                 playlists: userPlaylists,
                 isFollowing: isFollowing,
                 followers: userObject.followers,
@@ -582,6 +588,65 @@ class UserHandler {
         
         const statusObject = await UserHandler.getProfilePageData(self_user_id, target_username);
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    static async getUserSettingsRoute(req, res) {
+        const target_username = req.params.username;
+
+        if (!target_username) {
+            res.send({status: 1});
+            return;
+        }
+        
+        const statusObject = await UserHandler.getUserSettings(target_username);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    static async getUserSettings(targetUsername){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            //First, search users collection for the user object
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+            //const selfIdObject = new MongoClient.ObjectID(selfId);
+            const userQuery = { username : targetUsername };
+            const userObject = await collection.findOne(userQuery);
+            if (!userObject) {
+                console.log("user not found");
+                return {status: 1};
+            }
+
+            const data = {
+                username: userObject.username,
+                bio: userObject.bio,
+                email: userObject.email
+            };
+
+            return {
+                status: 0,
+                result: data
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        /*
+        finally {
+            client.close();
+        }
+        */
     }
 
     /**

@@ -29,16 +29,32 @@ class NavBar extends React.Component {
         this.state = {
             inputVal: "",
             redirect: false,
-            redirect_link: ""
+            redirect_link: "",
+            data: {}
         }
     }
 
     openSettings = () => {
+        this.getUserSettings();
         document.getElementById("settings-pane-fixed-top").style.display = "block";
         document.getElementById("settings-pane").style.display = "block";
+
+        var usernameText = document.getElementById("username-entry");
+        var bioText = document.getElementById("user-bio-entry");
+        var emailText = document.getElementById("email-entry");
+        var bioLength = document.getElementById("user-bio-char-count");
+        
+        usernameText.value = this.state.data.username;
+        bioText.value = this.state.data.bio;
+        emailText.value = this.state.data.email;
+        bioLength.innerHTML = this.state.data.bio.length;
     }
 
     closeSettings = () => {
+        var user = this.cookie.get('username');
+        if(user){
+            this.getUserSettings();
+        }
         document.getElementById("settings-pane-fixed-top").style.display = "none";
         document.getElementById("settings-pane").style.display = "none";
     }
@@ -101,6 +117,25 @@ class NavBar extends React.Component {
         }
     }
     
+    getUserSettings(){
+        var user = this.cookie.get('username');
+        if(!user){
+            alert("ERROR: User cookie does not exist!");
+            return;
+        }
+        else {
+            fetch(`/getUserSettings/${user}`)
+            .then(res => res.json())
+            .then(obj => {
+                if (obj.status == 0) {
+                    this.setState({data: obj.result});
+                }
+                else {
+                    this.setState({data: null}); //do stuff for showing not found
+                }
+            });
+        }
+    }
 
     render() {
         var showProfile = <a href={this.cookie.get('username') ? "/user/" + this.cookie.get('username') : "/"}><img src={profile_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> my profile</a>;
