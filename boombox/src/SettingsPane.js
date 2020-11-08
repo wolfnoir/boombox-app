@@ -51,26 +51,6 @@ class SettingsPane extends React.Component {
         });
     }
 
-    getUserData(){
-        var user = this.cookie.get('username');
-        if(!user){
-            alert("ERROR: User cookie does not exist!");
-            return;
-        }
-        else {
-            fetch(`/getProfilePageData/${user}`)
-            .then(res => res.json())
-            .then(obj => {
-                if (obj.status == 0) {
-                    this.setState({data: obj.result});
-                }
-                else {
-                    this.setState({data: null}); //do stuff for showing not found
-                }
-            });
-        }
-    }
-
     editUserIcon = (e) => {
         
         e.preventDefault();
