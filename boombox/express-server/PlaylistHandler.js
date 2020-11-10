@@ -221,7 +221,6 @@ class PlaylistHandler {
             const tempComments = foundPlaylist.comments;
             const tempImage = foundPlaylist.image_url;
             const tempLikes = foundPlaylist.likes;
-            const tempPrivate = foundPlaylist.isPrivate;
             const tempSongs = foundPlaylist.songs;
             const tempTags = foundPlaylist.tags;
             const tempUserId = foundPlaylist.user_id;
@@ -235,7 +234,7 @@ class PlaylistHandler {
                 last_modified: date,
                 likes: tempLikes,
                 name: name,
-                isPrivate: tempPrivate,
+                isPrivate: isPrivate,
                 songs: tempSongs,
                 tags: tempTags,
                 user_id: tempUserId
@@ -303,7 +302,7 @@ class PlaylistHandler {
         const com_enabled = fields.com_enabled[0];
         const description = fields.description[0];
         const name = fields.name[0];
-        const isPrivate = fields.isPrivate[0];
+        const isPrivate = fields.isPrivate[0] === "true";
 
         var filename;
         var filepath;
