@@ -45,9 +45,9 @@ class PlaylistSettings extends React.Component {
         this.cookie = new Cookie();
         this.state = {
             show: false,
-            setShow: false,
             name: this.props.playlistName,
             desc: this.props.playlistDesc,
+            private: this.props.privacy,
             playlistId: this.props.playlistId,
             userId: this.props.userId,
             redirect: false,
@@ -79,6 +79,7 @@ class PlaylistSettings extends React.Component {
                 this.setState({
                     name: this.props.playlistName,
                     desc: this.props.playlistDesc,
+                    private: this.props.privacy,
                     playlistId: this.props.playlistId,
                     userId: this.props.userId
                 });
@@ -91,6 +92,10 @@ class PlaylistSettings extends React.Component {
 
     updateDescription = (event) => {
         this.setState({desc: event.target.value});
+    }
+
+    updatePlaylistPrivacy = (event) => {
+        this.setState({private: !this.state.private});
     }
 
     handleImageUpload = () => {
@@ -131,7 +136,7 @@ class PlaylistSettings extends React.Component {
         formData.append('name', this.state.name);
         formData.append('userId', this.state.userId);
         formData.append('com_enabled', null);
-        formData.append('isPrivate', null);
+        formData.append('isPrivate', this.state.private);
         formData.append('file', file);
 
         const headers = {"Content-Type": "application/json"};
@@ -142,20 +147,22 @@ class PlaylistSettings extends React.Component {
 		}).then(res => res.json())
         .then(obj => {
             console.log(obj);
-            if (obj.statusCode === 0) {
+            if (obj.status === 0) {
                 console.log('successfully saved playlist');
             }
-            else if (obj.statusCode === 1) {
+            else if (obj.status === 1) {
                 console.log('not authorized');
             }
-            else if (obj.statusCode === -1) {
+            else if (obj.status === -1) {
                 console.log('error');
             }
             else {
                 console.log('somehow it broke');
             }
 
-            this.props.onSave(this.state.name, this.state.desc, this.state.imageSrc.replace('data:image/jpeg;base64,', ''));
+            const imageSrcCropped = this.state.imageSrc? this.state.imageSrc.replace('data:image/jpeg;base64,', '') : null;
+
+            this.props.onSave(this.state.name, this.state.desc, this.state.private, imageSrcCropped);
             this.setState({show: false});
         });
     }
@@ -226,7 +233,7 @@ class PlaylistSettings extends React.Component {
                     </Form.Group>
 
                     <Form.Group style = {{display: 'inline-block', verticalAlign: 'middle'}} className = "settings-modal-checkboxes">
-                        <Form.Check label = "Public Playlist" className = "settings-checkbox"/>
+                        <Form.Check label = "Public Playlist" className = "settings-checkbox" checked = {!this.state.private} onChange = {this.updatePlaylistPrivacy} />
                         <Form.Check label = "Enable Comments" className = "settings-checkbox"/>
                     </Form.Group>
 
@@ -484,12 +491,13 @@ class PlaylistEditDisplay extends React.Component {
         });
     }
 
-    handleSettingsChange = (name, desc, imageData) => {
+    handleSettingsChange = (name, desc, privacy, imageData) => {
         console.log(name, desc);
         console.log(imageData);
         var data = {...this.state.data};
         data.name = name;
         data.description = desc;
+        data.isPrivate = privacy;
         this.setState({data});
         if (imageData) {
             this.setState({imageData: imageData});
@@ -534,7 +542,7 @@ class PlaylistEditDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            <PlaylistSettings onSave = {this.handleSettingsChange} playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} playlistId = {this.props.playlistId}/>
+                                            <PlaylistSettings onSave = {this.handleSettingsChange} playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} privacy = {this.state.data.isPrivate} playlistId = {this.props.playlistId}/>
                                         </div>
                                     </div>
                                 </div>

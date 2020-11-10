@@ -148,7 +148,7 @@ class PlaylistPageDisplay extends React.Component {
             editButton = null;
         }
 
-        if(this.state.data == null) {
+        if(this.state.data == null || (this.state.data.isPrivate && this.state.data.author && this.state.data.author !== this.cookie.get('username'))) {
             return <Redirect to="/error" />
         }
         else{
