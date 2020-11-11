@@ -29,9 +29,13 @@ class SettingsPane extends React.Component {
     send_add_media_request = (e) => {
         const formData = new FormData();
         const fileInput = document.getElementById("fileInput");
+        var error = document.getElementById("settings-error");
+        var confirm = document.getElementById("settings-confirm");
         if(fileInput.value == ""){
             e.preventDefault();
-            alert("Please select a file.");
+            //alert("Please select a file.");
+            error.innerHTML = "Please select a file.";
+            confirm.innerHTML = "";
             return;
         }
 
@@ -56,8 +60,12 @@ class SettingsPane extends React.Component {
         e.preventDefault();
         const formData = new FormData();
         const fileInput = document.getElementById("fileInput");
+        var error = document.getElementById("settings-error");
+        var confirm = document.getElementById("settings-confirm");
         if (!fileInput.value) {
-            alert("Please select a file.");
+            //alert("Please select a file.");
+            error.innerHTML = "Please select a file.";
+            confirm.innerHTML = "";
             return;
         }
 
@@ -81,8 +89,12 @@ class SettingsPane extends React.Component {
         e.preventDefault();
         //need to check if username already taken
         const username =  document.getElementById('username-entry');
+        var error = document.getElementById("settings-error");
+        var confirm = document.getElementById("settings-confirm");
         if (!username || username.value === "") {
-            alert('Please provide a valid username.');
+            //alert('Please provide a valid username.');
+            error.innerHTML = "Please provide a valid username.";
+            confirm.innerHTML = "";
             return;
         }
         const body = JSON.stringify({
@@ -98,13 +110,19 @@ class SettingsPane extends React.Component {
             console.log(obj);
             //need to make response better
             if (obj.status === 0) {
-                alert('Username changed!');
+                //alert('Username changed!');
+                error.innerHTML = "";
+                confirm.innerHTML = "Username changed!";
             }
             else if (obj.status === 5) {
-                alert('Username already taken!');
+                //alert('Username already taken!');
+                error.innerHTML = "Username already taken!";
+                confirm.innerHTML = "";
             }
             else {
-                alert('somehow it broke');
+                //alert('somehow it broke');
+                error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
+                confirm.innerHTML = "";
             }
         });
     }
@@ -112,8 +130,12 @@ class SettingsPane extends React.Component {
     changeEmail = (e) => {
         e.preventDefault();
         const email =  document.getElementById('email-entry');
+        var error = document.getElementById("settings-error");
+        var confirm = document.getElementById("settings-confirm");
         if (!email || !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.value)) {
-            alert('Please provide a valid email.');
+            //alert('Please provide a valid email.');
+            error.innerHTML = "Please provide a valid email.";
+            confirm.innerHTML = "";
             return;
         }
         const body = JSON.stringify({
@@ -129,13 +151,19 @@ class SettingsPane extends React.Component {
             console.log(obj);
             //need to make response better
             if (obj.status === 0) {
-                alert('E-mail changed!');
+                //alert('E-mail changed!');
+                error.innerHTML = "";
+                confirm.innerHTML = "E-mail changed!";
             }
             else if (obj.status === 2) {
-                alert('E-mail already in use!');
+                //alert('E-mail already in use!');
+                error.innerHTML = "E-mail already in use!";
+                confirm.innerHTML = "";
             }
             else {
-                alert('somehow it broke');
+                //alert('somehow it broke');
+                error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
+                confirm.innerHTML = "";
             }
         });
     }
@@ -143,6 +171,8 @@ class SettingsPane extends React.Component {
     changeBio = (e) => {
         e.preventDefault();
         const bio = document.getElementById('user-bio-entry');
+        var error = document.getElementById("settings-error");
+        var confirm = document.getElementById("settings-confirm");
         var value = bio.value;
         if(!bio.value){
             value = "";
@@ -160,10 +190,14 @@ class SettingsPane extends React.Component {
             console.log(obj);
             //need to make response better
             if (obj.status == 0) {
-                alert('Bio successfully changed!');
+                //alert('Bio successfully changed!');
+                error.innerHTML = "";
+                confirm.innerHTML = "Bio successfully changed!";
             }
             else {
-                alert('somehow it broke');
+                //alert('somehow it broke');
+                error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
+                confirm.innerHTML = "";
             }
         });
     }
@@ -173,8 +207,12 @@ class SettingsPane extends React.Component {
         const currentPassword =  document.getElementById('current-password-entry');
         const newPassword =  document.getElementById('new-password-entry');
         const confirmPassword =  document.getElementById('confirm-password-entry');
+        var error = document.getElementById("settings-error");
+        var confirm = document.getElementById("settings-confirm");
         if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
-            alert('please fill out all fields');
+            //alert('please fill out all fields');
+            error.innerHTML = "Please fill out all fields!";
+            confirm.innerHTML = "";
             return;
         }
 		const body = JSON.stringify({
@@ -192,19 +230,27 @@ class SettingsPane extends React.Component {
             console.log(obj);
             //need to make response better
             if (obj.status == 0) {
-                alert('password successfully changed');
+                //alert('password successfully changed');
+                error.innerHTML = "";
+                confirm.innerHTML = "Password successfully changed!";
                 currentPassword.value = null;
                 newPassword.value = null;
                 confirmPassword.value = null;
             }
             else if (obj.status == 3) {
-                alert('incorrect password');
+                //alert('incorrect password');
+                error.innerHTML = "Incorrect password.";
+                confirm.innerHTML = "";
             }
             else if (obj.status == 4) {
-                alert('new password fields did not match');
+                //alert('new password fields did not match');
+                error.innerHTML = "New password fields did not match. Please try again.";
+                confirm.innerHTML = "";
             }
             else {
-                alert('somehow it broke');
+                //alert('somehow it broke');
+                error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
+                confirm.innerHTML = "";
             }
         });
     }
@@ -221,7 +267,6 @@ class SettingsPane extends React.Component {
         .then(res => res.json()) 
         .then(data => {
             console.log("was here");
-            console.log(data);
             this.setState({profile_image_data: data.iconData});
         });
     }
@@ -253,6 +298,8 @@ class SettingsPane extends React.Component {
                     </div>
                     <div className="col">
                         <h1>Settings</h1>
+                        <div id = "settings-error"></div>
+                        <div id = "settings-confirm"></div>
                     </div>
                 </div>
                 <div className="row" id="row2">

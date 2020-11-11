@@ -113,8 +113,9 @@ class PlaylistSettings extends React.Component {
     }
 
     handleSavePlaylist = () => {
+        var error = document.getElementById("playlist-settings-error");
         if(!this.cookie.get('username')){
-            alert("You're not authorized to save this playlist!");
+            error.innerHTML = "You're not authorized to save this playlist!";
             return;
         }
         const body = JSON.stringify({
@@ -246,6 +247,7 @@ class PlaylistSettings extends React.Component {
                 </Form>
 
                 <center>
+                    <div id = "playlist-settings-error" className = "song-error"></div>
                     <Button variant="primary" onClick={this.handleSavePlaylist}>
                     Save
                     </Button>
@@ -273,6 +275,7 @@ class PlaylistEditDisplay extends React.Component {
             song_notes_open: [],
             charCount: 0,
             imageData: null,
+            history: [],
         }
     }
 
@@ -311,7 +314,6 @@ class PlaylistEditDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log(data);
             this.setState({imageData: data.imageData});
         });
     }
@@ -361,7 +363,8 @@ class PlaylistEditDisplay extends React.Component {
         var titleField = document.getElementById("edit-song-title-"+i);
         var artistField = document.getElementById("edit-song-artist-"+i);
         var albumField = document.getElementById("edit-song-album-"+i);
-        var noteField = document.getElementById("edit-song-note-"+i);
+        var noteField = document.getElementById("edit-song-note-"+i)
+        var errorField = document.getElementById("edit-song-error-"+i);;
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
         var url = urlField.value;
@@ -379,6 +382,7 @@ class PlaylistEditDisplay extends React.Component {
             currentSong.artist = artistField.value;
             currentSong.album = albumField.value;
             currentSong.note = noteField.value;
+            errorField.innerHTML = "";
 
             console.log(dataCopy);
             this.setState({data: dataCopy});
@@ -386,7 +390,7 @@ class PlaylistEditDisplay extends React.Component {
             this.toggleEditFields(i);
         }
         else {
-            alert("Must be valid YouTube URL!");
+            errorField.innerHTML = "Must be a vaild YouTube URL.";
         }   
     }
 
@@ -397,6 +401,7 @@ class PlaylistEditDisplay extends React.Component {
         var artistField = document.getElementById("add-song-artist");
         var albumField = document.getElementById("add-song-album");
         var noteField = document.getElementById("add-song-note");
+        var errorField = document.getElementById("add-song-error");
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
         var url = urlField.value;
@@ -424,9 +429,10 @@ class PlaylistEditDisplay extends React.Component {
             artistField.value = "";
             titleField.value = "";
             noteField.value = "";
+            errorField.innerHTML = "";
         }
         else {
-            alert("Must be valid YouTube URL!");
+            errorField.innerHTML = "Must be a vaild YouTube URL.";
         }   
     }
 
@@ -511,6 +517,24 @@ class PlaylistEditDisplay extends React.Component {
         this.setState({charCount: length});
     }
 
+    keyPressed = (e) => {
+        if((e.which === 90 || e.keyCode === 90) && e.ctrlKey){
+            //undo
+            //tps.undoTransaction();
+            console.log("undo attempted");
+        }
+        else if ((e.which === 89 || e.keyCode === 89) && e.ctrlKey){
+            //redo
+            console.log("redo attempted");
+            // if(tps.peekDo() === null){
+            //   return;
+            // }
+            // else{
+            //   tps.doTransaction();
+            // }
+        }
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -523,8 +547,9 @@ class PlaylistEditDisplay extends React.Component {
         }
         else{
             return (
+                <div onKeyDown = {this.keyPressed} tabIndex="0">
                 <NavBarWrapper>
-                    <div className="container" id="playlist-edit-container">
+                    <div className="container" id="playlist-edit-container" >
                         <div className="row" id="row1">
                             <div className="col" id="playlist-cover-container">
                                 {this.getPlaylistImage()}
@@ -614,6 +639,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>URL</Form.Label>
+                                                                            <div id = {"edit-song-error-"+i} className = "song-error"></div>
                                                                             <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
 
                                                                             <Form.Label>Title</Form.Label>
@@ -664,6 +690,7 @@ class PlaylistEditDisplay extends React.Component {
                                                     <Col>
                                                         <Form.Group>
                                                             <Form.Label>URL</Form.Label>
+                                                            <div id = {"add-song-error"} className = "song-error"></div>
                                                             <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
 
                                                             <Form.Label>Title</Form.Label>
@@ -700,6 +727,7 @@ class PlaylistEditDisplay extends React.Component {
                     </div>
 
                 </NavBarWrapper>
+                </div>
             );
         }
     }
