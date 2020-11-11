@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
-import jsTPS from './jstps/jsTPS.js';
 import Cookie from 'universal-cookie';
 import './css/bootstrap.min.css';
 import './PlaylistEdit.css';
@@ -269,12 +268,12 @@ class PlaylistEditDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.cookie = new Cookie();
-        this.tps = new jsTPS();
         this.state = {
             data: {},
             song_notes_open: [],
             charCount: 0,
             imageData: null,
+            history: [],
         }
     }
 
@@ -290,7 +289,6 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     componentDidMount() {
-        this.tps.clearAllTransactions();
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
         .then(obj => {
