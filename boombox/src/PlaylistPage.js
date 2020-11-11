@@ -184,6 +184,14 @@ class PlaylistPageDisplay extends React.Component {
             editButton = null;
         }
 
+        var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
+        var bookmarkButton = <img src={bookmark_img} height="30px" width="30px" />
+        
+        if(!this.cookie.get('username')){
+            likeButton = null;
+            bookmarkButton = null;
+        }
+
         if(this.state.data == null || (this.state.data.isPrivate && this.state.data.author && this.state.data.author !== this.cookie.get('username'))) {
             return <Redirect to="/error" />
         }
@@ -200,8 +208,8 @@ class PlaylistPageDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
-                                            <img src={bookmark_img} height="30px" width="30px" />
+                                            {likeButton}
+                                            {bookmarkButton}
                                             <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} />
                                             {editButton}
                                         </div>
