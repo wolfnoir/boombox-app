@@ -113,8 +113,9 @@ class PlaylistSettings extends React.Component {
     }
 
     handleSavePlaylist = () => {
+        var error = document.getElementById("playlist-settings-error");
         if(!this.cookie.get('username')){
-            alert("You're not authorized to save this playlist!");
+            error.innerHTML = "You're not authorized to save this playlist!";
             return;
         }
         const body = JSON.stringify({
@@ -246,6 +247,7 @@ class PlaylistSettings extends React.Component {
                 </Form>
 
                 <center>
+                    <div id = "playlist-settings-error" className = "song-error"></div>
                     <Button variant="primary" onClick={this.handleSavePlaylist}>
                     Save
                     </Button>
@@ -361,7 +363,8 @@ class PlaylistEditDisplay extends React.Component {
         var titleField = document.getElementById("edit-song-title-"+i);
         var artistField = document.getElementById("edit-song-artist-"+i);
         var albumField = document.getElementById("edit-song-album-"+i);
-        var noteField = document.getElementById("edit-song-note-"+i);
+        var noteField = document.getElementById("edit-song-note-"+i)
+        var errorField = document.getElementById("edit-song-error-"+i);;
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
         var url = urlField.value;
@@ -379,6 +382,7 @@ class PlaylistEditDisplay extends React.Component {
             currentSong.artist = artistField.value;
             currentSong.album = albumField.value;
             currentSong.note = noteField.value;
+            errorField.innerHTML = "";
 
             console.log(dataCopy);
             this.setState({data: dataCopy});
@@ -386,7 +390,7 @@ class PlaylistEditDisplay extends React.Component {
             this.toggleEditFields(i);
         }
         else {
-            alert("Must be valid YouTube URL!");
+            errorField.innerHTML = "Must be a vaild YouTube URL.";
         }   
     }
 
@@ -397,6 +401,7 @@ class PlaylistEditDisplay extends React.Component {
         var artistField = document.getElementById("add-song-artist");
         var albumField = document.getElementById("add-song-album");
         var noteField = document.getElementById("add-song-note");
+        var errorField = document.getElementById("add-song-error");
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
         var url = urlField.value;
@@ -424,9 +429,10 @@ class PlaylistEditDisplay extends React.Component {
             artistField.value = "";
             titleField.value = "";
             noteField.value = "";
+            errorField.innerHTML = "";
         }
         else {
-            alert("Must be valid YouTube URL!");
+            errorField.innerHTML = "Must be a vaild YouTube URL.";
         }   
     }
 
@@ -633,6 +639,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>URL</Form.Label>
+                                                                            <div id = {"edit-song-error-"+i} className = "song-error"></div>
                                                                             <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
 
                                                                             <Form.Label>Title</Form.Label>
@@ -683,6 +690,7 @@ class PlaylistEditDisplay extends React.Component {
                                                     <Col>
                                                         <Form.Group>
                                                             <Form.Label>URL</Form.Label>
+                                                            <div id = {"add-song-error"} className = "song-error"></div>
                                                             <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
 
                                                             <Form.Label>Title</Form.Label>
