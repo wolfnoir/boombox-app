@@ -276,6 +276,7 @@ class PlaylistEditDisplay extends React.Component {
             charCount: 0,
             imageData: null,
             history: [],
+            historyStep: 0,
         }
     }
 
@@ -300,11 +301,17 @@ class PlaylistEditDisplay extends React.Component {
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
+                const songs = this.state.data.songs
+                this.setState ({
+                    history: [songs]
+                });
+                console.log(this.state.history);
             }
             else {
-                this.setState({data: null}); //need to change the component to have a not found page
+                this.setState({data: null});
             }
         });
+      
         fetch('/getPlaylistCover', {
             method: 'POST',
             body: JSON.stringify({
@@ -346,7 +353,7 @@ class PlaylistEditDisplay extends React.Component {
     handleDeleteSong = (e, i) => {
         e.stopPropagation();
         console.log("call");
-        var dataCopy = this.state.data;
+        var dataCopy = JSON.parse(JSON.stringify(this.state.data));
         if (dataCopy.songs && i < dataCopy.songs.length) {
             console.log("delete ", i);
             dataCopy.songs.splice(i, 1);
@@ -355,7 +362,6 @@ class PlaylistEditDisplay extends React.Component {
             dataCopy.songs[j].index = j;
         }
         this.setState({data: dataCopy});
-        console.log(this.state.data.songs);
     }
 
     handleEditSong = (i) => {
@@ -372,7 +378,7 @@ class PlaylistEditDisplay extends React.Component {
         if(p.test(url)){
             var songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
         
-            var dataCopy = this.state.data; //creates a copy of the song array
+            var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the song array
             var currentSong = dataCopy.songs[i];
             console.log(currentSong);
 
@@ -408,9 +414,9 @@ class PlaylistEditDisplay extends React.Component {
         if(p.test(url)){
             var songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
         
-            var dataCopy = this.state.data; //creates a copy of the song array
+            var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the song array
             var currentSong = {
-                index: this.state.data.songs.length + 1,
+                index: this.state.data.songs.length,
                 album: albumField.value,
                 artist: artistField.value,
                 name: titleField.value,
@@ -418,9 +424,8 @@ class PlaylistEditDisplay extends React.Component {
                 url: songId,
                 url_type: "youtube.com/watch?v=" //temporary
             }
-            console.log(currentSong);
             dataCopy.songs.push(currentSong);
-            console.log(dataCopy);
+            this.addToHistory(dataCopy.songs);
             this.setState({data: dataCopy});
             this.toggleAddSong();
 
@@ -434,6 +439,15 @@ class PlaylistEditDisplay extends React.Component {
         else {
             errorField.innerHTML = "Must be a vaild YouTube URL.";
         }   
+    }
+
+    addToHistory(songs){
+        const history = this.state.history.slice(0, this.state.historyStep + 1);
+        const newHistory = history.concat([songs]);
+        this.setState({
+            history: newHistory,
+            historyStep: newHistory.length
+        });
     }
 
     toggleAddSong() {
@@ -546,6 +560,8 @@ class PlaylistEditDisplay extends React.Component {
             return <Redirect to="/error" />
         }
         else{
+            const history = this.state.history;
+            const current = history[this.state.historyStep];
             return (
                 <div onKeyDown = {this.keyPressed} tabIndex="0">
                 <NavBarWrapper>
