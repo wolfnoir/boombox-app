@@ -37,8 +37,6 @@ class PlaylistDisplay extends React.Component{
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log("was here");
-            console.log(data);
             this.setState({albumCover: data.imageData});
         });
     }

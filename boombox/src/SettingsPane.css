@@ -4,7 +4,7 @@
     background: black;
     color: white;
     font-family: 'Roboto Condensed';
-    font-size: 30px;
+    font-size: 24px;
     z-index: 2000 !important;
 }
 
@@ -71,4 +71,14 @@
 
 .invert-color {
     filter: invert(1);
+}
+
+#settings-error {
+    color: red;
+    font-size: 18px;
+}
+
+#settings-confirm {
+    color: green;
+    font-size: 18px;
 }
