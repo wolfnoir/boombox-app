@@ -4,13 +4,13 @@
         "comments": [],
         "creation_date": 1604288237,
         "description": "This is a playlist description. Lorem ispum blah blah bacon cheese and crackers.",
-        "image_url": null,
+        "image_url": "watermelon-wolf",
         "isPrivate": false,
         "last_modified": 1604288237,
         "likes": [],
         "name": "Best of Oingo Boingo",
         "tags": ["new wave", "ska", "pop", "rock"],
-        "user_id": null, 
+        "user_id": "test-user", 
         "songs": [
             {
                 "index": 0,
@@ -61,7 +61,7 @@
         "likes": [],
         "name": "Everywhere at the End of Time",
         "tags": ["ambient"],
-        "user_id": null,
+        "user_id": "test-user",
         "songs": [
             {
                 "index": 0,
@@ -94,7 +94,7 @@
         "likes": [],
         "name": "Chill Tunes",
         "tags": ["lo-fi", "video game", "soundtrack", "vocal"],
-        "user_id": null,
+        "user_id": "test-user",
         "songs": [
             {
                 "index": 0,
@@ -169,7 +169,7 @@
         "likes": [],
         "name": "The Pizza Show",
         "tags": [],
-        "user_id": null,
+        "user_id": "test-user-2",
         "songs": [
             {
                 "index": 0,
@@ -238,7 +238,7 @@
         "likes": [],
         "name": "1-800-HOTLINE",
         "tags": ["ambient", "video game", "soundtrack", "electronic"],
-        "user_id": null,
+        "user_id": "test-user-2",
         "songs": [
             {
                 "index": 0,
@@ -307,7 +307,7 @@
         "likes": [],
         "name": "My Electroswing Playlist",
         "tags": ["electroswing", "swing", "electronic"],
-        "user_id": null,
+        "user_id": "sidneyfalco",
         "songs": [
             {
                  "index": 0,
@@ -355,5 +355,55 @@
                 "url_type": "youtube"
             }
         ]
+    },
+    "Lofi Beats to Eat Pizza to": {
+        "com_enabled":false,
+        "comments":[],
+        "creation_time": 1604705642884,
+        "description":"My deliveryman was late again so I made this playlist to calm myself down. I hope he gets fired.",
+        "image_url":null,
+        "isPrivate":false,
+        "last_modified": 1604976905135.0,
+        "likes":[],
+        "name":"Lofi Beats to Eat Pizza to",
+        "songs":[
+            {
+                "index": 0,
+                "album":"Does Whatever a Spider Can",
+                "artist":"Spider-Man",
+                "name":"Pizza Time",
+                "note":"I'm not paying for this.",
+                "url":"czTksCF6X8Y",
+                "url_type":"youtube.com/watch?v="
+            },
+            {
+                "index": 1, 
+                "album":"Cursed Kids",
+                "artist":"Mary Kate and Ashley Olsen",
+                "name":"Gimme Pizza!",
+                "note":"Pizza comes in all flavors, even fear!",
+                "url":"CJEoASUMZbI","url_type":"youtube.com/watch?v="
+            },
+            {
+                "index": 2,
+                "album":"test",
+                "artist":"test",
+                "name":"test",
+                "note":"",
+                "url":"nkA_lD8sbVU",
+                "url_type":"youtube.com/watch?v="
+            },
+            {
+                "index": 3,
+                "album":"test2",
+                "artist":"test2",
+                "name":"test2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "note":"",
+                "url":"nkA_lD8sbVU",
+                "url_type":"youtube.com/watch?v="
+            }
+        ],
+        "tags":[],
+        "user_id": "test-user"
     }
 }

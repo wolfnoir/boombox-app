@@ -4,8 +4,29 @@
         "email":"test@test.com",
         "password":"testPassword123?",
         "pw_reset_link":null,
-        "icon_url": "watermelon-wolf",
+        "icon_url": "bob",
         "bio":"this is my bio. hello",
+        "following":[],
+        "followers":[],
+        "bookmarks":[]
+    },
+    "test-user-2": {
+        "username":"test-user-2",
+        "email":"test1@test.com",
+        "password":"example",
+        "pw_reset_link":null,"icon_url":null,
+        "bio":"    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "following":[],
+        "followers":[],
+        "bookmarks":[]
+    },
+    "sidneyfalco": {
+        "username":"sidneyfalco",
+        "email":"test2@test.com",
+        "password":"ok",
+        "pw_reset_link":null,
+        "icon_url":null,
+        "bio":"I'd hate to take a bite out of you. You're like a cookie full of arsenic.",
         "following":[],
         "followers":[],
         "bookmarks":[]
@@ -15,8 +36,8 @@
         "email":"a@a.com",
         "password":"a",
         "pw_reset_link":null,
-        "icon_url": "disco-church",
-        "bio":"this is my bio aaaaa",
+        "icon_url":null,
+        "bio":"",
         "following":[],
         "followers":[],
         "bookmarks":[]

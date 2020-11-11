@@ -47,10 +47,10 @@ class DataGenerator {
             process.exit(1);
         }
         */
-        //const images = await DataGenerator.uploadImages();
-        //const users = await DataGenerator.generateUsers(images);
+        const images = await DataGenerator.uploadImages();
+        const users = await DataGenerator.generateUsers(images);
         const tags = await DataGenerator.generateTags();
-        //const playlists = await DataGenerator.generatePlaylists(images, users);
+        const playlists = await DataGenerator.generatePlaylists(images, users);
         //await DataGenerator.generateAdditionalData();
         client.close();
         process.exit(0);
@@ -174,7 +174,7 @@ class DataGenerator {
             playlists[playlist].image_url = imageId;
 
             const res = await playlistsCollection.insertOne(value);
-            playlists[playist].objectId = res.insertedId;
+            playlists[playlist].objectId = res.insertedId;
         }
         return playlists;
     }
