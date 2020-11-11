@@ -142,29 +142,35 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     likePlaylist() {
-        const body = JSON.stringify({
-            'playlistId': this.props.playlistId,
-            'username': this.cookie.get('username'),
-        });
-        const headers = {"Content-Type": "application/json"};
-        fetch('/updateLikes', {
-			method: 'POST',
-			body: body,
-			headers: headers
-		}).then(res => res.json())
-        .then(obj => {
-            console.log(obj);
-            if (obj.status == 0) {
-                console.log('Playlist liked!');
-            }
-            else {
-                console.log('Unauthorized');
-            }
-
-            var data = {...this.state.data};
-            data.liked = !data.liked;
-            this.setState({data});
-        });
+        var user = this.cookie.get('username');
+        if (!user){
+            alert("Please log in to like this playlist!");
+        }
+        else {
+            const body = JSON.stringify({
+                'playlistId': this.props.playlistId,
+                'username': this.cookie.get('username'),
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/updateLikes', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status == 0) {
+                    console.log('Playlist liked!');
+                }
+                else {
+                    console.log('Unauthorized');
+                }
+    
+                var data = {...this.state.data};
+                data.liked = !data.liked;
+                this.setState({data});
+            });
+        }
     }
 
     copyLink(){
