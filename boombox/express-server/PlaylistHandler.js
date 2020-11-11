@@ -187,7 +187,7 @@ class PlaylistHandler {
      */
     
     //static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
-    static async editPlaylist(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath) {
+    static async editPlaylistSettings(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -281,7 +281,7 @@ class PlaylistHandler {
         return {status: 0};
     }
 
-    static async editPlaylistRoute(req, res) {
+    static async editPlaylistSettingsRoute(req, res) {
         console.log("hi");
         
         const user_id = req.session.user_id;
@@ -322,7 +322,7 @@ class PlaylistHandler {
             }
         }
 
-        const success = await PlaylistHandler.editPlaylist(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath);
+        const success = await PlaylistHandler.editPlaylistSettings(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath);
 
 
         res.send(success); //-1: an error occurred, 0: success, 1: not logged in
@@ -332,7 +332,7 @@ class PlaylistHandler {
      * Get Playlist
      */
 
-    static async getPlaylist(playlist_id) {
+    static async getPlaylist(self_user_id, playlist_id) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -365,6 +365,9 @@ class PlaylistHandler {
             }
             playlistObject.url = "/playlist/" + playlist_id;
 
+            const selfUserIdObject = MongoClient.ObjectID(self_user_id);
+            playlistObject.liked = playlistObject.likes.filter( id => id.equals(selfUserIdObject)).length > 0;
+
             return {
                 status: 0,
                 result: playlistObject
@@ -380,8 +383,9 @@ class PlaylistHandler {
     }
 
     static async getPlaylistRoute(req, res) {
+        const user_id = req.session.user_id;
         const playlist_id = req.params.playlistId;
-        const statusObject = await PlaylistHandler.getPlaylist(playlist_id);
+        const statusObject = await PlaylistHandler.getPlaylist(user_id, playlist_id);
 
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: playlist not found
     }
@@ -448,6 +452,60 @@ class PlaylistHandler {
         //console.log(statusObject);
         res.send(statusObject);
     }
+
+    static async updateLikes(user_id, playlistId) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+
+            var likes = foundPlaylist.likes;
+
+            if(likes.filter( id => id.equals(user_id)).length > 0)
+                likes = likes.filter( id => !id.equals(user_id));
+
+            else
+                likes.push(user_id);
+
+            await collection.updateOne({"_id": idObject}, {$set: {likes: likes}}); //add status checking for update?
+            return {status: 0};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+     }
+
+     static async updateLikesRoute(req, res) {
+        const username = req.body.username;
+        const playlistId = req.body.playlistId;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
+        const statusObject = await PlaylistHandler.updateLikes(user_id, playlistId);
+
+        res.send(statusObject);
+     }
 
     /* 
      * Song Handling

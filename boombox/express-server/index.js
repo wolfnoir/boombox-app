@@ -84,7 +84,9 @@ app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
 app.post("/deletePlaylist", PlaylistHandler.deletePlaylistRoute);
 
-app.post("/editPlaylist", PlaylistHandler.editPlaylistRoute);
+app.post("/editPlaylistSettings", PlaylistHandler.editPlaylistSettingsRoute);
+
+app.post("/updateLikes", PlaylistHandler.updateLikesRoute);
 
 app.post("/addSong", PlaylistHandler.addSong);
 
