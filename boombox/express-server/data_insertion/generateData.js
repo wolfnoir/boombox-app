@@ -32,21 +32,6 @@ class DataGenerator {
         }
         this.client = client;
         
-
-        /*
-        try {
-            const images = DataGenerator.uploadImages();
-            const users = DataGenerator.generateUsers(images);
-            const tags = DataGenerator.generateTags();
-            const playlists = DataGenerator.generatePlaylists();
-            DataGenerator.generateAdditionalData();
-            process.exit(0);
-        }
-        catch (err) {
-            console.log(err);
-            process.exit(1);
-        }
-        */
         const images = await DataGenerator.uploadImages();
         const users = await DataGenerator.generateUsers(images);
         const tags = await DataGenerator.generateTags();
@@ -80,8 +65,7 @@ class DataGenerator {
                     throw err;
                 })
                 .on('finish', () => {
-                    //console.log(uploadStream.id);
-                    console.log("ended");
+                    console.log("\tfinished upload");
                     return resolve();
                 });
             });
@@ -93,9 +77,6 @@ class DataGenerator {
     }
 
     static async generateUsers(images) {
-        //replace icon_urls with objectid responses from uploadimages, the value should be the key of the image in images.json
-        //password is plaintext by default, generate a salt and hash before insert
-
         console.log("generate users");
 
         const fileData = fs.readFileSync('users.json');
@@ -105,8 +86,6 @@ class DataGenerator {
         const usersCollection = db.collection(mongoUserCollection);
 
         for (const [user, value] of Object.entries(users)) {
-            console.log("\t" + user);
-            
             const salt = crypto.randomBytes(16).toString('hex');
             const hashedPassword = crypto.createHash('sha256').update(value.password + salt).digest('hex');
             value.password = hashedPassword;
@@ -140,9 +119,7 @@ class DataGenerator {
     }
 
     static async generatePlaylists(images, users) {
-        //replace user_ids with id responses from generateuser, and image_urls with objectids from uploadimages
         console.log("generate playlists");
-
         
         const fileData = fs.readFileSync('playlists.json');
         const playlists = JSON.parse(fileData);
@@ -167,7 +144,6 @@ class DataGenerator {
 
     //UNTESTED
     static async generateAdditionalData(users, playlists) {
-        //add bookmarks, follows, followers, etc.
         console.log("generate additional data");
 
         const db = this.client.db(mongoDbName);
@@ -175,9 +151,6 @@ class DataGenerator {
         const usersCollection = db.collection(mongoUserCollection);
 
         for (const [user, value] of Object.entries(users)) {
-            //update follows
-            //update followers
-            //update bookmarks
             const updateDoc = {};
             const following = [];
             const followers = [];
@@ -214,4 +187,3 @@ class DataGenerator {
 }
 
 DataGenerator.generateData();
-//DataGenerator.pushTestPlaylists();
