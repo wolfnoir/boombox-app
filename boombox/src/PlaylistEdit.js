@@ -277,6 +277,7 @@ class PlaylistEditDisplay extends React.Component {
             imageData: null,
             history: [],
             historyStep: 0,
+            allowUndo: true,
         }
     }
 
@@ -361,6 +362,7 @@ class PlaylistEditDisplay extends React.Component {
         for(var j = 0; j < dataCopy.songs.length; j ++){
             dataCopy.songs[j].index = j;
         }
+        this.addToHistory(dataCopy.songs);
         this.setState({data: dataCopy});
     }
 
@@ -391,6 +393,7 @@ class PlaylistEditDisplay extends React.Component {
             errorField.innerHTML = "";
 
             console.log(dataCopy);
+            this.addToHistory(dataCopy.songs);
             this.setState({data: dataCopy});
 
             this.toggleEditFields(i);
@@ -441,19 +444,22 @@ class PlaylistEditDisplay extends React.Component {
         }   
     }
 
-    addToHistory(songs){
+    async addToHistory(songs){
         const history = this.state.history.slice(0, this.state.historyStep + 1);
         const newHistory = history.concat([songs]);
-        this.setState({
+        await this.setState({
             history: newHistory,
-            historyStep: newHistory.length
+            historyStep: newHistory.length - 1
         });
+        console.log(this.state.history);
+        console.log("current history step: " + this.state.historyStep);
     }
 
     toggleAddSong() {
         var addSongForm = document.getElementById("add-song-form");
         var isHidden = addSongForm.hidden;
         addSongForm.hidden = !isHidden;
+        this.setState({ allowUndo: !isHidden });
     }
 
     toggleEditFields(i){
@@ -468,6 +474,7 @@ class PlaylistEditDisplay extends React.Component {
         console.log(editField);
         var isHidden = editField.hidden;
         editField.hidden = !isHidden;
+        this.setState({ allowUndo: !isHidden });
         var currentSong = this.state.data.songs[i];
 
         var urlField = document.getElementById("edit-song-url-"+i);
@@ -533,19 +540,46 @@ class PlaylistEditDisplay extends React.Component {
 
     keyPressed = (e) => {
         if((e.which === 90 || e.keyCode === 90) && e.ctrlKey){
-            //undo
-            //tps.undoTransaction();
-            console.log("undo attempted");
+            this.handleUndo();
         }
         else if ((e.which === 89 || e.keyCode === 89) && e.ctrlKey){
-            //redo
+            this.handleRedo();
+        }
+    }
+
+    handleUndo(){
+        var step = this.state.historyStep;
+        if(step === 0 || !this.state.allowUndo){
+            return;
+        }
+        else {
+            console.log("undo attempted");
+            var dataCopy = JSON.parse(JSON.stringify(this.state.data));
+            var previousSongs = this.state.history[step - 1];
+            dataCopy.songs = previousSongs;
+            this.setState({
+                data: dataCopy,
+                historyStep: step - 1
+            });
+            console.log("history step: " + (step - 1));
+        }
+    }
+
+    handleRedo(){
+        var step = this.state.historyStep;
+        if(step === this.state.history.length - 1 || !this.state.allowUndo){
+            return;
+        }
+        else {
             console.log("redo attempted");
-            // if(tps.peekDo() === null){
-            //   return;
-            // }
-            // else{
-            //   tps.doTransaction();
-            // }
+            var dataCopy = JSON.parse(JSON.stringify(this.state.data));
+            var nextSongs = this.state.history[step + 1];
+            dataCopy.songs = nextSongs;
+            this.setState({
+                data: dataCopy,
+                historyStep: step + 1
+            });
+            console.log("history step: " + (step + 1));
         }
     }
 
@@ -696,7 +730,7 @@ class PlaylistEditDisplay extends React.Component {
                                 <div className="row" id="title-row">
                                     <div className="col" id = "add-song">
                                         {/* <AddSongModal/> */}
-                                        <div onClick={this.toggleAddSong}>
+                                        <div onClick={() => this.toggleAddSong()}>
                                             <img id="add-song-icon" src={add_circle_img} height="48px" width="48px" />
                                                                     <h1>add song</h1>
                                         </div>
@@ -731,7 +765,7 @@ class PlaylistEditDisplay extends React.Component {
                                                         Submit
                                                 </Button>
 
-                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {this.toggleAddSong}>
+                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {() => this.toggleAddSong()}>
                                                         Cancel
                                                 </Button>
                                             </Form>
