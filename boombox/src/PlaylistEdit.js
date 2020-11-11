@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
+import jsTPS from './jstps/jsTPS.js';
 import Cookie from 'universal-cookie';
 import './css/bootstrap.min.css';
 import './PlaylistEdit.css';
@@ -268,6 +269,7 @@ class PlaylistEditDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.cookie = new Cookie();
+        this.tps = new jsTPS();
         this.state = {
             data: {},
             song_notes_open: [],
@@ -288,6 +290,7 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     componentDidMount() {
+        this.tps.clearAllTransactions();
         fetch(`/getPlaylistData/${this.props.playlistId}`)
         .then(res => res.json())
         .then(obj => {
@@ -311,7 +314,6 @@ class PlaylistEditDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log(data);
             this.setState({imageData: data.imageData});
         });
     }
@@ -511,6 +513,24 @@ class PlaylistEditDisplay extends React.Component {
         this.setState({charCount: length});
     }
 
+    keyPressed = (e) => {
+        if((e.which === 90 || e.keyCode === 90) && e.ctrlKey){
+            //undo
+            //tps.undoTransaction();
+            console.log("undo attempted");
+        }
+        else if ((e.which === 89 || e.keyCode === 89) && e.ctrlKey){
+            //redo
+            console.log("redo attempted");
+            // if(tps.peekDo() === null){
+            //   return;
+            // }
+            // else{
+            //   tps.doTransaction();
+            // }
+        }
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -523,8 +543,9 @@ class PlaylistEditDisplay extends React.Component {
         }
         else{
             return (
+                <div onKeyDown = {this.keyPressed} tabIndex="0">
                 <NavBarWrapper>
-                    <div className="container" id="playlist-edit-container">
+                    <div className="container" id="playlist-edit-container" >
                         <div className="row" id="row1">
                             <div className="col" id="playlist-cover-container">
                                 {this.getPlaylistImage()}
@@ -700,6 +721,7 @@ class PlaylistEditDisplay extends React.Component {
                     </div>
 
                 </NavBarWrapper>
+                </div>
             );
         }
     }
