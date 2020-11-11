@@ -140,7 +140,7 @@ class PlaylistSettings extends React.Component {
         formData.append('file', file);
 
         const headers = {"Content-Type": "application/json"};
-        fetch('/editPlaylist', {
+        fetch('/editPlaylistSettings', {
 			method: 'POST',
 			body: formData, //body,
 			//headers: headers

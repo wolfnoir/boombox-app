@@ -8,6 +8,7 @@ import Cookie from 'universal-cookie';
 import './css/bootstrap.min.css';
 import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
+import liked_img from './images/favorite-24px.svg';
 import bookmark_img from './images/bookmark-24px.svg';
 import default_playlist_img from './images/default-playlist-cover.png';
 import link_img from './images/link-24px.svg';
@@ -46,6 +47,8 @@ class PlaylistPageDisplay extends React.Component {
             is_song_playing: false,
             imageData: null
         }
+
+        this.likePlaylist = this.likePlaylist.bind(this);
     }
 
     getPlaylistImage() {
@@ -113,6 +116,13 @@ class PlaylistPageDisplay extends React.Component {
         }
     }
 
+    getLikeImage() {
+        if(this.state.data.liked)
+            return liked_img;
+
+        return like_img;
+    }
+
     getPlayButtonImage() {
         if (this.state.is_song_playing) {
             return pause_img;
@@ -129,6 +139,32 @@ class PlaylistPageDisplay extends React.Component {
             //@todo: play the song
             this.setState({is_song_playing: true});
         }
+    }
+
+    likePlaylist() {
+        const body = JSON.stringify({
+            'playlistId': this.props.playlistId,
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/updateLikes', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            if (obj.status == 0) {
+                console.log('Playlist liked!');
+            }
+            else {
+                console.log('Unauthorized');
+            }
+
+            var data = {...this.state.data};
+            data.liked = !data.liked;
+            this.setState({data});
+        });
     }
 
     copyLink(){
@@ -164,7 +200,7 @@ class PlaylistPageDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            <img src={like_img} height="30px" width="30px" />
+                                            <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
                                             <img src={bookmark_img} height="30px" width="30px" />
                                             <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} />
                                             {editButton}
