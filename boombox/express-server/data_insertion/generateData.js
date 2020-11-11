@@ -51,7 +51,7 @@ class DataGenerator {
         const users = await DataGenerator.generateUsers(images);
         const tags = await DataGenerator.generateTags();
         const playlists = await DataGenerator.generatePlaylists(images, users);
-        //await DataGenerator.generateAdditionalData();
+        //await DataGenerator.generateAdditionalData(users, playlists);
         client.close();
         process.exit(0);
     }
@@ -61,20 +61,6 @@ class DataGenerator {
         console.log("upload images")
         const fileData = fs.readFileSync('images.json');
         const images = JSON.parse(fileData);
-
-        /*
-        const client = await MongoClient.connect(mongoUrl, {
-            useNewUrlParser: true,  
-            useUnifiedTopology: true
-        }).catch(err => {
-            console.log(err);
-            process.exit(1);
-        });
-        if (!client) {
-            console.log("Client is null");
-            process.exit(1);
-        }
-        */
 
         const db = this.client.db(mongoDbName);
         const bucket = new MongoClient.GridFSBucket(db);
@@ -179,9 +165,51 @@ class DataGenerator {
         return playlists;
     }
 
-    static async generateAdditionalData() {
-        //add bookmarks, likes, follows, etc.
+    //UNTESTED
+    static async generateAdditionalData(users, playlists) {
+        //add bookmarks, follows, followers, etc.
         console.log("generate additional data");
+
+        const db = this.client.db(mongoDbName);
+        const playlistsCollection = db.collection(mongoPlaylistCollection);
+        const usersCollection = db.collection(mongoUserCollection);
+
+        for (const [user, value] of Object.entries(users)) {
+            //update follows
+            //update followers
+            //update bookmarks
+            const updateDoc = {};
+            const following = [];
+            const followers = [];
+            const bookmarks = [];
+            var i;
+            for (i = 0; i < value.following.length; i++) {
+                const userId = users[value.following[i]] ? users[value.following[i]].objectId : null;
+                if (userId) {
+                    following.push(userId);
+                }
+            }
+            for (i = 0; i < value.followers.length; i++) {
+                const userId = users[value.followers[i]] ? users[value.followers[i]].objectId : null;
+                if (userId) {
+                    followers.push(userId);
+                }
+            }
+            for (i = 0; i < value.bookmarks.length; i++) {
+                const playlistId = playlists[value.bookmarks[i]] ? playlists[value.bookmarks[i]].objectId : null;
+                if (playlistId) {
+                    bookmarks.push(playlistId);
+                }
+            }
+            updateDoc.following = following;
+            updateDoc.followers = followers;
+            updateDoc.bookmarks = bookmarks;
+            await usersCollection.updateOne({username: value.username}, {$set: updateDoc});
+        }
+        
+        //for (const [playlist, value] of Object.entries(playlists)) {}
+
+        return;
     }
 }
 
