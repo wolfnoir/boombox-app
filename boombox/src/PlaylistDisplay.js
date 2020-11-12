@@ -14,7 +14,9 @@ class PlaylistDisplay extends React.Component{
             author: this.props.author,
             likes: this.props.likes,
             key: this.props.key,
-            albumCover: null
+            albumCover: null,
+            id: this.props.id,
+            isPrivate: this.props.isPrivate
         }
     }
 
@@ -39,16 +41,21 @@ class PlaylistDisplay extends React.Component{
         .then(data => {
             this.setState({albumCover: data.imageData});
         });
+        console.log("is private?: " + this.state.isPrivate);
     }
 
     render(){
         const albumCover = this.state.albumCover;
+        var priv = null;
+        if(this.state.isPrivate){
+            priv = <span id = "private-span" className = "private-span">(private)</span>;
+        }
         return(
             <div className = "playlist-display" key={this.state.key}>
                 <a href={this.props.url}><img className = "playlist-cover" src = {this.getImageSrc()}/></a>
                 <a href={this.props.url}><div className = "playlist-title"><EllipsisWithTooltip placement="bottom">{this.state.title}</EllipsisWithTooltip></div></a>
                 <div className = "playlist-info">
-                    by <a href={"/user/" + this.state.author}>{this.state.author}</a><br/>
+                    by <a href={"/user/" + this.state.author}>{this.state.author}</a> {priv}<br/>
                     {this.state.likes.length} likes
                 </div>
             </div>

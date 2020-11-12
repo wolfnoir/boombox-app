@@ -443,15 +443,13 @@ class PlaylistEditDisplay extends React.Component {
         }   
     }
 
-    async addToHistory(songs){
+    addToHistory(songs){
         const history = this.state.history.slice(0, this.state.historyStep + 1);
         const newHistory = history.concat([songs]);
-        await this.setState({
+        this.setState({
             history: newHistory,
             historyStep: newHistory.length - 1
         });
-        console.log(this.state.history);
-        console.log("current history step: " + this.state.historyStep);
     }
 
     toggleAddSong() {
