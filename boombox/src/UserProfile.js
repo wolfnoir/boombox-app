@@ -134,6 +134,8 @@ class UserProfileDisplay extends React.Component {
                                 url={playlist.url}
                                 image_url={playlist.image_url}
                                 key={playlist.key}
+                                id = {playlist._id}
+                                isPrivate = {playlist.isPrivate}
                             />
                         )
                     }
