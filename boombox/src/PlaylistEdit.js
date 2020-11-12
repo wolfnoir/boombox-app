@@ -404,7 +404,6 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     handleAddSong() {
-        //TODO: handle add song
         var urlField = document.getElementById("add-song-url");
         var titleField = document.getElementById("add-song-title");
         var artistField = document.getElementById("add-song-artist");
@@ -678,7 +677,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                 {song.album ? song.album : "N/A"}
                                                             </div>
                                                             <div className="col songs-col3">
-                                                                {/* TODO: get this from youtube data api */}
+                                                                {/* @TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
                                                             <img className="delete-song-button" id = {"delete-song-"+i} src = {delete_img} onClick = {(e) =>  this.handleDeleteSong(e, i)}/>

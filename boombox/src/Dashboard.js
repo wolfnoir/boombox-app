@@ -78,33 +78,37 @@ class Dashboard extends React.Component {
         var listofNewPlaylistDisplays = this.state.newPlaylists.map((playlist, i) => {
             //need to figure out how to load image
             //albumCover={playlist.image} 
-            return (
-                <PlaylistDisplay
-                    albumCover={staticImages1[i]} 
-                    title={playlist.name}
-                    author={playlist.author}
-                    likes={playlist.likes} 
-                    url={playlist.url}
-                    image_url={playlist.image_url}
-                    key={playlist.key}
-                />
-            )
+            if(!playlist.isPrivate){
+                return (
+                    <PlaylistDisplay
+                        albumCover={staticImages1[i]} 
+                        title={playlist.name}
+                        author={playlist.author}
+                        likes={playlist.likes} 
+                        url={playlist.url}
+                        image_url={playlist.image_url}
+                        key={playlist.key}
+                    />
+                )
+            }
         });
 
         var listofRecommendedPlaylistDisplays = this.state.recommendedPlaylists.map((playlist, i) => {
             //need to figure out how to load image
             //albumCover={playlist.image} 
-            return (
-                <PlaylistDisplay
-                    albumCover={staticImages2[i]} 
-                    title={playlist.name}
-                    author={playlist.author}
-                    likes={playlist.likes} 
-                    url={playlist.url}
-                    image_url={playlist.image_url}
-                    key={playlist.key}
-                />
-            )
+            if(!playlist.isPrivate){
+                return (
+                    <PlaylistDisplay
+                        albumCover={staticImages2[i]} 
+                        title={playlist.name}
+                        author={playlist.author}
+                        likes={playlist.likes} 
+                        url={playlist.url}
+                        image_url={playlist.image_url}
+                        key={playlist.key}
+                    />
+                )
+            }
         });
         
         
