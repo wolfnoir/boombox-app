@@ -142,29 +142,35 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     likePlaylist() {
-        const body = JSON.stringify({
-            'playlistId': this.props.playlistId,
-            'username': this.cookie.get('username'),
-        });
-        const headers = {"Content-Type": "application/json"};
-        fetch('/updateLikes', {
-			method: 'POST',
-			body: body,
-			headers: headers
-		}).then(res => res.json())
-        .then(obj => {
-            console.log(obj);
-            if (obj.status == 0) {
-                console.log('Playlist liked!');
-            }
-            else {
-                console.log('Unauthorized');
-            }
-
-            var data = {...this.state.data};
-            data.liked = !data.liked;
-            this.setState({data});
-        });
+        var user = this.cookie.get('username');
+        if (!user){
+            alert("Please log in to like this playlist!");
+        }
+        else {
+            const body = JSON.stringify({
+                'playlistId': this.props.playlistId,
+                'username': this.cookie.get('username'),
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/updateLikes', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status == 0) {
+                    console.log('Playlist liked!');
+                }
+                else {
+                    console.log('Unauthorized');
+                }
+    
+                var data = {...this.state.data};
+                data.liked = !data.liked;
+                this.setState({data});
+            });
+        }
     }
 
     copyLink(){
@@ -177,25 +183,25 @@ class PlaylistPageDisplay extends React.Component {
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
-        console.log(this.cookie.get('username'));
+        //console.log(this.cookie.get('username'));
         //console.log(this.state.data.author);
-        var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
-        if(this.state.data && this.state.data.author !== this.cookie.get('username')){
-            editButton = null;
-        }
 
-        var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
-        var bookmarkButton = <img src={bookmark_img} height="30px" width="30px" />
-        
-        if(!this.cookie.get('username')){
-            likeButton = null;
-            bookmarkButton = null;
-        }
-
-        if(this.state.data == null || (this.state.data.isPrivate && this.state.data.author && this.state.data.author !== this.cookie.get('username'))) {
+        if(this.state.data === null) {
             return <Redirect to="/error" />
         }
         else{
+            var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
+            if(this.state.data && this.state.data.author !== this.cookie.get('username')){
+                editButton = null;
+            }
+
+            var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
+            var bookmarkButton = <img src={bookmark_img} height="30px" width="30px" />
+            
+            if(!this.cookie.get('username')){
+                likeButton = null;
+                bookmarkButton = null;
+            }
             return (
                 <NavBarWrapper>
                     <div className="container" id="playlist-page-container">

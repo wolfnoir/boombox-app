@@ -199,7 +199,7 @@ class UserHandler {
             var updateObject = {}
             /*
             if (newIcon) {
-                //TODO: need to handle image storage
+                //@TODO: need to handle image storage
             }
             */
             if (newUsername) {

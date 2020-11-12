@@ -1,0 +1,50 @@
+{
+    "bob": {
+        "path": "bob.png",
+        "name": "bob.png"
+    },
+    "disco-church": {
+        "path": "disco-church.png",
+        "name": "disco-church.png"
+    },
+    "horse": {
+        "path": "horse.png",
+        "name": "horse.png"
+    },
+    "kermit": {
+        "path": "kermit.png",
+        "name": "kermit.png"
+    },
+    "leafy": {
+        "path": "leafy.jpg",
+        "name": "leafy.jpg"
+    },
+    "mountain": {
+        "path": "mountain.jpg",
+        "name": "mountain.jpg"
+    },
+    "luigi time": {
+        "path": "luigi time.gif",
+        "name": "luigi time.gif"
+    },
+    "noir": {
+        "path": "noir.jpg",
+        "name": "noir.jpg"
+    },
+    "noir2": {
+        "path": "noir2.png",
+        "name": "noir2.png"
+    },
+    "platypus": {
+        "path": "platypus.png",
+        "name": "platypus.png"
+    },
+    "raccoon": {
+        "path": "raccoon.png",
+        "name": "raccoon.png"
+    },
+    "watermelon-wolf": {
+        "path": "watermelon-wolf.jpg",
+        "name": "watermelon-wolf.jpg"
+    }
+}
