@@ -23,13 +23,14 @@ import add_box_img from './images/add_box-24px.svg';
 import remove_circle_img from './images/remove_circle-24px.svg';
 import delete_img from './images/delete-black-24dp.svg';
 import edit_img from './images/edit-24px.svg';
+import SelectSearch from 'react-select-search';
 
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
 /*-----------------------------------------*/
 import horse_img from './images/horse.png';
-import { render } from '@testing-library/react';
+import { render, wait } from '@testing-library/react';
 // import { addSong } from '../express-server/PlaylistHandler';
 /*-----------------------------------------*/
 
@@ -260,6 +261,72 @@ class PlaylistSettings extends React.Component {
                     Delete Playlist
                     </Button>
                 </center>
+                </Modal>
+            </div>
+        );
+    }
+}
+
+class PlaylistTags extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            show: false,
+            tags: null,
+            allTags: null
+        }
+    }
+
+    componentDidMount() {
+        this.fetchTags();
+    }
+
+    componentDidUpdate(prevprops) {
+        if(prevprops != this.props)
+            this.setState({tags: this.props.tags});
+    }
+
+    fetchTags() {
+        fetch('/getTags')
+        .then(res => res.json())
+        .then(data => {
+            if(data.status == 0)
+                this.setState({ allTags: data.result.map( tag => ({ name: tag,value: tag})) });
+        });
+    }
+
+    render() {
+        const handleClose = () => this.setState({show: false});
+        const handleShow = () => this.setState({show: true});
+
+        return(
+            <div>
+                <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" onClick={handleShow}/>
+
+                <Modal show={this.state.show} onHide={handleClose} size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    backdrop="static"
+                    keyboard={false}>
+                    <div className = "tags-modal-header">
+                        tags
+                    </div>
+
+                    <div>
+                        <SelectSearch 
+                            options = {this.state.allTags}
+                            multiple
+                            search
+                            placeholder="Select tags"
+                        />
+                    </div>
+
+                    <center>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Cancel
+                        </Button>
+                    </center>
                 </Modal>
             </div>
         );
@@ -587,7 +654,9 @@ class PlaylistEditDisplay extends React.Component {
                                             </div>
                                             ) 
                                             : null}
-                                        <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" />
+                                        <div id="tags-div">
+                                            <PlaylistTags tags={this.state.data.tags} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

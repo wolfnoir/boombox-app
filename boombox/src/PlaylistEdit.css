@@ -73,6 +73,10 @@
     margin-left: 15px;
 }
 
+#tags-div {
+    display: inline-block;
+}
+
 #playlist-edit-container #icons-div > img {
     margin: 0 2.5px;
 }
