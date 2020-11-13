@@ -46,3 +46,7 @@
     font-size: 18px;
     font-weight: normal;
 }
+
+.private-span {
+    color: lightcoral;
+}

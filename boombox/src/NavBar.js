@@ -18,9 +18,6 @@ import Button from 'react-bootstrap/Button';
 import FormControl from 'react-bootstrap/FormControl';
 
 
-//TODO: add sliding animation
-//reference: https://www.w3schools.com/howto/howto_js_animate.asp
-
 class NavBar extends React.Component {
     constructor(props) {
         super(props);
@@ -98,7 +95,7 @@ class NavBar extends React.Component {
     }
 
     componentDidMount() {
-        {this.closeSettings()}
+        this.closeSettings()
     }
 
     updateInput = (event) => {

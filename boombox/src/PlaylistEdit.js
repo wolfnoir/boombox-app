@@ -23,13 +23,14 @@ import add_box_img from './images/add_box-24px.svg';
 import remove_circle_img from './images/remove_circle-24px.svg';
 import delete_img from './images/delete-black-24dp.svg';
 import edit_img from './images/edit-24px.svg';
+import SelectSearch from 'react-select-search';
 
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
 /*-----------------------------------------*/
 import horse_img from './images/horse.png';
-import { render } from '@testing-library/react';
+import { render, wait } from '@testing-library/react';
 // import { addSong } from '../express-server/PlaylistHandler';
 /*-----------------------------------------*/
 
@@ -212,7 +213,7 @@ class PlaylistSettings extends React.Component {
                 {this.handleRedirect()}
                 <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
 
-                <Modal show={this.state.show} onHide={handleClose} size="lg"
+                <Modal id = "settings-modal" show={this.state.show} onHide={handleClose} size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
                     backdrop="static"
@@ -266,6 +267,97 @@ class PlaylistSettings extends React.Component {
     }
 }
 
+class PlaylistTags extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            show: false,
+            tags: null,
+            allTags: null,
+            selectedTags: []
+        }
+
+        this.addTags = this.addTags.bind(this);
+    }
+
+    componentDidMount() {
+        this.fetchTags();
+    }
+
+    componentDidUpdate(prevprops) {
+        if(prevprops != this.props)
+            this.setState({tags: this.props.tags});
+    }
+
+    fetchTags() {
+        fetch('/getTags')
+        .then(res => res.json())
+        .then(data => {
+            if(data.status == 0)
+                this.setState({ allTags: data.result });
+        });
+    }
+
+    fetchUnusedTags() {
+        const unusedTags = this.state.allTags.filter((element) => !this.state.tags.includes(element));
+        return unusedTags.map( tag => ({ name: tag,value: tag}));
+    }
+
+    changedValues = (event) => {
+        this.setState({selectedTags: event});
+    }
+
+    addTags() {
+        this.props.onSubmit(this.state.selectedTags);
+        this.setState({show: false});
+    }
+
+    render() {
+        const handleClose = () => this.setState({show: false});
+        const handleShow = () => this.setState({show: true});
+
+        return(
+            <div>
+                <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" onClick={handleShow}/>
+
+                <Modal show={this.state.show} onHide={handleClose} size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    backdrop="static"
+                    keyboard={false}>
+                    <div className = "tags-modal-header">
+                        tags
+                    </div>
+
+                    <div><center>
+                        <SelectSearch 
+                            id = "select-tag-search"
+                            options = {this.state.tags && this.state.allTags? this.fetchUnusedTags() : null}
+                            multiple
+                            search
+                            placeholder="Select tags"
+                            printOptions = "on-focus"
+                            onChange={this.changedValues}
+                        />
+                        </center>
+                    </div>
+
+                    <center>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Cancel
+                        </Button>
+
+                        <Button onClick={this.addTags}>
+                            Add Tags
+                        </Button>
+                    </center>
+                </Modal>
+            </div>
+        );
+    }
+}
+
 class PlaylistEditDisplay extends React.Component {
     constructor(props) {
         super(props);
@@ -277,7 +369,6 @@ class PlaylistEditDisplay extends React.Component {
             imageData: null,
             history: [],
             historyStep: 0,
-            allowUndo: true,
         }
     }
 
@@ -404,7 +495,6 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     handleAddSong() {
-        //TODO: handle add song
         var urlField = document.getElementById("add-song-url");
         var titleField = document.getElementById("add-song-title");
         var artistField = document.getElementById("add-song-artist");
@@ -444,22 +534,19 @@ class PlaylistEditDisplay extends React.Component {
         }   
     }
 
-    async addToHistory(songs){
+    addToHistory(songs){
         const history = this.state.history.slice(0, this.state.historyStep + 1);
         const newHistory = history.concat([songs]);
-        await this.setState({
+        this.setState({
             history: newHistory,
             historyStep: newHistory.length - 1
         });
-        console.log(this.state.history);
-        console.log("current history step: " + this.state.historyStep);
     }
 
     toggleAddSong() {
         var addSongForm = document.getElementById("add-song-form");
         var isHidden = addSongForm.hidden;
         addSongForm.hidden = !isHidden;
-        this.setState({ allowUndo: !isHidden });
     }
 
     toggleEditFields(i){
@@ -474,7 +561,6 @@ class PlaylistEditDisplay extends React.Component {
         console.log(editField);
         var isHidden = editField.hidden;
         editField.hidden = !isHidden;
-        this.setState({ allowUndo: !isHidden });
         var currentSong = this.state.data.songs[i];
 
         var urlField = document.getElementById("edit-song-url-"+i);
@@ -491,7 +577,18 @@ class PlaylistEditDisplay extends React.Component {
         noteField.value = currentSong.note;
     }
     
+    handleAddTags = (tags) => {
+        var data = {...this.state.data};
+        data.tags = data.tags.concat(tags);
+        this.setState({data});
+    }
+
     saveChanges() {
+        this.saveSongs();
+        this.saveTags();
+    }
+
+    saveSongs(){
         const body = JSON.stringify({
             'playlistId': this.props.playlistId,
             'songs': this.state.data.songs,
@@ -515,6 +612,41 @@ class PlaylistEditDisplay extends React.Component {
             else {
                 alert('somehow it broke');
             }
+        });
+    }
+
+    saveTags() {
+        const body = JSON.stringify({
+            'playlistId': this.props.playlistId,
+            'tags': this.state.data.tags,
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/updateTags', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status == 0) {
+                console.log('Playlist saved!');
+            }
+            else if (obj.status == 1) {
+                console.log('You are not authorized to edit this playlist!');
+            }
+            else {
+                console.log('somehow it broke');
+            }
+        });
+    }
+
+    deleteTag = (tag) => {
+        var data = {...this.state.data};
+        data.tags = data.tags.filter((element) => element != tag);
+        this.setState({data}, () => {
+            console.log(this.state.data.tags);
         });
     }
 
@@ -549,7 +681,7 @@ class PlaylistEditDisplay extends React.Component {
 
     handleUndo(){
         var step = this.state.historyStep;
-        if(step === 0 || !this.state.allowUndo){
+        if(step === 0 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT' || document.activeElement.nodeName == 'MODAL'){
             return;
         }
         else {
@@ -567,7 +699,7 @@ class PlaylistEditDisplay extends React.Component {
 
     handleRedo(){
         var step = this.state.historyStep;
-        if(step === this.state.history.length - 1 || !this.state.allowUndo){
+        if(step === this.state.history.length - 1 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT' || !this.state.allowUndo){
             return;
         }
         else {
@@ -633,11 +765,13 @@ class PlaylistEditDisplay extends React.Component {
                                             this.state.data.tags.map((tag, i) => 
                                             <div key={"tagDiv" + i} style={{"display": "inline-block"}}>
                                                 <Tag number = {i} content = {tag}/>
-                                                <img className="remove-tag-icon" src={remove_circle_img} />
+                                                <img className="remove-tag-icon" src={remove_circle_img} onClick={() => this.deleteTag(tag)}/>
                                             </div>
                                             ) 
                                             : null}
-                                        <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" />
+                                        <div id="tags-div">
+                                            <PlaylistTags tags={this.state.data.tags} onSubmit={this.handleAddTags} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -678,7 +812,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                 {song.album ? song.album : "N/A"}
                                                             </div>
                                                             <div className="col songs-col3">
-                                                                {/* TODO: get this from youtube data api */}
+                                                                {/* @TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
                                                             </div>
                                                             <img className="delete-song-button" id = {"delete-song-"+i} src = {delete_img} onClick = {(e) =>  this.handleDeleteSong(e, i)}/>
