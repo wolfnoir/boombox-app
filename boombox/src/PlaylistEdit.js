@@ -639,6 +639,14 @@ class PlaylistEditDisplay extends React.Component {
         });
     }
 
+    deleteTag = (tag) => {
+        var data = {...this.state.data};
+        data.tags = data.tags.filter((element) => element != tag);
+        this.setState({data}, () => {
+            console.log(this.state.data.tags);
+        });
+    }
+
     handleSettingsChange = (name, desc, privacy, imageData) => {
         console.log(name, desc);
         console.log(imageData);
@@ -754,7 +762,7 @@ class PlaylistEditDisplay extends React.Component {
                                             this.state.data.tags.map((tag, i) => 
                                             <div key={"tagDiv" + i} style={{"display": "inline-block"}}>
                                                 <Tag number = {i} content = {tag}/>
-                                                <img className="remove-tag-icon" src={remove_circle_img} />
+                                                <img className="remove-tag-icon" src={remove_circle_img} onClick={() => this.deleteTag(tag)}/>
                                             </div>
                                             ) 
                                             : null}
