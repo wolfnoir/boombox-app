@@ -330,14 +330,17 @@ class PlaylistTags extends React.Component {
                         tags
                     </div>
 
-                    <div>
+                    <div><center>
                         <SelectSearch 
+                            id = "select-tag-search"
                             options = {this.state.tags && this.state.allTags? this.fetchUnusedTags() : null}
                             multiple
                             search
                             placeholder="Select tags"
+                            printOptions = "on-focus"
                             onChange={this.changedValues}
                         />
+                        </center>
                     </div>
 
                     <center>
