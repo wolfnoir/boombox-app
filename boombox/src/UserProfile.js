@@ -88,7 +88,7 @@ class UserProfileDisplay extends React.Component {
     }
 
     getProfileImageData = () => {
-        const username = this.cookie.get('username');
+        const username = this.props.username;
         const body = JSON.stringify({username: username});
         const headers = {"Content-Type": "application/json"};
         fetch('/getUserIcon', {
@@ -98,6 +98,7 @@ class UserProfileDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
+            console.log(data);
             this.setState({profile_image_data: data.iconData});
         });
     }
