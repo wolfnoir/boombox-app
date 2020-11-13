@@ -212,7 +212,7 @@ class PlaylistSettings extends React.Component {
                 {this.handleRedirect()}
                 <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
 
-                <Modal show={this.state.show} onHide={handleClose} size="lg"
+                <Modal id = "settings-modal" show={this.state.show} onHide={handleClose} size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
                     backdrop="static"
@@ -277,7 +277,6 @@ class PlaylistEditDisplay extends React.Component {
             imageData: null,
             history: [],
             historyStep: 0,
-            allowUndo: true,
         }
     }
 
@@ -456,7 +455,6 @@ class PlaylistEditDisplay extends React.Component {
         var addSongForm = document.getElementById("add-song-form");
         var isHidden = addSongForm.hidden;
         addSongForm.hidden = !isHidden;
-        this.setState({ allowUndo: !isHidden });
     }
 
     toggleEditFields(i){
@@ -471,7 +469,6 @@ class PlaylistEditDisplay extends React.Component {
         console.log(editField);
         var isHidden = editField.hidden;
         editField.hidden = !isHidden;
-        this.setState({ allowUndo: !isHidden });
         var currentSong = this.state.data.songs[i];
 
         var urlField = document.getElementById("edit-song-url-"+i);
@@ -546,7 +543,7 @@ class PlaylistEditDisplay extends React.Component {
 
     handleUndo(){
         var step = this.state.historyStep;
-        if(step === 0 || !this.state.allowUndo){
+        if(step === 0 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT' || document.activeElement.nodeName == 'MODAL'){
             return;
         }
         else {
@@ -564,7 +561,7 @@ class PlaylistEditDisplay extends React.Component {
 
     handleRedo(){
         var step = this.state.historyStep;
-        if(step === this.state.history.length - 1 || !this.state.allowUndo){
+        if(step === this.state.history.length - 1 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT' || !this.state.allowUndo){
             return;
         }
         else {
