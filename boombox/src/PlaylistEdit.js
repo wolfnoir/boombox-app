@@ -699,7 +699,7 @@ class PlaylistEditDisplay extends React.Component {
 
     handleRedo(){
         var step = this.state.historyStep;
-        if(step === this.state.history.length - 1 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT' || !this.state.allowUndo){
+        if(step === this.state.history.length - 1 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT'){
             return;
         }
         else {
