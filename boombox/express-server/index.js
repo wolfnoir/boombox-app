@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const UserHandler = require('./UserHandler.js');
+const TagHandler = require("./TagHandler");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
@@ -94,6 +95,8 @@ app.post("/deleteSong", PlaylistHandler.deleteSong);
 
 app.post("/updateSongs", PlaylistHandler.updateSongsRoute);
 
+app.post("/updateTags", PlaylistHandler.updateTagsRoute);
+
 app.post("/addPlaylistTag", (req, res) => {});
 
 app.post("/deletePlaylistTag", (req, res) => {});
@@ -101,6 +104,8 @@ app.post("/deletePlaylistTag", (req, res) => {});
 app.post("/getImage", PlaylistHandler.getImage);
 
 app.post("/getNewPlaylists", UserHandler.getNewPlaylistsRoute);
+
+app.all("/getTags", TagHandler.getTagsRoute);
 
 /*
 app.all("/getNewPlaylists", (req, res) => {
