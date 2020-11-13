@@ -663,6 +663,58 @@ class PlaylistHandler {
         res.send(statusObject);
     }
 
+    static async updateTags(user_id, playlistId, tags) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            var stringUserId = user_id.toString();
+            var stringPlaylistUserId = foundPlaylist.user_id.toString();
+            if (stringUserId !== stringPlaylistUserId) { //if we want to admin debug, add an AND != for admin account
+                console.log("not authorized");
+                return {status: 1};
+            }
+            await collection.updateOne({"_id": idObject}, {$set: {tags: tags}}); //add status checking for update?
+            return {status: 0};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+     }
+
+    static async updateTagsRoute(req, res) {
+        const username = req.body.username;
+        const playlistId = req.body.playlistId;
+        const tags = req.body.tags;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
+        const statusObject = await PlaylistHandler.updateTags(user_id, playlistId, tags);
+
+        res.send(statusObject);
+    }
+
     /*
      * Other
      */

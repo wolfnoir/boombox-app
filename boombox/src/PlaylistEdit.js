@@ -274,8 +274,11 @@ class PlaylistTags extends React.Component {
         this.state = {
             show: false,
             tags: null,
-            allTags: null
+            allTags: null,
+            selectedTags: []
         }
+
+        this.addTags = this.addTags.bind(this);
     }
 
     componentDidMount() {
@@ -292,8 +295,22 @@ class PlaylistTags extends React.Component {
         .then(res => res.json())
         .then(data => {
             if(data.status == 0)
-                this.setState({ allTags: data.result.map( tag => ({ name: tag,value: tag})) });
+                this.setState({ allTags: data.result });
         });
+    }
+
+    fetchUnusedTags() {
+        const unusedTags = this.state.allTags.filter((element) => !this.state.tags.includes(element));
+        return unusedTags.map( tag => ({ name: tag,value: tag}));
+    }
+
+    changedValues = (event) => {
+        this.setState({selectedTags: event});
+    }
+
+    addTags() {
+        this.props.onSubmit(this.state.selectedTags);
+        this.setState({show: false});
     }
 
     render() {
@@ -315,16 +332,21 @@ class PlaylistTags extends React.Component {
 
                     <div>
                         <SelectSearch 
-                            options = {this.state.allTags}
+                            options = {this.state.tags && this.state.allTags? this.fetchUnusedTags() : null}
                             multiple
                             search
                             placeholder="Select tags"
+                            onChange={this.changedValues}
                         />
                     </div>
 
                     <center>
                         <Button variant="secondary" onClick={handleClose}>
                             Cancel
+                        </Button>
+
+                        <Button onClick={this.addTags}>
+                            Add Tags
                         </Button>
                     </center>
                 </Modal>
@@ -557,7 +579,18 @@ class PlaylistEditDisplay extends React.Component {
         noteField.value = currentSong.note;
     }
     
+    handleAddTags = (tags) => {
+        var data = {...this.state.data};
+        data.tags = data.tags.concat(tags);
+        this.setState({data});
+    }
+
     saveChanges() {
+        this.saveSongs();
+        this.saveTags();
+    }
+
+    saveSongs(){
         const body = JSON.stringify({
             'playlistId': this.props.playlistId,
             'songs': this.state.data.songs,
@@ -580,6 +613,33 @@ class PlaylistEditDisplay extends React.Component {
             }
             else {
                 alert('somehow it broke');
+            }
+        });
+    }
+
+    saveTags() {
+        const body = JSON.stringify({
+            'playlistId': this.props.playlistId,
+            'tags': this.state.data.tags,
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch('/updateTags', {
+			method: 'POST',
+			body: body,
+			headers: headers
+		}).then(res => res.json())
+        .then(obj => {
+            console.log(obj);
+            //need to make response better
+            if (obj.status == 0) {
+                console.log('Playlist saved!');
+            }
+            else if (obj.status == 1) {
+                console.log('You are not authorized to edit this playlist!');
+            }
+            else {
+                console.log('somehow it broke');
             }
         });
     }
@@ -704,7 +764,7 @@ class PlaylistEditDisplay extends React.Component {
                                             ) 
                                             : null}
                                         <div id="tags-div">
-                                            <PlaylistTags tags={this.state.data.tags} />
+                                            <PlaylistTags tags={this.state.data.tags} onSubmit={this.handleAddTags} />
                                         </div>
                                     </div>
                                 </div>
