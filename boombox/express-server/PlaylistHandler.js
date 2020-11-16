@@ -272,11 +272,10 @@ class PlaylistHandler {
             console.log(err);
             return {status: -1};
         }
-        /*
+        
         finally {
             client.close();
         }
-        */
         console.log("Success");
         return {status: 0};
     }
@@ -443,6 +442,9 @@ class PlaylistHandler {
         catch (err) {
             console.log(err);
             return {status: -1};
+        }
+        finally {
+            client.close();
         }
     }
 
@@ -769,6 +771,9 @@ class PlaylistHandler {
         catch (err) {
             console.log(err);
             res.send({status: -1});
+        }
+        finally {
+            client.close();
         }
     }
 }
