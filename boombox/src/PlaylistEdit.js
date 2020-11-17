@@ -100,10 +100,19 @@ class PlaylistSettings extends React.Component {
     }
 
     handleImageUpload = () => {
+        const imageExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
         const input = document.getElementById("file-input");
         console.log("hi");
         if (input.files && input.files[0]) {
-            console.log(input.files);
+            console.log(input.files[0]);
+            if (!imageExts.includes(input.files[0].type)) {
+                alert("not an image");
+                return;
+            }
+            if (input.files[0].size > 500000) {
+                alert("file too big");
+                return;
+            }
             const reader = new FileReader();
             reader.onload = (e) => {
                 this.setState({imageSrc: e.target.result});
