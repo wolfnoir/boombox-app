@@ -350,7 +350,7 @@ class PlaylistHandler {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const idObject = MongoClient.ObjectID(playlist_id);
             const playlistQuery = { "_id" : idObject };
-            const playlistObject = await collection.findOne(playlistQuery);
+            var playlistObject = await collection.findOne(playlistQuery);
             if (!playlistObject) {
                 console.log("playlist not found");
                 return {status: 1};
