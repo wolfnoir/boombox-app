@@ -168,6 +168,13 @@ class PlaylistPageDisplay extends React.Component {
     
                 var data = {...this.state.data};
                 data.liked = !data.liked;
+
+                if(data.liked)
+                    data.likes.push(user);
+                
+                else
+                    data.likes.pop();
+
                 this.setState({data});
             });
         }
@@ -228,7 +235,7 @@ class PlaylistPageDisplay extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        {this.state.data.likes ? this.state.data.likes.length : 0} Likes
+                                        {this.state.data.likes ? (this.state.data.likes.length ) + " " + (this.state.data.likes.length == 1? "Like" : "Likes") : "0 Likes"}
                                     </div>
                                 </div>
                                 <div className="row">
