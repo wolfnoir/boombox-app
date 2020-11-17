@@ -162,9 +162,7 @@ class PlaylistSettings extends React.Component {
                 console.log('somehow it broke');
             }
 
-            const imageSrcCropped = this.state.imageSrc? this.state.imageSrc.replace('data:image/jpeg;base64,', '') : null;
-
-            this.props.onSave(this.state.name, this.state.desc, this.state.private, imageSrcCropped);
+            this.props.onSave(this.state.name, this.state.desc, this.state.private, this.state.imageSrc);
             this.setState({show: false});
         });
     }
@@ -375,7 +373,7 @@ class PlaylistEditDisplay extends React.Component {
     getPlaylistImage() {
         if (this.state.imageData) {
             return (
-                <img src={`data:image/jpeg;base64,${this.state.imageData}`} id="playlist-cover" width="250px" height="250px"/>
+                <img src={this.state.imageData} id="playlist-cover" width="250px" height="250px"/>
             )
         }
         return (
@@ -413,7 +411,9 @@ class PlaylistEditDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            this.setState({imageData: data.imageData});
+            if (data.imageData) {
+                this.setState({imageData: `data:image/jpeg;base64,${data.imageData}`});
+            }
         });
     }
 
@@ -659,6 +659,7 @@ class PlaylistEditDisplay extends React.Component {
         data.isPrivate = privacy;
         this.setState({data});
         if (imageData) {
+            console.log("update imagedata");
             this.setState({imageData: imageData});
         }
     }
