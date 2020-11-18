@@ -1000,10 +1000,76 @@ class UserHandler {
             res.send({status: 1});
             return;
         }
-        const profileUserIdResponse = await PlaylistHandler.getUserId(profileUser);
-        const currentUserIdResponse = await PlaylistHandler.getUserId(currentUser);
-        const statusObject = await UserHandler.updateFollowers(profileUserIdResponse, currentUserIdResponse);
+        const profileUserIdResponse = await UserHandler.getUserId(profileUser);
+        const profileUserId = new MongoClient.ObjectID(profileUserIdResponse.result);
+        const currentUserIdResponse = await UserHandler.getUserId(currentUser);
+        const currentUserId = new MongoClient.ObjectID(currentUserIdResponse.result);
+
+        const statusObject = await UserHandler.updateFollowers(profileUserId, currentUserId);
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    static async checkIfFollowing(profileUser, currentUserId){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+
+            //const currentUserIdObject = MongoClient.ObjectID(currentUserId);
+
+            const profileUserObject = await collection.findOne({ "username": profileUser });
+
+            if (!profileUserObject) {
+                console.log("user(s) not found");
+                return {status: 1};
+            }
+
+            var followers = profileUserObject.followers;
+            
+            if(followers.filter( id => id.equals(currentUserId)).length > 0)
+                return {
+                    status: 0 //user is following
+                }
+
+            else
+                return {
+                    status: 1 //user does not follow
+                }
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async checkIfFollowingRoute(req, res){
+        const profileUser = req.body.profileUser;
+        const currentUser = req.body.currentUser;
+        
+        if (!currentUser) {
+            res.send({status: 1});
+            return;
+        }
+
+        const currentUserIdResponse = await UserHandler.getUserId(currentUser);
+        const user_id = new MongoClient.ObjectID(currentUserIdResponse.result);
+
+        const statusObject = await UserHandler.checkIfFollowing(profileUser, user_id);
+        res.send(statusObject);
     }
 
     /*------------------------*/
@@ -1124,7 +1190,7 @@ class UserHandler {
         }
 
         try {
-            const collection = client.db(monogDbName).collection(mongoUserCollection);
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const user = await collection.findOne({"username": username});
             if (!user){
                 console.log("user not found");

@@ -83,6 +83,8 @@ app.all("/getUserPlaylists/:username", UserHandler.getUserPlaylistsRoute);
 
 app.post("/updateFollowers", UserHandler.updateFollowersRoute);
 
+app.post("/checkIfFollowing", UserHandler.checkIfFollowingRoute);
+
 app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
 app.post("/deletePlaylist", PlaylistHandler.deletePlaylistRoute);
