@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useParams } from 'react-router';
 import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
+import YoutubeVideo from './YoutubeVideo';
 import Tag from './Tag';
 import Cookie from 'universal-cookie';
 
@@ -49,6 +50,7 @@ class PlaylistPageDisplay extends React.Component {
         }
 
         this.likePlaylist = this.likePlaylist.bind(this);
+        this.videoRef = React.createRef();
     }
 
     getPlaylistImage() {
@@ -132,11 +134,11 @@ class PlaylistPageDisplay extends React.Component {
 
     handlePlayButton = () => {
         if (this.state.is_song_playing) {
-            //@todo: pause the song
+            this.videoRef.current.getPlayer().pauseVideo();
             this.setState({is_song_playing: false});
         }
         else {
-            //@todo: play the song
+            this.videoRef.current.getPlayer().playVideo();
             this.setState({is_song_playing: true});
         }
     }
@@ -380,6 +382,9 @@ class PlaylistPageDisplay extends React.Component {
                                             }
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col">
+                                    <YoutubeVideo id="fWNaR-rxAic" ref={this.videoRef} />
                                 </div>
                             </div>
                         </div>
