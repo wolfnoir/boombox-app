@@ -839,7 +839,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>Note</Form.Label>
-                                                                            <Form.Control as="textarea" id = {"edit-song-note-"+i} className = "edit-song-textarea" ></Form.Control>
+                                                                            <Form.Control as="textarea" id = {"edit-song-note-"+i} className = "edit-song-textarea" maxLength = "250" ></Form.Control>
                                                                         </Form.Group>
                                                                     </Col>
                                                                 </Row>
