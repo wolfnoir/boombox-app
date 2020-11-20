@@ -301,6 +301,8 @@ class PlaylistPageDisplay extends React.Component {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
 
+        const currentLikes = this.state.data.likes ? this.state.data.likes.length + this.state.data.liked : null;
+
         if(this.state.data === null) {
             return <Redirect to="/error" />
         }
@@ -343,7 +345,7 @@ class PlaylistPageDisplay extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        {this.state.data.likes ? this.state.data.likes.length : 0} Likes
+                                        {currentLikes == 1? "1 Like" : currentLikes + " Likes"}
                                     </div>
                                 </div>
                                 <div className="row">

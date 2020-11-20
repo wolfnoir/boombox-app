@@ -217,7 +217,6 @@ class PlaylistHandler {
             }
 
             //TEMPORARILY USING TEMP VARS FOR THIS
-            const tempEnabled = foundPlaylist.com_enabled;
             const tempComments = foundPlaylist.comments;
             const tempImage = foundPlaylist.image_url;
             const tempLikes = foundPlaylist.likes;
@@ -227,7 +226,7 @@ class PlaylistHandler {
 
             //@todo: TEMPORARILY ONLY UPDATING NAME AND DESCRIPTION
             const updateDoc = {
-                com_enabled: tempEnabled,
+                com_enabled: com_enabled,
                 comments: tempComments,
                 description: description,
                 image_url: tempImage, //need to do this separately for image upload
@@ -298,10 +297,10 @@ class PlaylistHandler {
         console.log(fields);
 
         const playlist_id = fields.playlistId[0];
-        const com_enabled = fields.com_enabled[0];
         const description = fields.description[0];
         const name = fields.name[0];
         const isPrivate = fields.isPrivate[0] === "true";
+        const com_enabled = fields.com_enabled[0] === "true";
 
         var filename;
         var filepath;
@@ -349,7 +348,7 @@ class PlaylistHandler {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const idObject = MongoClient.ObjectID(playlist_id);
             const playlistQuery = { "_id" : idObject };
-            const playlistObject = await collection.findOne(playlistQuery);
+            var playlistObject = await collection.findOne(playlistQuery);
             if (!playlistObject) {
                 console.log("playlist not found");
                 return {status: 1};
