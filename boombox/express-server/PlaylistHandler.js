@@ -837,8 +837,53 @@ class PlaylistHandler {
         res.send(statusObject);
     }
 
-    static async deleteCommentRoute(req, res){
+    static async deleteComment(index, playlistId){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
 
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            
+            //delete comment from playlist
+            var commentArray = foundPlaylist.comments;
+            commentArray.splice(index, 1)
+            await collection.updateOne({"_id": idObject}, {$set: {comments: commentArray}}); //add status checking for update?
+
+            return  {status: 0 };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+    }
+
+    static async deleteCommentRoute(req, res){
+        const playlist_id = req.body.playlistId;
+        const index = req.body.index;
+
+        const statusObject = await PlaylistHandler.deleteComment(index, playlist_id);
+
+        res.send(statusObject);
     }
 }
 
