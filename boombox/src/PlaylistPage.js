@@ -237,8 +237,8 @@ class PlaylistPageDisplay extends React.Component {
 
     deleteComment = (i) => {
         var user = this.cookie.get('username');
-        if (!user){
-            alert("Please log in to delete this comment!");
+        if (!user || user !== this.state.data.author){
+            alert("You are not authorized to delete this comment!");
         }
         else {
             const body = JSON.stringify({
@@ -448,7 +448,7 @@ class PlaylistPageDisplay extends React.Component {
                                                     <div className="col">
                                                         <div className="row">
                                                             <div className="col comment-user-col">
-                                                            <a href={"/user/" + this.state.commentUsername[i]}>{this.state.commentUsername[i]}</a>
+                                                            <a href={"/user/" + this.getUsername(comment.user_id)}>{this.getUsername(comment.user_id)}</a>
                                                             </div>
                                                             <div className="col comment-time-col">
                                                                 {new Date(comment.date).toDateString() + " " + new Date(comment.date).toLocaleTimeString()}
