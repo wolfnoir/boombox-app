@@ -232,8 +232,38 @@ class PlaylistPageDisplay extends React.Component {
 
     deleteComment = (i) => {
         var user = this.cookie.get('username');
-        if (!user || user !== this.state.data.author){
-            alert("You are not authorized to delete this comment!");
+        if (!user){
+            alert("Please log in to delete this comment!");
+        }
+        else if (user !== this.state.data.author) {
+            if(user !== this.state.data.comments[i].username){
+                alert("You are not authorized to delete this comment!");
+            }
+            else {
+                const body = JSON.stringify({
+                    'playlistId': this.props.playlistId,
+                    'index': i
+                });
+                const headers = {"Content-Type": "application/json"};
+                fetch('/deleteComment', {
+                    method: 'POST',
+                    body: body,
+                    headers: headers
+                }).then(res => res.json())
+                .then(obj => {
+                    console.log(obj);
+                    if (obj.status === 0) {
+                        console.log('Deleted comment');
+                        //update state here
+                        var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
+                        dataCopy.comments.splice(i, 1);
+                        this.setState({data: dataCopy});
+                    }
+                    else {
+                        console.log('Unauthorized');
+                    }
+                });
+            }
         }
         else {
             const body = JSON.stringify({
@@ -425,7 +455,7 @@ class PlaylistPageDisplay extends React.Component {
                                                                 {new Date(comment.date).toDateString() + " " + new Date(comment.date).toLocaleTimeString()}
                                                                 {
                                                                     //this.state.commentUsername[i] === this.cookie.get('username') || //(checking if the user comment is the same as logged in user)
-                                                                    this.state.data.author === this.cookie.get('username') ?
+                                                                    comment.username === this.cookie.get('username') || this.state.data.author === this.cookie.get('username') ?
                                                                     <img className = "delete-comment-button" src={delete_img} width = "20px" height = "20px" onClick = {() => this.deleteComment(i)}></img>
                                                                     : null
                                                                 }
