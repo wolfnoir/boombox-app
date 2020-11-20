@@ -49,6 +49,7 @@ class PlaylistSettings extends React.Component {
             name: this.props.playlistName,
             desc: this.props.playlistDesc,
             private: this.props.privacy,
+            com_enabled: this.props.com_enabled,
             playlistId: this.props.playlistId,
             userId: this.props.userId,
             redirect: false,
@@ -78,6 +79,7 @@ class PlaylistSettings extends React.Component {
     componentDidUpdate(prevprops) {
         if(prevprops != this.props) {
                 this.setState({
+                    com_enabled: this.props.com_enabled,
                     name: this.props.playlistName,
                     desc: this.props.playlistDesc,
                     private: this.props.privacy,
@@ -97,6 +99,10 @@ class PlaylistSettings extends React.Component {
 
     updatePlaylistPrivacy = (event) => {
         this.setState({private: !this.state.private});
+    }
+
+    updateCommentsEnabled = (event) => {
+        this.setState({com_enabled: !this.state.com_enabled});
     }
 
     handleImageUpload = () => {
@@ -146,7 +152,7 @@ class PlaylistSettings extends React.Component {
         formData.append('description', this.state.desc);
         formData.append('name', this.state.name);
         formData.append('userId', this.state.userId);
-        formData.append('com_enabled', null);
+        formData.append('com_enabled', this.state.com_enabled);
         formData.append('isPrivate', this.state.private);
         formData.append('file', file);
 
@@ -171,7 +177,7 @@ class PlaylistSettings extends React.Component {
                 console.log('somehow it broke');
             }
 
-            this.props.onSave(this.state.name, this.state.desc, this.state.private, this.state.imageSrc);
+            this.props.onSave(this.state.name, this.state.desc, this.state.private, this.state.com_enabled, this.state.imageSrc);
             this.setState({show: false});
         });
     }
@@ -243,7 +249,7 @@ class PlaylistSettings extends React.Component {
 
                     <Form.Group style = {{display: 'inline-block', verticalAlign: 'middle'}} className = "settings-modal-checkboxes">
                         <Form.Check label = "Public Playlist" className = "settings-checkbox" checked = {!this.state.private} onChange = {this.updatePlaylistPrivacy} />
-                        <Form.Check label = "Enable Comments" className = "settings-checkbox"/>
+                        <Form.Check label = "Comments Enabled" className = "settings-checkbox" checked = {this.state.com_enabled} onChange = {this.updateCommentsEnabled}/>
                     </Form.Group>
 
                     <Form.Group>
@@ -659,13 +665,12 @@ class PlaylistEditDisplay extends React.Component {
         });
     }
 
-    handleSettingsChange = (name, desc, privacy, imageData) => {
-        console.log(name, desc);
-        console.log(imageData);
+    handleSettingsChange = (name, desc, privacy, commentsEnabled, imageData) => {
         var data = {...this.state.data};
         data.name = name;
         data.description = desc;
         data.isPrivate = privacy;
+        data.com_enabled = commentsEnabled;
         this.setState({data});
         if (imageData) {
             console.log("update imagedata");
@@ -759,7 +764,7 @@ class PlaylistEditDisplay extends React.Component {
                                     <div className="col">
                                         <h1>{this.state.data.name}</h1>
                                         <div id="icons-div">
-                                            <PlaylistSettings onSave = {this.handleSettingsChange} playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} privacy = {this.state.data.isPrivate} playlistId = {this.props.playlistId}/>
+                                            <PlaylistSettings onSave = {this.handleSettingsChange} playlistName = {this.state.data.name} playlistDesc = {this.state.data.description} privacy = {this.state.data.isPrivate} playlistId = {this.props.playlistId} com_enabled = {this.state.data.com_enabled}/>
                                         </div>
                                     </div>
                                 </div>
