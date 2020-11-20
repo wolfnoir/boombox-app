@@ -147,6 +147,9 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     handlePlayButton = () => {
+        if (!this.videoRef.current.getIsVideoReady()) {
+            return;
+        }
         if (this.state.is_song_playing) {
             this.videoRef.current.pauseVideo();
             this.setState({is_song_playing: false});

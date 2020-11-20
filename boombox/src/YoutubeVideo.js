@@ -23,6 +23,7 @@ class YouTubeVideo extends React.PureComponent {
     loadVideoWithId = (videoId) => {
         console.log(videoId);
         if (videoId) {
+            this.isVideoReady = false;
             var youtubePlayer = document.getElementById("youtube-player");
             if (youtubePlayer) {
                 console.log(youtubePlayer.tagName);
@@ -37,7 +38,7 @@ class YouTubeVideo extends React.PureComponent {
                 height: '45',
                 width: '80',
                 events: {
-                    //onReady: this.onPlayerReady,
+                    onReady: this.onPlayerReady,
                 },
                 playerVars: {controls: 0}
             });
@@ -53,19 +54,24 @@ class YouTubeVideo extends React.PureComponent {
     }
 
     onPlayerReady = (event) => {
-        event.target.playVideo();
+        //event.target.playVideo();
+        this.isVideoReady = true;
     };
 
     playVideo = () => {
-        if (this.player) {
+        if (this.player && this.isVideoReady) {
             this.player.playVideo();
         }
     }
 
     pauseVideo = () => {
-        if (this.player) {
+        if (this.player && this.isVideoReady) {
             this.player.pauseVideo();
         }
+    }
+
+    getIsVideoReady() {
+        return this.isVideoReady;
     }
 
     render() {
