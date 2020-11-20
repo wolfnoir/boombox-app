@@ -187,7 +187,7 @@ class PlaylistHandler {
      */
     
     //static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
-    static async editPlaylistSettings(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath) {
+    static async editPlaylistSettings(playlist_id, com_enabled, description, name, isPrivate, filename, filepath) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -282,11 +282,11 @@ class PlaylistHandler {
     static async editPlaylistSettingsRoute(req, res) {
         console.log("hi");
         
-        const user_id = req.session.user_id;
-        if (!user_id) {
-            res.send({statusCode: 1});
-            return;
-        }
+        // const user_id = req.session.user_id;
+        // if (!user_id) {
+        //     res.send({statusCode: 1});
+        //     return;
+        // }
 
         const form = new multiparty.Form();
         const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
@@ -320,7 +320,7 @@ class PlaylistHandler {
             }
         }
 
-        const success = await PlaylistHandler.editPlaylistSettings(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath);
+        const success = await PlaylistHandler.editPlaylistSettings(playlist_id, com_enabled, description, name, isPrivate, filename, filepath);
 
 
         res.send(success); //-1: an error occurred, 0: success, 1: not logged in
