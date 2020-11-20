@@ -192,7 +192,7 @@ class PlaylistPageDisplay extends React.Component {
             alert("Please log in to comment!");
         }
         else if (comment === "" || comment === null) {
-            alert("Please write something in the textbox!");
+            alert("Please write something");
         }
         else {
             const body = JSON.stringify({
@@ -267,30 +267,6 @@ class PlaylistPageDisplay extends React.Component {
         var textbox = document.getElementById("comment-entry");
         var length = textbox.value.length;
         this.setState({charCount: length});
-    }
-
-    getUsername(user_id){
-        console.log("username attempted fetch: " + user_id);
-        const body = JSON.stringify({
-            'id': user_id
-        });
-        const headers = {"Content-Type": "application/json"};
-        fetch('/getUsername', {
-            method: 'POST',
-            body: body,
-            headers: headers
-        })
-        .then(res => res.json())
-        .then(obj => {
-            if (obj.status === 0) {
-                console.log(obj.username);
-                var username = obj.username
-                return username;
-            }
-            else {
-                return null;
-            }
-        });
     }
 
     render() {
@@ -444,7 +420,7 @@ class PlaylistPageDisplay extends React.Component {
                                                     <div className="col">
                                                         <div className="row">
                                                             <div className="col comment-user-col">
-                                                            <a href={"/user/" + this.getUsername(comment.user_id)}>{this.getUsername(comment.user_id)}</a>
+                                                            <a href={"/user/" + comment.username}>{comment.username}</a>
                                                             </div>
                                                             <div className="col comment-time-col">
                                                                 {new Date(comment.date).toDateString() + " " + new Date(comment.date).toLocaleTimeString()}
