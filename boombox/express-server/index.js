@@ -85,6 +85,8 @@ app.post("/updateFollowers", UserHandler.updateFollowersRoute);
 
 app.post("/checkIfFollowing", UserHandler.checkIfFollowingRoute);
 
+app.post("/getUsername", UserHandler.getUsernameRoute);
+
 app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
 app.post("/deletePlaylist", PlaylistHandler.deletePlaylistRoute);
@@ -92,6 +94,10 @@ app.post("/deletePlaylist", PlaylistHandler.deletePlaylistRoute);
 app.post("/editPlaylistSettings", PlaylistHandler.editPlaylistSettingsRoute);
 
 app.post("/updateLikes", PlaylistHandler.updateLikesRoute);
+
+app.post("/addComment", PlaylistHandler.addCommentRoute);
+
+app.post("/deleteComment", PlaylistHandler.deleteCommentRoute);
 
 app.post("/addSong", PlaylistHandler.addSong);
 

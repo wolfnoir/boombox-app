@@ -776,6 +776,70 @@ class PlaylistHandler {
             client.close();
         }
     }
+
+    static async addComment(playlistId, user_id, content, date){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            
+            //add comment to playlist
+            const commentArray = foundPlaylist.comments;
+            commentArray.push({
+                user_id: user_id,
+                content: content,
+                date: date,
+            });
+            await collection.updateOne({"_id": idObject}, {$set: {comments: commentArray}}); //add status checking for update?
+
+            return {
+                status: 0,
+                user_id: user_id
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+    }
+
+    static async addCommentRoute(req, res){
+        const playlist_id = req.body.playlistId;
+        const username = req.body.username;
+        const content = req.body.content;
+        const date = req.body.date;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
+
+        const statusObject = await PlaylistHandler.addComment(playlist_id, user_id, content, date);
+
+        res.send(statusObject);
+    }
+
+    static async deleteCommentRoute(req, res){
+
+    }
 }
 
 module.exports = PlaylistHandler;

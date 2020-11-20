@@ -1072,6 +1072,54 @@ class UserHandler {
         res.send(statusObject);
     }
 
+    static async getUsername(user_id){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+
+            const userObject = await collection.findOne({ "_id": user_id });
+
+            if (!userObject) {
+                console.log("user(s) not found");
+                return {status: 1};
+            }
+            
+            const username = userObject.username;
+
+            return {
+                status: 0,
+                username: username,
+            }
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getUsernameRoute(req, res){
+        const id = req.body.id;
+        const user_id = new MongoClient.ObjectID(id);
+
+        const statusObject = await UserHandler.getUsername(user_id);
+        res.send(statusObject);
+    }
+
     /*------------------------*/
     /* STANDALONE IMAGE STUFF */
     /*------------------------*/

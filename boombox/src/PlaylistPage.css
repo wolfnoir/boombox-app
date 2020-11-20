@@ -163,6 +163,11 @@
 
 #playlist-page-container .comment-time-col {
     text-align: right;
+    padding: 2px;
+}
+
+.delete-comment-button:hover {
+    cursor: pointer;
 }
 
 #playlist-page-container .comment-content-col {
