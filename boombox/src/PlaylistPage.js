@@ -14,6 +14,7 @@ import bookmark_img from './images/bookmark-24px.svg';
 import default_playlist_img from './images/default-playlist-cover.png';
 import link_img from './images/link-24px.svg';
 import edit_img from './images/create-24px.svg';
+import delete_img from './images/close-24px.svg';
 import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
 import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
 import pause_img from './images/pause_circle_outline-24px.svg';
@@ -48,7 +49,8 @@ class PlaylistPageDisplay extends React.Component {
             currentYoutubeVideoId: null,
             //current_song: 2, //temporary for showing
             is_song_playing: false,
-            imageData: null
+            imageData: null,
+            charCount: 0
         }
 
         this.likePlaylist = this.likePlaylist.bind(this);
@@ -217,11 +219,125 @@ class PlaylistPageDisplay extends React.Component {
         .catch((error) => { alert(`Copy failed! ${error}`) })
     }
 
+    submitComment = () => {
+        var textbox = document.getElementById("comment-entry");
+        var comment = textbox.value;
+        const date = Date.now();
+        var user = this.cookie.get('username');
+        if (!user){
+            alert("Please log in to comment!");
+        }
+        else if (comment === "" || comment === null) {
+            alert("Please write something");
+        }
+        else {
+            const body = JSON.stringify({
+                'playlistId': this.props.playlistId,
+                'username': user,
+                'content': comment,
+                'date': date
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/addComment', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status === 0) {
+                    console.log('Added comment');
+                    //update state here
+                    var userId = obj.user_id;
+                    var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
+                    var currentComment = {
+                        content: comment,
+                        date: date,
+                        user_id: userId,
+                    }
+                    dataCopy.comments.push(currentComment);
+                    this.setState({data: dataCopy});
+                    textbox.value = "";
+                    this.setState({charCount: 0});
+                }
+                else {
+                    console.log('Unauthorized');
+                }
+            });
+        }
+    }
+
+    deleteComment = (i) => {
+        var user = this.cookie.get('username');
+        if (!user){
+            alert("Please log in to delete this comment!");
+        }
+        else if (user !== this.state.data.author) {
+            if(user !== this.state.data.comments[i].username){
+                alert("You are not authorized to delete this comment!");
+            }
+            else {
+                const body = JSON.stringify({
+                    'playlistId': this.props.playlistId,
+                    'index': i
+                });
+                const headers = {"Content-Type": "application/json"};
+                fetch('/deleteComment', {
+                    method: 'POST',
+                    body: body,
+                    headers: headers
+                }).then(res => res.json())
+                .then(obj => {
+                    console.log(obj);
+                    if (obj.status === 0) {
+                        console.log('Deleted comment');
+                        //update state here
+                        var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
+                        dataCopy.comments.splice(i, 1);
+                        this.setState({data: dataCopy});
+                    }
+                    else {
+                        console.log('Unauthorized');
+                    }
+                });
+            }
+        }
+        else {
+            const body = JSON.stringify({
+                'playlistId': this.props.playlistId,
+                'index': i
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/deleteComment', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status === 0) {
+                    console.log('Deleted comment');
+                    //update state here
+                    var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
+                    dataCopy.comments.splice(i, 1);
+                    this.setState({data: dataCopy});
+                }
+                else {
+                    console.log('Unauthorized');
+                }
+            });
+        }
+    }
+
+    updateCharCount(){
+        var textbox = document.getElementById("comment-entry");
+        var length = textbox.value.length;
+        this.setState({charCount: length});
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
-        //console.log(this.cookie.get('username'));
-        //console.log(this.state.data.author);
 
         if(this.state.data === null) {
             return <Redirect to="/error" />
@@ -341,7 +457,7 @@ class PlaylistPageDisplay extends React.Component {
 
                         {
 
-                        this.state.data.comments_enabled ?
+                        this.state.data.com_enabled ?
 
                         <div className="row" id="row3">
                             <div className="col" id="playlist-comments-container">
@@ -352,12 +468,13 @@ class PlaylistPageDisplay extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        <textarea id="comment-entry" placeholder="Add New Comment" /> 
+                                        <textarea id="comment-entry" placeholder="Add New Comment" maxLength = "500"  onChange = {() => this.updateCharCount()}/> <br/>
+                                        {this.state.charCount}/500
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        <button type="button" className="btn btn-primary">Submit</button>
+                                        <button type="button" className="btn btn-primary" onClick = {this.submitComment}>Submit</button>
                                     </div>
                                 </div>
                                 <div className="row" id="displayed-comments-row">
@@ -372,7 +489,13 @@ class PlaylistPageDisplay extends React.Component {
                                                             <a href={"/user/" + comment.username}>{comment.username}</a>
                                                             </div>
                                                             <div className="col comment-time-col">
-                                                                {new Date(comment.time).toDateString() + " " + new Date(comment.time).toLocaleTimeString()}
+                                                                {new Date(comment.date).toDateString() + " " + new Date(comment.date).toLocaleTimeString()}
+                                                                {
+                                                                    //this.state.commentUsername[i] === this.cookie.get('username') || //(checking if the user comment is the same as logged in user)
+                                                                    comment.username === this.cookie.get('username') || this.state.data.author === this.cookie.get('username') ?
+                                                                    <img className = "delete-comment-button" src={delete_img} width = "20px" height = "20px" onClick = {() => this.deleteComment(i)}></img>
+                                                                    : null
+                                                                }
                                                             </div>
                                                         </div>
                                                         <div className="row">

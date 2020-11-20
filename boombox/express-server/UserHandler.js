@@ -333,6 +333,9 @@ class UserHandler {
             console.log(err);
             return {status: -1};
         }
+        finally {
+            client.close();
+        }
     }
 
     static async editUserIconRoute(req, res) {
@@ -393,6 +396,9 @@ class UserHandler {
         catch (err) {
             console.log(err);
             return {status: -1};
+        }
+        finally {
+            client.close();
         }
     }
 
@@ -568,11 +574,9 @@ class UserHandler {
             console.log(err);
             return {status: -1};
         }
-        /*
         finally {
             client.close();
         }
-        */
     }
 
     static async getProfilePageDataRoute(req, res) {
@@ -641,11 +645,10 @@ class UserHandler {
             console.log(err);
             return {status: -1};
         }
-        /*
         finally {
             client.close();
         }
-        */
+        
     }
 
     /**
@@ -691,11 +694,11 @@ class UserHandler {
             console.log(err);
             return {status: -1};
         }
-        /*
+        
         finally {
             client.close();
         }
-        */
+        
     }
 
     static async getFollowersRoute(req, res) {
@@ -933,6 +936,193 @@ class UserHandler {
         res.send(statusObject);
     }
 
+    static async updateFollowers(profileUserId, currentUserId) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+
+            const profileUserIdObject = MongoClient.ObjectID(profileUserId);
+            const currentUserIdObject = MongoClient.ObjectID(currentUserId);
+
+            const profileUserObject = await collection.findOne({ "_id": profileUserIdObject });
+            const currentUserObject = await collection.findOne({ "_id": currentUserIdObject });
+            if (!profileUserObject || !currentUserObject) {
+                console.log("user(s) not found");
+                return {status: 1};
+            }
+
+            var followers = profileUserObject.followers;
+            var following = currentUserObject.following;
+            //add/delete to profile user followers
+            if(followers.filter( id => id.equals(currentUserId)).length > 0)
+                followers = followers.filter( id => !id.equals(currentUserId));
+
+            else
+                followers.push(currentUserId);
+
+            //add/delete to current user following
+            if(following.filter( id => id.equals(profileUserId)).length > 0)
+                following = following.filter( id => !id.equals(profileUserId));
+
+            else
+                following.push(profileUserId);
+
+            await collection.updateOne({"_id": profileUserId}, {$set: {followers: followers}}); //add status checking for update?
+            await collection.updateOne({"_id": currentUserId}, {$set: {following: following}});
+
+            return {
+                status: 0
+            }
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async updateFollowersRoute(req, res) {
+        const profileUser = req.body.profileUser;
+        const currentUser = req.body.currentUser;
+        
+        if (!currentUser) {
+            res.send({status: 1});
+            return;
+        }
+        const profileUserIdResponse = await UserHandler.getUserId(profileUser);
+        const profileUserId = new MongoClient.ObjectID(profileUserIdResponse.result);
+        const currentUserIdResponse = await UserHandler.getUserId(currentUser);
+        const currentUserId = new MongoClient.ObjectID(currentUserIdResponse.result);
+
+        const statusObject = await UserHandler.updateFollowers(profileUserId, currentUserId);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
+
+    static async checkIfFollowing(profileUser, currentUserId){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+
+            //const currentUserIdObject = MongoClient.ObjectID(currentUserId);
+
+            const profileUserObject = await collection.findOne({ "username": profileUser });
+
+            if (!profileUserObject) {
+                console.log("user(s) not found");
+                return {status: 1};
+            }
+
+            var followers = profileUserObject.followers;
+            
+            if(followers.filter( id => id.equals(currentUserId)).length > 0)
+                return {
+                    status: 0 //user is following
+                }
+
+            else
+                return {
+                    status: 1 //user does not follow
+                }
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async checkIfFollowingRoute(req, res){
+        const profileUser = req.body.profileUser;
+        const currentUser = req.body.currentUser;
+        
+        if (!currentUser) {
+            res.send({status: 1});
+            return;
+        }
+
+        const currentUserIdResponse = await UserHandler.getUserId(currentUser);
+        const user_id = new MongoClient.ObjectID(currentUserIdResponse.result);
+
+        const statusObject = await UserHandler.checkIfFollowing(profileUser, user_id);
+        res.send(statusObject);
+    }
+
+    static async getUsername(user_id){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+
+            const userObject = await collection.findOne({ "_id": user_id });
+
+            if (!userObject) {
+                console.log("user(s) not found");
+                return {status: 1};
+            }
+            
+            const username = userObject.username;
+
+            return {
+                status: 0,
+                username: username,
+            }
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getUsernameRoute(req, res){
+        const id = req.body.id;
+        const user_id = new MongoClient.ObjectID(id);
+
+        const statusObject = await UserHandler.getUsername(user_id);
+        res.send(statusObject);
+    }
+
     /*------------------------*/
     /* STANDALONE IMAGE STUFF */
     /*------------------------*/
@@ -991,7 +1181,7 @@ class UserHandler {
             //return {status: -1};
         }
         finally {
-            //client.close();
+            client.close();
         }
         
         res.send("hello"); //change to something that the client can actually use
@@ -1031,9 +1221,46 @@ class UserHandler {
             //return {status: -1};
         }
         finally {
-            //client.close();
+            client.close();
         }
         res.send("hello"); //change to something that the client can actually use
+    }
+
+    static async getUserId(username){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(mongoDbName).collection(mongoUserCollection);
+            const user = await collection.findOne({"username": username});
+            if (!user){
+                console.log("user not found");
+                return {status: 1};
+            }
+
+            const targetIdObject = user._id;
+            return {
+                status: 0,
+                result: targetIdObject
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
     }
 
 
