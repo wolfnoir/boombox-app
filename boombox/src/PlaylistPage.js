@@ -191,6 +191,9 @@ class PlaylistPageDisplay extends React.Component {
         if (!user){
             alert("Please log in to comment!");
         }
+        else if (comment === "" || comment === null) {
+            alert("Please write something in the textbox!");
+        }
         else {
             const body = JSON.stringify({
                 'playlistId': this.props.playlistId,
