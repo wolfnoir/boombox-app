@@ -24,17 +24,17 @@ class YouTubeVideo extends React.PureComponent {
         console.log(videoId);
         if (videoId) {
             this.isVideoReady = false;
-            var youtubePlayer = document.getElementById("youtube-player");
+            const youtubePlayer = document.getElementById("youtube-player");
             if (youtubePlayer) {
                 console.log(youtubePlayer.tagName);
                 document.getElementById('youtube-player-wrapper').removeChild(youtubePlayer);
             }
-            youtubePlayer = document.createElement('div');
-            youtubePlayer.setAttribute('id', 'youtube-player');
-            document.getElementById('youtube-player-wrapper').appendChild(youtubePlayer);
+            const newYoutubePlayer = document.createElement('div');
+            newYoutubePlayer.setAttribute('id', 'youtube-player');
+            document.getElementById('youtube-player-wrapper').appendChild(newYoutubePlayer);
 
             this.player = new window.YT.Player('youtube-player', {
-                videoId: this.props.id,
+                videoId: videoId,
                 height: '45',
                 width: '80',
                 events: {

@@ -160,6 +160,18 @@ class PlaylistPageDisplay extends React.Component {
         }
     }
 
+    handlePrevButton = () => {
+        if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song > 0) {
+            this.selectSong(this.state.current_song - 1);
+        }
+    }
+
+    handleNextButton = () => {
+        if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song < this.state.data.songs.length - 1) {
+            this.selectSong(this.state.current_song + 1);
+        }
+    }
+
     likePlaylist() {
         var user = this.cookie.get('username');
         if (!user){
@@ -380,9 +392,9 @@ class PlaylistPageDisplay extends React.Component {
                         <div className="container fixed-bottom" id="play-track-container">
                             <div className="row">
                                 <div className="col-md-auto" id="play-track-left-col">
-                                    <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" />
+                                    <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" onClick={this.handlePrevButton} />
                                     <img id="play-pause-img" className="invert-color" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
-                                    <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" />
+                                    <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" onClick={this.handleNextButton} />
                                 </div>
                                 <div className="col" id="play-track-right-col">
                                     <div className="row">
@@ -400,7 +412,7 @@ class PlaylistPageDisplay extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div className="col">
                                     <YoutubeVideo id={this.state.currentYoutubeVideoId} ref={this.videoRef} />
                                 </div>
                             </div>
