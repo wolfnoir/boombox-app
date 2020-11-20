@@ -239,7 +239,7 @@ class PlaylistPageDisplay extends React.Component {
             if(user !== this.state.data.comments[i].username){
                 alert("You are not authorized to delete this comment!");
             }
-            else {
+            else { //redo this so it's not so stupid and repeats code
                 const body = JSON.stringify({
                     'playlistId': this.props.playlistId,
                     'index': i
