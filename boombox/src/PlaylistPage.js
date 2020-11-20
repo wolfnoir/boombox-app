@@ -137,12 +137,12 @@ class PlaylistPageDisplay extends React.Component {
         return play_img;
     }
 
-    selectSong = (i) => {
+    selectSong = (i, autoplay=0) => {
         if (this.state.data) {
             this.state.is_song_playing = false;
             this.videoRef.current.pauseVideo();
             this.setState({current_song: i, currentYoutubeVideoId: this.state.data.songs[i].url});
-            this.videoRef.current.loadVideoWithId(this.state.data.songs[i].url);
+            this.videoRef.current.loadVideoWithId(this.state.data.songs[i].url, autoplay);
         }
     }
 
@@ -169,6 +169,12 @@ class PlaylistPageDisplay extends React.Component {
     handleNextButton = () => {
         if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song < this.state.data.songs.length - 1) {
             this.selectSong(this.state.current_song + 1);
+        }
+    }
+
+    handleVideoEnd = () => {
+        if (this.state.data && this.state.current_song < this.state.data.songs.length - 1) {
+            this.selectSong(this.state.current_song + 1, 1);
         }
     }
 
@@ -413,7 +419,7 @@ class PlaylistPageDisplay extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col">
-                                    <YoutubeVideo id={this.state.currentYoutubeVideoId} ref={this.videoRef} />
+                                    <YoutubeVideo id={this.state.currentYoutubeVideoId} handleVideoEnd={this.handleVideoEnd} ref={this.videoRef} />
                                 </div>
                             </div>
                         </div>
