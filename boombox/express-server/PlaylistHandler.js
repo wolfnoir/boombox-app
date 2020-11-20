@@ -280,14 +280,6 @@ class PlaylistHandler {
     }
 
     static async editPlaylistSettingsRoute(req, res) {
-        console.log("hi");
-        
-        // const user_id = req.session.user_id;
-        // if (!user_id) {
-        //     res.send({statusCode: 1});
-        //     return;
-        // }
-
         const form = new multiparty.Form();
         const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
             if (err) {console.log(err);}
