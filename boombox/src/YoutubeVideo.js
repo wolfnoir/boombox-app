@@ -19,16 +19,34 @@ class YouTubeVideo extends React.PureComponent {
         }
     };
 
-    loadVideo = () => {
-        this.player = new window.YT.Player('youtube-player', {
-            videoId: this.props.id,
-            height: '45',
-            width: '80',
-            events: {
-                //onReady: this.onPlayerReady,
-            },
-        });
+
+    loadVideoWithId = (videoId) => {
+        console.log(videoId);
+        if (videoId) {
+            var youtubePlayer = document.getElementById("youtube-player");
+            if (youtubePlayer) {
+                console.log(youtubePlayer.tagName);
+                document.getElementById('youtube-player-wrapper').removeChild(youtubePlayer);
+            }
+            youtubePlayer = document.createElement('div');
+            youtubePlayer.setAttribute('id', 'youtube-player');
+            document.getElementById('youtube-player-wrapper').appendChild(youtubePlayer);
+
+            this.player = new window.YT.Player('youtube-player', {
+                videoId: this.props.id,
+                height: '45',
+                width: '80',
+                events: {
+                    //onReady: this.onPlayerReady,
+                },
+                playerVars: {controls: 0}
+            });
+        }
     };
+
+    loadVideo = () => {
+        this.loadVideoWithId(this.props.id);
+    }
 
     getPlayer() {
         return this.player;
@@ -39,16 +57,20 @@ class YouTubeVideo extends React.PureComponent {
     };
 
     playVideo = () => {
-        this.player.playVideo();
+        if (this.player) {
+            this.player.playVideo();
+        }
     }
 
     pauseVideo = () => {
-        this.player.pauseVideo();
+        if (this.player) {
+            this.player.pauseVideo();
+        }
     }
 
     render() {
         return (
-            <div className="youtube-player-wrapper">
+            <div id="youtube-player-wrapper">
                 <div id="youtube-player"></div>
             </div>
         );

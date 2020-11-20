@@ -123,6 +123,15 @@
     padding: 5px 0px;
 }
 
+#playlist-page-container .song-row {
+    transition: 0.3s;
+    min-height: 30px;
+}
+
+#playlist-page-container .song-row:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.3)
+}
 
 #playlist-page-container .song-arrow {
     cursor: pointer;

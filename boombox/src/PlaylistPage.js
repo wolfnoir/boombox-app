@@ -28,6 +28,7 @@ import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 /*-----------------------------------------*/
 import horse_img from './images/horse.png';
 import { NavItem } from 'react-bootstrap';
+import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 /*-----------------------------------------*/
 
 function PlaylistPage() {
@@ -43,8 +44,9 @@ class PlaylistPageDisplay extends React.Component {
         this.state = {
             data: {},
             song_notes_open: [],
-            //current_song: null, //correct one
-            current_song: 2, //temporary for showing
+            current_song: null, //correct one
+            currentYoutubeVideoId: null,
+            //current_song: 2, //temporary for showing
             is_song_playing: false,
             imageData: null
         }
@@ -73,6 +75,9 @@ class PlaylistPageDisplay extends React.Component {
                 this.setState({data: obj.result});
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
+                }
+                if (this.state.data.songs.length > 0) {
+                    this.selectSong(0);
                 }
             }
             else {
@@ -132,13 +137,22 @@ class PlaylistPageDisplay extends React.Component {
         return play_img;
     }
 
+    selectSong = (i) => {
+        if (this.state.data) {
+            this.state.is_song_playing = false;
+            this.videoRef.current.pauseVideo();
+            this.setState({current_song: i, currentYoutubeVideoId: this.state.data.songs[i].url});
+            this.videoRef.current.loadVideoWithId(this.state.data.songs[i].url);
+        }
+    }
+
     handlePlayButton = () => {
         if (this.state.is_song_playing) {
-            this.videoRef.current.getPlayer().pauseVideo();
+            this.videoRef.current.pauseVideo();
             this.setState({is_song_playing: false});
         }
         else {
-            this.videoRef.current.getPlayer().playVideo();
+            this.videoRef.current.playVideo();
             this.setState({is_song_playing: true});
         }
     }
@@ -266,7 +280,7 @@ class PlaylistPageDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row" style={{minHeight: "30px"}}>
+                                                        <div className="row song-row" onClick={() => {this.selectSong(i)}}>
                                                             <div className="col songs-col0">
                                                                 {
                                                                     song.note && song.note.length > 0 ? 
@@ -384,7 +398,7 @@ class PlaylistPageDisplay extends React.Component {
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <YoutubeVideo id="fWNaR-rxAic" ref={this.videoRef} />
+                                    <YoutubeVideo id={this.state.currentYoutubeVideoId} ref={this.videoRef} />
                                 </div>
                             </div>
                         </div>
