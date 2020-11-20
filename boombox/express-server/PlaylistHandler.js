@@ -187,7 +187,7 @@ class PlaylistHandler {
      */
     
     //static async editPlaylist(user_id, playlist_id, com_enabled, comments, description, image_url, likes, name, songs, tags) {
-    static async editPlaylistSettings(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath) {
+    static async editPlaylistSettings(playlist_id, com_enabled, description, name, isPrivate, filename, filepath) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -217,7 +217,6 @@ class PlaylistHandler {
             }
 
             //TEMPORARILY USING TEMP VARS FOR THIS
-            const tempEnabled = foundPlaylist.com_enabled;
             const tempComments = foundPlaylist.comments;
             const tempImage = foundPlaylist.image_url;
             const tempLikes = foundPlaylist.likes;
@@ -227,7 +226,7 @@ class PlaylistHandler {
 
             //@todo: TEMPORARILY ONLY UPDATING NAME AND DESCRIPTION
             const updateDoc = {
-                com_enabled: tempEnabled,
+                com_enabled: com_enabled,
                 comments: tempComments,
                 description: description,
                 image_url: tempImage, //need to do this separately for image upload
@@ -272,24 +271,15 @@ class PlaylistHandler {
             console.log(err);
             return {status: -1};
         }
-        /*
+        
         finally {
             client.close();
         }
-        */
         console.log("Success");
         return {status: 0};
     }
 
     static async editPlaylistSettingsRoute(req, res) {
-        console.log("hi");
-        
-        const user_id = req.session.user_id;
-        if (!user_id) {
-            res.send({statusCode: 1});
-            return;
-        }
-
         const form = new multiparty.Form();
         const formPromise = new Promise((resolve, reject) => form.parse(req, (err, fields, files) => {
             if (err) {console.log(err);}
@@ -299,10 +289,10 @@ class PlaylistHandler {
         console.log(fields);
 
         const playlist_id = fields.playlistId[0];
-        const com_enabled = fields.com_enabled[0];
         const description = fields.description[0];
         const name = fields.name[0];
         const isPrivate = fields.isPrivate[0] === "true";
+        const com_enabled = fields.com_enabled[0] === "true";
 
         var filename;
         var filepath;
@@ -322,7 +312,7 @@ class PlaylistHandler {
             }
         }
 
-        const success = await PlaylistHandler.editPlaylistSettings(user_id, playlist_id, com_enabled, description, name, isPrivate, filename, filepath);
+        const success = await PlaylistHandler.editPlaylistSettings(playlist_id, com_enabled, description, name, isPrivate, filename, filepath);
 
 
         res.send(success); //-1: an error occurred, 0: success, 1: not logged in
@@ -350,7 +340,7 @@ class PlaylistHandler {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
             const idObject = MongoClient.ObjectID(playlist_id);
             const playlistQuery = { "_id" : idObject };
-            const playlistObject = await collection.findOne(playlistQuery);
+            var playlistObject = await collection.findOne(playlistQuery);
             if (!playlistObject) {
                 console.log("playlist not found");
                 return {status: 1};
@@ -364,6 +354,14 @@ class PlaylistHandler {
                 playlistObject.author = userObject.username;
             }
             playlistObject.url = "/playlist/" + playlist_id;
+
+            //Getting usernames for each comment
+            for(var i = 0; i < playlistObject.comments.length; i++){
+                var comment = playlistObject.comments[i];
+                const userQuery = {"_id": comment.user_id};
+                const userObject = await client.db(monogDbName).collection(mongoUserCollection).findOne(userQuery);
+                comment.username = (!userObject)? "Anonymous" : userObject.username;
+            }
 
             const selfUserIdObject = MongoClient.ObjectID(self_user_id);
             playlistObject.liked = playlistObject.likes.filter( id => id.equals(selfUserIdObject)).length > 0;
@@ -443,6 +441,9 @@ class PlaylistHandler {
         catch (err) {
             console.log(err);
             return {status: -1};
+        }
+        finally {
+            client.close();
         }
     }
 
@@ -770,6 +771,118 @@ class PlaylistHandler {
             console.log(err);
             res.send({status: -1});
         }
+        finally {
+            client.close();
+        }
+    }
+
+    static async addComment(playlistId, user_id, content, date){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            
+            //add comment to playlist
+            const commentArray = foundPlaylist.comments;
+            commentArray.push({
+                user_id: user_id,
+                content: content,
+                date: date,
+            });
+            await collection.updateOne({"_id": idObject}, {$set: {comments: commentArray}}); //add status checking for update?
+
+            return {
+                status: 0,
+                user_id: user_id
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+    }
+
+    static async addCommentRoute(req, res){
+        const playlist_id = req.body.playlistId;
+        const username = req.body.username;
+        const content = req.body.content;
+        const date = req.body.date;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
+
+        const statusObject = await PlaylistHandler.addComment(playlist_id, user_id, content, date);
+
+        res.send(statusObject);
+    }
+
+    static async deleteComment(index, playlistId){
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await collection.findOne({"_id": idObject});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+            
+            //delete comment from playlist
+            var commentArray = foundPlaylist.comments;
+            commentArray.splice(index, 1)
+            await collection.updateOne({"_id": idObject}, {$set: {comments: commentArray}}); //add status checking for update?
+
+            return  {status: 0 };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+    }
+
+    static async deleteCommentRoute(req, res){
+        const playlist_id = req.body.playlistId;
+        const index = req.body.index;
+
+        const statusObject = await PlaylistHandler.deleteComment(index, playlist_id);
+
+        res.send(statusObject);
     }
 }
 

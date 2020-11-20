@@ -32,6 +32,7 @@ class UserProfileDisplay extends React.Component {
             userPlaylists: [],
             following: {},
             followers: {},
+            isFollowing: false,
         }
     }
 
@@ -103,9 +104,72 @@ class UserProfileDisplay extends React.Component {
         });
     }
 
+    toggleFollowUser = () => {
+        var user = this.cookie.get('username');
+        if (!user){
+            alert("Please log in to follow this user!");
+        }
+        else {
+            const body = JSON.stringify({
+                'profileUser': this.state.data.username,
+                'currentUser': user,
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/updateFollowers', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status == 0) {
+                    console.log('Success!');
+                    this.setState({ isFollowing: !this.state.isFollowing });
+                }
+                else {
+                    console.log('Unauthorized');
+                }
+    
+                //add change to following here
+            });
+        }
+    }
+
+    //@TODO: check whether or not the current user is actually following
+
+    checkIfUserFollowing(){
+        var user = this.cookie.get('username');
+        if (!user) {
+            this.setState({ isFollowing: false });
+        }
+        else {
+            //@TODO: check on back end whether the current user is following this user
+            const body = JSON.stringify({
+                'profileUser': this.props.username,
+                'currentUser': user,
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/checkIfFollowing', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status === 0) {
+                    this.setState({ isFollowing: true });
+                }
+                else {
+                    this.setState({ isFollowing: false });
+                }
+            });
+        }
+    }
+
     componentDidMount(){
         this.getUserData();
         this.getProfileImageData(); //COMMENT THIS IN LATER
+        this.checkIfUserFollowing();
     }
 
     render(){
@@ -162,11 +226,11 @@ class UserProfileDisplay extends React.Component {
 
                                     {
                                         this.cookie.get('username') !== this.props.username ? 
-                                    <div className = "btn btn-primary follow-button hoverable" /*onClick = {  toggle following in here }*/>
-                                            {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                    <div className = "btn btn-primary follow-button hoverable"  onClick = {this.toggleFollowUser}  >
+                                            {this.state.isFollowing ? "Unfollow" : "Follow"}
                                     </div>
-                                    : <div className = "btn btn-primary follow-button hoverable disabled" /*onClick = {  toggle following in here }*/>
-                                            {this.state.data.isFollowing ? "Unfollow" : "Follow"}
+                                    : <div className = "btn btn-primary follow-button hoverable disabled">
+                                            {this.state.isFollowing ? "Unfollow" : "Follow"}
                                         </div>
                                     }
 
