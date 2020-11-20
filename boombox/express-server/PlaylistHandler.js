@@ -355,6 +355,14 @@ class PlaylistHandler {
             }
             playlistObject.url = "/playlist/" + playlist_id;
 
+            //Getting usernames for each comment
+            for(var i = 0; i < playlistObject.comments.length; i++){
+                var comment = playlistObject.comments[i];
+                const userQuery = {"_id": comment.user_id};
+                const userObject = await client.db(monogDbName).collection(mongoUserCollection).findOne(userQuery);
+                comment.username = (!userObject)? "Anonymous" : userObject.username;
+            }
+
             const selfUserIdObject = MongoClient.ObjectID(self_user_id);
             playlistObject.liked = playlistObject.likes.filter( id => id.equals(selfUserIdObject)).length > 0;
 
