@@ -75,13 +75,6 @@ class PlaylistPageDisplay extends React.Component {
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
-
-                //figure out how to display usernames here
-                // for(var i = 0; i < this.state.data.comments.length; i++){
-                //     var username = this.getUsername(this.state.data.comments[i].user_id);
-                //     console.log(username);
-                //     this.state.commentUsername.push(username);
-                // }
             }
             else {
                 this.setState({data: null}); //need to change the component to have a not found page
@@ -301,8 +294,6 @@ class PlaylistPageDisplay extends React.Component {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
 
-        const currentLikes = this.state.data.likes ? this.state.data.likes.length + this.state.data.liked : null;
-
         if(this.state.data === null) {
             return <Redirect to="/error" />
         }
@@ -345,7 +336,7 @@ class PlaylistPageDisplay extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        {currentLikes == 1? "1 Like" : currentLikes + " Likes"}
+                                        {this.state.data.likes ? this.state.data.likes.length : 0} Likes
                                     </div>
                                 </div>
                                 <div className="row">

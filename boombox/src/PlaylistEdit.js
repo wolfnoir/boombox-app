@@ -99,10 +99,12 @@ class PlaylistSettings extends React.Component {
 
     updatePlaylistPrivacy = (event) => {
         this.setState({private: !this.state.private});
+        console.log("Private: " + this.state.private);
     }
 
     updateCommentsEnabled = (event) => {
         this.setState({com_enabled: !this.state.com_enabled});
+        console.log("Comments Enabled?: " + this.state.com_enabled);
     }
 
     handleImageUpload = () => {
