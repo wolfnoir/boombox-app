@@ -47,8 +47,7 @@ class PlaylistPageDisplay extends React.Component {
             current_song: 2, //temporary for showing
             is_song_playing: false,
             imageData: null,
-            charCount: 0,
-            commentUsername: []
+            charCount: 0
         }
 
         this.likePlaylist = this.likePlaylist.bind(this);
