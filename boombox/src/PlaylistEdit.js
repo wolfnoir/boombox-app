@@ -497,7 +497,7 @@ class PlaylistEditDisplay extends React.Component {
             currentSong.artist = artistField.value;
             currentSong.album = albumField.value;
             currentSong.note = noteField.value;
-            currentSong.length = lengthField.value;
+            currentSong.length = parseInt(lengthField.value);
             errorField.innerHTML = "";
 
             console.log(dataCopy);
@@ -530,7 +530,7 @@ class PlaylistEditDisplay extends React.Component {
                 index: this.state.data.songs.length,
                 album: albumField.value,
                 artist: artistField.value,
-                length: lengthField.value,
+                length: parseInt(lengthField.value),
                 name: titleField.value,
                 note: noteField.value,
                 url: songId,
@@ -738,7 +738,7 @@ class PlaylistEditDisplay extends React.Component {
         const urlField = i >= 0 ? document.getElementById("edit-song-url-"+i) : document.getElementById("add-song-url");
         const titleField = i >= 0 ? document.getElementById("edit-song-title-"+i) : document.getElementById("add-song-title");
         const validatorField = i >= 0 ? document.getElementById("edit-song-url-validator-"+i) : document.getElementById("add-song-url-validator");
-        const videoLengthField = i >= 0 ? document.getElementById("edit-song-video-length"+i) : document.getElementById("add-song-video-length");
+        const videoLengthField = i >= 0 ? document.getElementById("edit-song-video-length-"+i) : document.getElementById("add-song-video-length");
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
         var url = urlField.value;
