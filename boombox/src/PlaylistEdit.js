@@ -753,14 +753,14 @@ class PlaylistEditDisplay extends React.Component {
                 }
                 else {
                     console.log("youtube video not found");
-                    validatorField.innerHTML = "Youtube video not found";
+                    validatorField.innerHTML = "YouTube video not found";
                 }
             });
         }
         else {
             if (url) {
                 console.log("invalid youtube video url");
-                validatorField.innerHTML = "Invalid Youtube video URL."
+                validatorField.innerHTML = "Invalid YouTube video URL."
             }
             else {
                 validatorField.innerHTML = null;
