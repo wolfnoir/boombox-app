@@ -24,7 +24,7 @@ import remove_circle_img from './images/remove_circle-24px.svg';
 import delete_img from './images/delete-black-24dp.svg';
 import edit_img from './images/edit-24px.svg';
 import SelectSearch from 'react-select-search';
-
+import moment from 'moment';
 
 /*-----------------------------------------*/
 /* STATIC IMPORT                           */
@@ -479,6 +479,7 @@ class PlaylistEditDisplay extends React.Component {
         var albumField = document.getElementById("edit-song-album-"+i);
         var noteField = document.getElementById("edit-song-note-"+i)
         var errorField = document.getElementById("edit-song-error-"+i);;
+        var lengthField = document.getElementById("edit-song-video-length-"+i)
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
         var url = urlField.value;
@@ -496,6 +497,7 @@ class PlaylistEditDisplay extends React.Component {
             currentSong.artist = artistField.value;
             currentSong.album = albumField.value;
             currentSong.note = noteField.value;
+            currentSong.length = lengthField.value;
             errorField.innerHTML = "";
 
             console.log(dataCopy);
@@ -516,6 +518,7 @@ class PlaylistEditDisplay extends React.Component {
         var albumField = document.getElementById("add-song-album");
         var noteField = document.getElementById("add-song-note");
         var errorField = document.getElementById("add-song-error");
+        var lengthField = document.getElementById("add-song-video-length");
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
         var url = urlField.value;
@@ -527,6 +530,7 @@ class PlaylistEditDisplay extends React.Component {
                 index: this.state.data.songs.length,
                 album: albumField.value,
                 artist: artistField.value,
+                length: lengthField.value,
                 name: titleField.value,
                 note: noteField.value,
                 url: songId,
@@ -734,6 +738,7 @@ class PlaylistEditDisplay extends React.Component {
         const urlField = i >= 0 ? document.getElementById("edit-song-url-"+i) : document.getElementById("add-song-url");
         const titleField = i >= 0 ? document.getElementById("edit-song-title-"+i) : document.getElementById("add-song-title");
         const validatorField = i >= 0 ? document.getElementById("edit-song-url-validator-"+i) : document.getElementById("add-song-url-validator");
+        const videoLengthField = i >= 0 ? document.getElementById("edit-song-video-length"+i) : document.getElementById("add-song-video-length");
 
         var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
         var url = urlField.value;
@@ -742,7 +747,7 @@ class PlaylistEditDisplay extends React.Component {
         if(p.test(url)){
             console.log("matches");
             const songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
-            const endpoint = `https://www.googleapis.com/youtube/v3/videos?id=${songId}&key=AIzaSyAKoDU8scPN2e76sQKwsu5rIg3XTbEfNt4&part=snippet`;
+            const endpoint = `https://www.googleapis.com/youtube/v3/videos?id=${songId}&key=AIzaSyAKoDU8scPN2e76sQKwsu5rIg3XTbEfNt4&part=snippet&part=contentDetails`;
             fetch(endpoint)
             .then(res => res.json())
             .then(obj => {
@@ -750,6 +755,13 @@ class PlaylistEditDisplay extends React.Component {
                 if (obj.items.length > 0) {
                     titleField.value = obj.items[0].snippet.title;
                     validatorField.innerHTML = null;
+
+                    //Do stuff with length
+                    const duration = moment.duration(obj.items[0].contentDetails.duration);
+                    const length = duration.asSeconds();
+                    videoLengthField.value = length;
+                    console.log(duration, length);
+                    console.log(videoLengthField.value);
                 }
                 else {
                     console.log("youtube video not found");
@@ -880,6 +892,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                             <div id = {"edit-song-error-"+i} className = "song-error"></div>
                                                                             <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
                                                                             <div id={"edit-song-url-validator-"+i} className="song-url-validator"></div>
+                                                                            <input type="hidden" id={"edit-song-video-length-"+i} />
 
                                                                             <Form.Label>Title</Form.Label>
                                                                             <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
@@ -932,6 +945,7 @@ class PlaylistEditDisplay extends React.Component {
                                                             <div id = {"add-song-error"} className = "song-error"></div>
                                                             <Form.Control id = "add-song-url" className = "add-song-textbox" onChange={() => {this.autofillSongTitle(-1)}} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
                                                             <div id="add-song-url-validator" className="song-url-validator"></div>
+                                                            <input type="hidden" id="add-song-video-length" />
 
                                                             <Form.Label>Title</Form.Label>
                                                             <Form.Control id = "add-song-title" className = "add-song-textbox" maxLength = "50"></Form.Control>
