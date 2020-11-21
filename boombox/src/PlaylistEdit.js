@@ -480,7 +480,7 @@ class PlaylistEditDisplay extends React.Component {
         var noteField = document.getElementById("edit-song-note-"+i)
         var errorField = document.getElementById("edit-song-error-"+i);;
 
-        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
         var url = urlField.value;
 
         if(p.test(url)){
@@ -517,7 +517,7 @@ class PlaylistEditDisplay extends React.Component {
         var noteField = document.getElementById("add-song-note");
         var errorField = document.getElementById("add-song-error");
 
-        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$");
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
         var url = urlField.value;
         if(p.test(url)){
             var songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
@@ -730,6 +730,45 @@ class PlaylistEditDisplay extends React.Component {
         }
     }
 
+    autofillSongTitle = (i) => {
+        const urlField = i >= 0 ? document.getElementById("edit-song-url-"+i) : document.getElementById("add-song-url");
+        const titleField = i >= 0 ? document.getElementById("edit-song-title-"+i) : document.getElementById("add-song-title");
+        const validatorField = i >= 0 ? document.getElementById("edit-song-url-validator-"+i) : document.getElementById("add-song-url-validator");
+
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
+        var url = urlField.value;
+        console.log(url);
+
+        if(p.test(url)){
+            console.log("matches");
+            const songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
+            const endpoint = `https://www.googleapis.com/youtube/v3/videos?id=${songId}&key=AIzaSyAKoDU8scPN2e76sQKwsu5rIg3XTbEfNt4&part=snippet`;
+            fetch(endpoint)
+            .then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.items.length > 0) {
+                    titleField.value = obj.items[0].snippet.title;
+                    validatorField.innerHTML = null;
+                }
+                else {
+                    console.log("youtube video not found");
+                    validatorField.innerHTML = "Youtube video not found";
+                }
+            });
+        }
+        else {
+            if (url) {
+                console.log("invalid youtube video url");
+                validatorField.innerHTML = "Invalid Youtube video URL."
+            }
+            else {
+                validatorField.innerHTML = null;
+            }
+        }
+
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -839,7 +878,8 @@ class PlaylistEditDisplay extends React.Component {
                                                                         <Form.Group>
                                                                             <Form.Label>URL</Form.Label>
                                                                             <div id = {"edit-song-error-"+i} className = "song-error"></div>
-                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
+                                                                            <div id={"edit-song-url-validator-"+i} className="song-url-validator"></div>
 
                                                                             <Form.Label>Title</Form.Label>
                                                                             <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
@@ -890,7 +930,8 @@ class PlaylistEditDisplay extends React.Component {
                                                         <Form.Group>
                                                             <Form.Label>URL</Form.Label>
                                                             <div id = {"add-song-error"} className = "song-error"></div>
-                                                            <Form.Control id = "add-song-url" className = "add-song-textbox" placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-url" className = "add-song-textbox" onChange={() => {this.autofillSongTitle(-1)}} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
+                                                            <div id="add-song-url-validator" className="song-url-validator"></div>
 
                                                             <Form.Label>Title</Form.Label>
                                                             <Form.Control id = "add-song-title" className = "add-song-textbox" maxLength = "50"></Form.Control>

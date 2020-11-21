@@ -107,7 +107,8 @@ class PlaylistPageDisplay extends React.Component {
         return arrow_right_img;
     }
 
-    handleSongArrowClick = (i) => {
+    handleSongArrowClick = (i, e) => {
+        e.stopPropagation();
         const songNote = document.getElementById("song-note-"+i);
         if (songNote) {
             const songNotesOpen = this.state.song_notes_open;
@@ -421,7 +422,7 @@ class PlaylistPageDisplay extends React.Component {
                                                             <div className="col songs-col0">
                                                                 {
                                                                     song.note && song.note.length > 0 ? 
-                                                                    <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                                    <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={(e) => {this.handleSongArrowClick(i, e)}}/>
                                                                     : null
                                                                 }
                                                                 <b>{(i+1) + "."}</b>
@@ -541,7 +542,7 @@ class PlaylistPageDisplay extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col">
+                                <div className="col-md-auto">
                                     <YoutubeVideo id={this.state.currentYoutubeVideoId} handleVideoEnd={this.handleVideoEnd} ref={this.videoRef} />
                                 </div>
                             </div>
