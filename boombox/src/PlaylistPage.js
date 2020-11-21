@@ -336,6 +336,14 @@ class PlaylistPageDisplay extends React.Component {
         this.setState({charCount: length});
     }
 
+
+    getSecondsPadder(seconds) {
+        if (seconds % 60 < 10) {
+            return '0';
+        }
+        return '';
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -435,7 +443,7 @@ class PlaylistPageDisplay extends React.Component {
                                                             </div>
                                                             <div className="col songs-col3">
                                                                 {/* TODO: get this from youtube data api */}
-                                                                {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
+                                                                {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}
                                                             </div>
                                                         </div>
                                                         {
