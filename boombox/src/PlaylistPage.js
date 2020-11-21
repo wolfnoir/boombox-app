@@ -336,6 +336,18 @@ class PlaylistPageDisplay extends React.Component {
         this.setState({charCount: length});
     }
 
+    getSongsTotalLength() {
+        if (this.state.data.songs) {
+            var sum = 0;
+            this.state.data.songs.forEach(song => {
+                if (song.length) {
+                    sum += song.length;
+                }
+            });
+            return sum;
+        }
+        return 0;
+    }
 
     getSecondsPadder(seconds) {
         if (seconds % 60 < 10) {
@@ -391,6 +403,11 @@ class PlaylistPageDisplay extends React.Component {
                                 <div className="row">
                                     <div className="col">
                                         {this.state.data.likes ? this.state.data.likes.length : 0} Likes
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col">
+                                        {this.state.data.songs ? this.state.data.songs.length : 0} Songs, {this.state.data.songs ? Math.floor(this.getSongsTotalLength() / 60) : 0} Minutes {this.state.data.songs ? this.getSongsTotalLength() % 60 : 0} Seconds
                                     </div>
                                 </div>
                                 <div className="row">
