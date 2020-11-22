@@ -39,7 +39,8 @@ class YouTubeVideo extends React.PureComponent {
                     width: '80',
                     events: {
                         onReady: this.onPlayerReady,
-                        onStateChange: this.onStateChange
+                        onStateChange: this.onStateChange,
+                        onError: this.onError,
                     },
                     playerVars: {autoplay: autoplay} //controls: 0
                 });
@@ -61,10 +62,12 @@ class YouTubeVideo extends React.PureComponent {
     };
 
     onStateChange = (event) => {
-        if (event.data == -1) {
+        /*
+        if (event.data == -1) { //doesn't work
             console.log("Failed to load video");
             this.props.handleVideoEnd();
         }
+        */
         if (event.data === window.YT.PlayerState.ENDED) { //0
             this.props.handleVideoEnd();
         }
@@ -74,6 +77,11 @@ class YouTubeVideo extends React.PureComponent {
         if (event.data === window.YT.PlayerState.PAUSED) { //2
             this.props.togglePlayButton(false);
         }
+    }
+
+    onError = (event) => {
+        console.log("Failed to load video");
+        this.props.handleVideoEnd();
     }
 
     playVideo = () => {
