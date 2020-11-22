@@ -20,7 +20,9 @@ import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
 import pause_img from './images/pause_circle_outline-24px.svg';
 import play_img from './images/play_circle_outline-24px.svg';
 import skip_next_img from './images/skip_next-24px.svg';
+import skip_next_grey_img from './images/skip_next-grey-24px.png';
 import skip_previous_img from './images/skip_previous-24px.svg'; 
+import skip_previous_grey_img from './images/skip_previous-grey-24px.png';
 import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 
 
@@ -131,6 +133,20 @@ class PlaylistPageDisplay extends React.Component {
             return liked_img;
 
         return like_img;
+    }
+
+    getPreviousButtonImage() {
+        if (this.state.data.songs && this.state.current_song > 0) {
+            return skip_previous_img;
+        }
+        return skip_previous_grey_img;
+    }
+
+    getNextButtonImage() {
+        if (this.state.data.songs && this.state.current_song < this.state.data.songs.length - 1) {
+            return skip_next_img;
+        }
+        return skip_next_grey_img;
     }
 
     getPlayButtonImage() {
@@ -547,9 +563,9 @@ class PlaylistPageDisplay extends React.Component {
                         <div className="container fixed-bottom" id="play-track-container">
                             <div className="row">
                                 <div className="col-md-auto" id="play-track-left-col">
-                                    <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" onClick={this.handlePrevButton} />
+                                    <img id="prev-song-img" className="invert-color" src={this.getPreviousButtonImage()} height="60px" width="60px" onClick={this.handlePrevButton} />
                                     <img id="play-pause-img" className="invert-color" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
-                                    <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" onClick={this.handleNextButton} />
+                                    <img id="next-song-img" className="invert-color" src={this.getNextButtonImage()} height="60px" width="60px" onClick={this.handleNextButton} />
                                 </div>
                                 <div className="col" id="play-track-right-col">
                                     <div className="row">
