@@ -269,6 +269,10 @@
     margin-bottom: 5px;
 }
 
+.song-url-validator {
+    color: red;
+}
+
 /*---------------------------------------*/
 
 #playlist-settings-button {

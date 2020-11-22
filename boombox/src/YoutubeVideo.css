@@ -1,0 +1,10 @@
+#youtube-player-wrapper {
+    background-color: white;
+    text-align: center;
+    height: 100%;
+    padding: 5px;
+}
+
+#youtube-player-wrapper > * {
+    margin-top: 8px;
+}

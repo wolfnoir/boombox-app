@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useParams } from 'react-router';
 import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
+import YoutubeVideo from './YoutubeVideo';
 import Tag from './Tag';
 import Cookie from 'universal-cookie';
 
@@ -19,7 +20,9 @@ import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
 import pause_img from './images/pause_circle_outline-24px.svg';
 import play_img from './images/play_circle_outline-24px.svg';
 import skip_next_img from './images/skip_next-24px.svg';
+import skip_next_grey_img from './images/skip_next-grey-24px.png';
 import skip_previous_img from './images/skip_previous-24px.svg'; 
+import skip_previous_grey_img from './images/skip_previous-grey-24px.png';
 import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 
 
@@ -28,6 +31,7 @@ import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 /*-----------------------------------------*/
 import horse_img from './images/horse.png';
 import { NavItem } from 'react-bootstrap';
+import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 /*-----------------------------------------*/
 
 function PlaylistPage() {
@@ -43,14 +47,16 @@ class PlaylistPageDisplay extends React.Component {
         this.state = {
             data: {},
             song_notes_open: [],
-            //current_song: null, //correct one
-            current_song: 2, //temporary for showing
+            current_song: null, //correct one
+            currentYoutubeVideoId: null,
+            //current_song: 2, //temporary for showing
             is_song_playing: false,
             imageData: null,
             charCount: 0
         }
 
         this.likePlaylist = this.likePlaylist.bind(this);
+        this.videoRef = React.createRef();
     }
 
     getPlaylistImage() {
@@ -74,6 +80,9 @@ class PlaylistPageDisplay extends React.Component {
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
+                if (this.state.data.songs.length > 0) {
+                    this.selectSong(0);
+                }
             }
             else {
                 this.setState({data: null}); //need to change the component to have a not found page
@@ -91,6 +100,7 @@ class PlaylistPageDisplay extends React.Component {
             console.log(data);
             this.setState({imageData: data.imageData});
         });
+        document.onkeypress = this.keyPressed;
     }
 
     getArrow(i) {
@@ -100,7 +110,8 @@ class PlaylistPageDisplay extends React.Component {
         return arrow_right_img;
     }
 
-    handleSongArrowClick = (i) => {
+    handleSongArrowClick = (i, e) => {
+        e.stopPropagation();
         const songNote = document.getElementById("song-note-"+i);
         if (songNote) {
             const songNotesOpen = this.state.song_notes_open;
@@ -125,6 +136,20 @@ class PlaylistPageDisplay extends React.Component {
         return like_img;
     }
 
+    getPreviousButtonImage() {
+        if (this.state.data.songs && this.state.current_song > 0) {
+            return skip_previous_img;
+        }
+        return skip_previous_grey_img;
+    }
+
+    getNextButtonImage() {
+        if (this.state.data.songs && this.state.current_song < this.state.data.songs.length - 1) {
+            return skip_next_img;
+        }
+        return skip_next_grey_img;
+    }
+
     getPlayButtonImage() {
         if (this.state.is_song_playing) {
             return pause_img;
@@ -132,14 +157,48 @@ class PlaylistPageDisplay extends React.Component {
         return play_img;
     }
 
+    selectSong = (i, autoplay=0) => {
+        if (this.state.data) {
+            this.state.is_song_playing = false;
+            this.videoRef.current.pauseVideo();
+            this.setState({current_song: i, currentYoutubeVideoId: this.state.data.songs[i].url});
+            this.videoRef.current.loadVideoWithId(this.state.data.songs[i].url, autoplay);
+        }
+    }
+
     handlePlayButton = () => {
+        if (!this.videoRef.current.getIsVideoReady()) {
+            return;
+        }
         if (this.state.is_song_playing) {
-            //@todo: pause the song
+            this.videoRef.current.pauseVideo();
             this.setState({is_song_playing: false});
         }
         else {
-            //@todo: play the song
+            this.videoRef.current.playVideo();
             this.setState({is_song_playing: true});
+        }
+    }
+
+    togglePlayButton = (is_song_playing) => {
+        this.setState({is_song_playing: is_song_playing});
+    }
+
+    handlePrevButton = () => {
+        if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song > 0) {
+            this.selectSong(this.state.current_song - 1, 1);
+        }
+    }
+
+    handleNextButton = () => {
+        if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song < this.state.data.songs.length - 1) {
+            this.selectSong(this.state.current_song + 1, 1);
+        }
+    }
+
+    handleVideoEnd = () => {
+        if (this.state.data && this.state.current_song < this.state.data.songs.length - 1) {
+            this.selectSong(this.state.current_song + 1, 1);
         }
     }
 
@@ -298,6 +357,39 @@ class PlaylistPageDisplay extends React.Component {
         this.setState({charCount: length});
     }
 
+    getSongsTotalLength() {
+        if (this.state.data.songs) {
+            var sum = 0;
+            this.state.data.songs.forEach(song => {
+                if (song.length) {
+                    sum += song.length;
+                }
+            });
+            return sum;
+        }
+        return 0;
+    }
+
+    getSecondsPadder(seconds) {
+        if (seconds % 60 < 10) {
+            return '0';
+        }
+        return '';
+    }
+
+    keyPressed = (e) => {
+        if (e.which === 80 || e.keyCode === 80) {
+            this.handlePrevButton();
+        }
+        if (e.which === 78 || e.keyCode === 78) {
+            this.handleNextButton();
+        }
+        if (e.which === 32 || e.keyCode === 32) {
+            e.preventDefault();
+            this.handlePlayButton();
+        }
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -327,15 +419,20 @@ class PlaylistPageDisplay extends React.Component {
                             </div>
                             <div className="col">
                                 <div className="row" id="title-row">
-                                    <div className="col">
+                                    <div className="col-md-auto" style={{paddingRight: "0px"}}>
+                                        <img id="play-pause-img-top" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
+                                    </div>
+                                    <div className="col-md-auto" style={{margin: "auto", paddingRight: "0px"}}>
                                         <h1>{this.state.data.name}</h1>
-                                        <div id="icons-div">
+                                        </div>
+                                        <div id="icons-div" className="col">
                                             {likeButton}
                                             {bookmarkButton}
                                             <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} />
                                             {editButton}
                                         </div>
-                                    </div>
+                                        
+                                    
                                 </div>
                                 <div className="row">
                                     <div className="col">
@@ -345,6 +442,11 @@ class PlaylistPageDisplay extends React.Component {
                                 <div className="row">
                                     <div className="col">
                                         {this.state.data.likes ? this.state.data.likes.length : 0} Likes
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col">
+                                        {this.state.data.songs ? this.state.data.songs.length : 0} Songs, {this.state.data.songs ? Math.floor(this.getSongsTotalLength() / 60) : 0} Minutes {this.state.data.songs ? this.getSongsTotalLength() % 60 : 0} Seconds
                                     </div>
                                 </div>
                                 <div className="row">
@@ -380,11 +482,11 @@ class PlaylistPageDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row" style={{minHeight: "30px"}}>
+                                                        <div className="row song-row" onClick={() => {this.selectSong(i, 1)}}>
                                                             <div className="col songs-col0">
                                                                 {
                                                                     song.note && song.note.length > 0 ? 
-                                                                    <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={() => {this.handleSongArrowClick(i)}}/>
+                                                                    <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={(e) => {this.handleSongArrowClick(i, e)}}/>
                                                                     : null
                                                                 }
                                                                 <b>{(i+1) + "."}</b>
@@ -397,7 +499,7 @@ class PlaylistPageDisplay extends React.Component {
                                                             </div>
                                                             <div className="col songs-col3">
                                                                 {/* TODO: get this from youtube data api */}
-                                                                {song.length ? Math.floor(song.length / 60) + ":" + song.length % 60 : "N/A"}
+                                                                {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}
                                                             </div>
                                                         </div>
                                                         {
@@ -484,9 +586,9 @@ class PlaylistPageDisplay extends React.Component {
                         <div className="container fixed-bottom" id="play-track-container">
                             <div className="row">
                                 <div className="col-md-auto" id="play-track-left-col">
-                                    <img id="prev-song-img" className="invert-color" src={skip_previous_img} height="60px" width="60px" />
+                                    <img id="prev-song-img" className="invert-color" src={this.getPreviousButtonImage()} height="60px" width="60px" onClick={this.handlePrevButton} />
                                     <img id="play-pause-img" className="invert-color" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
-                                    <img id="next-song-img" className="invert-color" src={skip_next_img} height="60px" width="60px" />
+                                    <img id="next-song-img" className="invert-color" src={this.getNextButtonImage()} height="60px" width="60px" onClick={this.handleNextButton} />
                                 </div>
                                 <div className="col" id="play-track-right-col">
                                     <div className="row">
@@ -503,6 +605,9 @@ class PlaylistPageDisplay extends React.Component {
                                             }
                                         </div>
                                     </div>
+                                </div>
+                                <div className="col-md-auto">
+                                    <YoutubeVideo id={this.state.currentYoutubeVideoId} handleVideoEnd={this.handleVideoEnd} togglePlayButton={this.togglePlayButton} ref={this.videoRef} />
                                 </div>
                             </div>
                         </div>
