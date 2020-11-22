@@ -12,7 +12,7 @@ class NavBarWrapper extends React.Component {
     render() {
         return (
             <div id="wrapper">
-                <NavBar />
+                <NavBar afterSettingsUpdate={this.props.afterSettingsUpdate} />
                 <div id="page-content">
                     {this.props.children}
                 </div>

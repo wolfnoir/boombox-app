@@ -34,6 +34,7 @@ class UserProfileDisplay extends React.Component {
             followers: {},
             isFollowing: false,
         }
+        this.afterSettingsUpdate = this.afterSettingsUpdate.bind(this);
     }
 
     getProfileImage = () => {
@@ -166,6 +167,20 @@ class UserProfileDisplay extends React.Component {
         }
     }
 
+    afterSettingsUpdate(data) {
+        if (data) {
+            const stateData = this.state.data;
+            if (data.bio) {
+                stateData.bio = data.bio;
+                this.setState({data: stateData});
+            }
+            if (data.username) {
+                stateData.username = data.username;
+                this.setState({data: stateData});
+            }
+        }
+    }
+
     componentDidMount(){
         this.getUserData();
         this.getProfileImageData(); //COMMENT THIS IN LATER
@@ -208,7 +223,7 @@ class UserProfileDisplay extends React.Component {
             }
 
             return(
-                <NavBarWrapper>
+                <NavBarWrapper afterSettingsUpdate={this.afterSettingsUpdate}>
                 <div className = "user-profile">
                     <table className = "user-profile-header">
                         <tbody>
