@@ -68,6 +68,7 @@ class YouTubeVideo extends React.PureComponent {
             this.props.handleVideoEnd();
         }
         */
+       console.log(event.data);
         if (event.data === window.YT.PlayerState.ENDED) { //0
             this.props.handleVideoEnd();
         }

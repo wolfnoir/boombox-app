@@ -100,6 +100,7 @@ class PlaylistPageDisplay extends React.Component {
             console.log(data);
             this.setState({imageData: data.imageData});
         });
+        document.onkeypress = this.keyPressed;
     }
 
     getArrow(i) {
@@ -185,13 +186,13 @@ class PlaylistPageDisplay extends React.Component {
 
     handlePrevButton = () => {
         if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song > 0) {
-            this.selectSong(this.state.current_song - 1);
+            this.selectSong(this.state.current_song - 1, 1);
         }
     }
 
     handleNextButton = () => {
         if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song < this.state.data.songs.length - 1) {
-            this.selectSong(this.state.current_song + 1);
+            this.selectSong(this.state.current_song + 1, 1);
         }
     }
 
@@ -376,6 +377,19 @@ class PlaylistPageDisplay extends React.Component {
         return '';
     }
 
+    keyPressed = (e) => {
+        if (e.which === 80 || e.keyCode === 80) {
+            this.handlePrevButton();
+        }
+        if (e.which === 78 || e.keyCode === 78) {
+            this.handleNextButton();
+        }
+        if (e.which === 32 || e.keyCode === 32) {
+            e.preventDefault();
+            this.handlePlayButton();
+        }
+    }
+
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
@@ -463,7 +477,7 @@ class PlaylistPageDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row song-row" onClick={() => {this.selectSong(i)}}>
+                                                        <div className="row song-row" onClick={() => {this.selectSong(i, 1)}}>
                                                             <div className="col songs-col0">
                                                                 {
                                                                     song.note && song.note.length > 0 ? 
