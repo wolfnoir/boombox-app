@@ -56,7 +56,7 @@
 /* need to figure out how to vertical align with title */
 #playlist-page-container #icons-div {
     display: inline-block;
-    margin-left: 15px;
+    margin: auto;
 }
 
 #playlist-page-container #icons-div > img {
@@ -205,6 +205,6 @@
     filter: invert(1);
 }
 
-#playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #playlist-page-container #next-song-img {
+#playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #play-pause-img-top, #playlist-page-container #next-song-img {
     cursor: pointer;
 }

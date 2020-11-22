@@ -419,15 +419,20 @@ class PlaylistPageDisplay extends React.Component {
                             </div>
                             <div className="col">
                                 <div className="row" id="title-row">
-                                    <div className="col">
+                                    <div className="col-md-auto" style={{paddingRight: "0px"}}>
+                                        <img id="play-pause-img-top" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
+                                    </div>
+                                    <div className="col-md-auto" style={{margin: "auto", paddingRight: "0px"}}>
                                         <h1>{this.state.data.name}</h1>
-                                        <div id="icons-div">
+                                        </div>
+                                        <div id="icons-div" className="col">
                                             {likeButton}
                                             {bookmarkButton}
                                             <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} />
                                             {editButton}
                                         </div>
-                                    </div>
+                                        
+                                    
                                 </div>
                                 <div className="row">
                                     <div className="col">
