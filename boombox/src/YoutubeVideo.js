@@ -23,6 +23,7 @@ class YouTubeVideo extends React.PureComponent {
     loadVideoWithId = (videoId, autoplay=0) => {
         window.YT.ready(() => {
             console.log(videoId);
+            this.autoplay = autoplay;
             if (videoId) {
                 this.isVideoReady = false;
                 const youtubePlayer = document.getElementById("youtube-player");
@@ -57,7 +58,9 @@ class YouTubeVideo extends React.PureComponent {
     }
 
     onPlayerReady = (event) => {
-        //event.target.playVideo();
+        if (this.autoplay) {
+            event.target.playVideo();
+        }
         this.isVideoReady = true;
     };
 
