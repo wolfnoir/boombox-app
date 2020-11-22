@@ -21,29 +21,30 @@ class YouTubeVideo extends React.PureComponent {
 
 
     loadVideoWithId = (videoId, autoplay=0) => {
-        console.log(videoId);
-        if (videoId) {
-            this.isVideoReady = false;
-            const youtubePlayer = document.getElementById("youtube-player");
-            if (youtubePlayer) {
-                console.log(youtubePlayer.tagName);
-                document.getElementById('youtube-player-wrapper').removeChild(youtubePlayer);
-            }
-            const newYoutubePlayer = document.createElement('div');
-            newYoutubePlayer.setAttribute('id', 'youtube-player');
-            document.getElementById('youtube-player-wrapper').appendChild(newYoutubePlayer);
-
-            this.player = new window.YT.Player('youtube-player', {
-                videoId: videoId,
-                height: '45',
-                width: '80',
-                events: {
-                    onReady: this.onPlayerReady,
-                    onStateChange: this.onStateChange
-                },
-                playerVars: {autoplay: autoplay} //controls: 0
-            });
-        }
+        window.YT.ready(() => {
+            console.log(videoId);
+            if (videoId) {
+                this.isVideoReady = false;
+                const youtubePlayer = document.getElementById("youtube-player");
+                if (youtubePlayer) {
+                    console.log(youtubePlayer.tagName);
+                    document.getElementById('youtube-player-wrapper').removeChild(youtubePlayer);
+                }
+                const newYoutubePlayer = document.createElement('div');
+                newYoutubePlayer.setAttribute('id', 'youtube-player');
+                document.getElementById('youtube-player-wrapper').appendChild(newYoutubePlayer);
+                this.player = new window.YT.Player('youtube-player', {
+                    videoId: videoId,
+                    height: '45',
+                    width: '80',
+                    events: {
+                        onReady: this.onPlayerReady,
+                        onStateChange: this.onStateChange
+                    },
+                    playerVars: {autoplay: autoplay} //controls: 0
+                });
+            };
+        });
     };
 
     loadVideo = () => {
@@ -60,8 +61,18 @@ class YouTubeVideo extends React.PureComponent {
     };
 
     onStateChange = (event) => {
-        if (event.data === 0) {
+        if (event.data == -1) {
+            console.log("Failed to load video");
             this.props.handleVideoEnd();
+        }
+        if (event.data === window.YT.PlayerState.ENDED) { //0
+            this.props.handleVideoEnd();
+        }
+        if (event.data == window.YT.PlayerState.PLAYING) { //1
+            this.props.togglePlayButton(true);
+        }
+        if (event.data === window.YT.PlayerState.PAUSED) { //2
+            this.props.togglePlayButton(false);
         }
     }
 

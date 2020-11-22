@@ -179,6 +179,10 @@ class PlaylistPageDisplay extends React.Component {
         }
     }
 
+    togglePlayButton = (is_song_playing) => {
+        this.setState({is_song_playing: is_song_playing});
+    }
+
     handlePrevButton = () => {
         if (this.state.data && this.state.data.songs.length > 1 && this.state.current_song > 0) {
             this.selectSong(this.state.current_song - 1);
@@ -584,7 +588,7 @@ class PlaylistPageDisplay extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-auto">
-                                    <YoutubeVideo id={this.state.currentYoutubeVideoId} handleVideoEnd={this.handleVideoEnd} ref={this.videoRef} />
+                                    <YoutubeVideo id={this.state.currentYoutubeVideoId} handleVideoEnd={this.handleVideoEnd} togglePlayButton={this.togglePlayButton} ref={this.videoRef} />
                                 </div>
                             </div>
                         </div>
