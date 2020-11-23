@@ -397,7 +397,15 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`/getPlaylistData/${this.props.playlistId}`)
+        const body = JSON.stringify({
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/getPlaylistData/${this.props.playlistId}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             if (obj.status == 0) {

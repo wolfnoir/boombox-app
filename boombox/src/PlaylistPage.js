@@ -10,7 +10,8 @@ import './css/bootstrap.min.css';
 import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
 import liked_img from './images/favorite-24px.svg';
-import bookmark_img from './images/bookmark-24px.svg';
+import bookmarked_img from './images/bookmark-24px.svg';
+import bookmark_img from './images/bookmark_border-black-24dp.svg';
 import default_playlist_img from './images/default-playlist-cover.png';
 import link_img from './images/link-24px.svg';
 import edit_img from './images/create-24px.svg';
@@ -71,7 +72,15 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`/getPlaylistData/${this.props.playlistId}`)
+        const body = JSON.stringify({
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/getPlaylistData/${this.props.playlistId}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
@@ -134,6 +143,13 @@ class PlaylistPageDisplay extends React.Component {
             return liked_img;
 
         return like_img;
+    }
+
+    getBookmarkImage() {
+        if(this.state.data.bookmarked)
+            return bookmarked_img;
+
+        return bookmark_img;
     }
 
     getPreviousButtonImage() {
@@ -234,6 +250,38 @@ class PlaylistPageDisplay extends React.Component {
         }
     }
 
+    bookmarkPlaylist = () => {
+        var user = this.cookie.get('username');
+        if (!user){
+            alert("Please log in to bookmark this playlist!");
+        }
+        else {
+            const body = JSON.stringify({
+                'playlistId': this.props.playlistId,
+                'username': this.cookie.get('username'),
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/updateBookmarks', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status == 0) {
+                    console.log('Playlist bookmarked!');
+                }
+                else {
+                    console.log('Unauthorized');
+                }
+    
+                var data = {...this.state.data};
+                data.bookmarked = !data.bookmarked;
+                this.setState({data});
+            });
+        }
+    }
+
     copyLink(){
         var currentURL = window.location.href;
         navigator.clipboard.writeText(currentURL)
@@ -276,6 +324,7 @@ class PlaylistPageDisplay extends React.Component {
                         content: comment,
                         date: date,
                         user_id: userId,
+                        username: user
                     }
                     dataCopy.comments.push(currentComment);
                     this.setState({data: dataCopy});
@@ -404,7 +453,7 @@ class PlaylistPageDisplay extends React.Component {
             }
 
             var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
-            var bookmarkButton = <img src={bookmark_img} height="30px" width="30px" />
+            var bookmarkButton = <img src={this.getBookmarkImage()} height="30px" width="30px" onClick = {this.bookmarkPlaylist} />
             
             if(!this.cookie.get('username')){
                 likeButton = null;

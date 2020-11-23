@@ -95,6 +95,8 @@ app.post("/editPlaylistSettings", PlaylistHandler.editPlaylistSettingsRoute);
 
 app.post("/updateLikes", PlaylistHandler.updateLikesRoute);
 
+app.post("/updateBookmarks", PlaylistHandler.updateBookmarksRoute);
+
 app.post("/addComment", PlaylistHandler.addCommentRoute);
 
 app.post("/deleteComment", PlaylistHandler.deleteCommentRoute);
