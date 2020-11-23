@@ -121,6 +121,9 @@ class SettingsPane extends React.Component {
                 //alert('Username changed!');
                 error.innerHTML = "";
                 confirm.innerHTML = "Username changed!";
+                if (this.props.afterSettingsUpdate) {
+                    this.props.afterSettingsUpdate({username: username.value});
+                }
             }
             else if (obj.status === 5) {
                 //alert('Username already taken!');
@@ -201,6 +204,9 @@ class SettingsPane extends React.Component {
                 //alert('Bio successfully changed!');
                 error.innerHTML = "";
                 confirm.innerHTML = "Bio successfully changed!";
+                if (this.props.afterSettingsUpdate) {
+                    this.props.afterSettingsUpdate({bio: value});
+                }
             }
             else {
                 //alert('somehow it broke');

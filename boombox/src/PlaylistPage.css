@@ -56,7 +56,7 @@
 /* need to figure out how to vertical align with title */
 #playlist-page-container #icons-div {
     display: inline-block;
-    margin-left: 15px;
+    margin: auto;
 }
 
 #playlist-page-container #icons-div > img {
@@ -123,6 +123,15 @@
     padding: 5px 0px;
 }
 
+#playlist-page-container .song-row {
+    transition: 0.3s;
+    min-height: 30px;
+}
+
+#playlist-page-container .song-row:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.3)
+}
 
 #playlist-page-container .song-arrow {
     cursor: pointer;
@@ -196,6 +205,6 @@
     filter: invert(1);
 }
 
-#playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #playlist-page-container #next-song-img {
+#playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #play-pause-img-top, #playlist-page-container #next-song-img {
     cursor: pointer;
 }
