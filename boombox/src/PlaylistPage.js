@@ -53,7 +53,8 @@ class PlaylistPageDisplay extends React.Component {
             //current_song: 2, //temporary for showing
             is_song_playing: false,
             imageData: null,
-            charCount: 0
+            charCount: 0,
+            likeCount: 0,
         }
 
         this.likePlaylist = this.likePlaylist.bind(this);
@@ -85,7 +86,10 @@ class PlaylistPageDisplay extends React.Component {
         .then(obj => {
             console.log(obj);
             if (obj.status == 0) {
-                this.setState({data: obj.result});
+                this.setState({
+                    data: obj.result,
+                    likeCount: obj.result.likes.length
+                });
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
@@ -246,6 +250,16 @@ class PlaylistPageDisplay extends React.Component {
                 var data = {...this.state.data};
                 data.liked = !data.liked;
                 this.setState({data});
+                if(data.liked){
+                    this.setState({
+                        likeCount: this.state.likeCount + 1
+                    })
+                }
+                else {
+                    this.setState({
+                        likeCount: this.state.likeCount - 1
+                    })
+                }
             });
         }
     }
@@ -490,7 +504,7 @@ class PlaylistPageDisplay extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        {this.state.data.likes ? this.state.data.likes.length : 0} Likes
+                                        {this.state.likeCount ? this.state.likeCount : 0} Likes
                                     </div>
                                 </div>
                                 <div className="row">
