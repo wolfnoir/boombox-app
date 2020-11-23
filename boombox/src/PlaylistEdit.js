@@ -481,7 +481,7 @@ class PlaylistEditDisplay extends React.Component {
         var errorField = document.getElementById("edit-song-error-"+i);;
         var lengthField = document.getElementById("edit-song-video-length-"+i)
 
-        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_-]{11,}$");
         var url = urlField.value;
 
         if(p.test(url)){
@@ -520,7 +520,7 @@ class PlaylistEditDisplay extends React.Component {
         var errorField = document.getElementById("add-song-error");
         var lengthField = document.getElementById("add-song-video-length");
 
-        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_-]{11,}$");
         var url = urlField.value;
         if(p.test(url)){
             var songId = urlField.value.substring(urlField.value.lastIndexOf("=") + 1);
@@ -740,7 +740,7 @@ class PlaylistEditDisplay extends React.Component {
         const validatorField = i >= 0 ? document.getElementById("edit-song-url-validator-"+i) : document.getElementById("add-song-url-validator");
         const videoLengthField = i >= 0 ? document.getElementById("edit-song-video-length-"+i) : document.getElementById("add-song-video-length");
 
-        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_]{11,}$");
+        var p = new RegExp("^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/watch\\?v\=[a-zA-Z0-9_-]{11,}$");
         var url = urlField.value;
         console.log(url);
 
