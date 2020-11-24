@@ -1,6 +1,8 @@
 import React from 'react';
 import NavBarWrapper from './NavBarWrapper';
 import PlaylistDisplay from './PlaylistDisplay';
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import './css/bootstrap.min.css';
 import './Dashboard.css';
 import bookmark_icon from './images/bookmark-24px.svg';
@@ -21,7 +23,26 @@ class Dashboard extends React.Component {
         super(props);
         this.state = {
             newPlaylists: [],
-            recommendedPlaylists: []
+            recommendedPlaylists: [],
+            responsive: {
+                superLargeDesktop: {
+                // the naming can be any, depends on you.
+                breakpoint: { max: 4000, min: 3000 },
+                items: 5
+                },
+                desktop: {
+                breakpoint: { max: 3000, min: 1024 },
+                items: 3
+                },
+                tablet: {
+                breakpoint: { max: 1024, min: 464 },
+                items: 2
+                },
+                mobile: {
+                breakpoint: { max: 464, min: 0 },
+                items: 1
+                }
+            },
         }
     }
 
@@ -126,7 +147,7 @@ class Dashboard extends React.Component {
                     </div>
                     <div className="row" id="row2">
                         <div className="col">
-                            {listofNewPlaylistDisplays}
+                            <Carousel responsive={this.state.responsive} infinite="true" centerMode="true">{listofNewPlaylistDisplays}</Carousel>
                         </div>
                     </div>
                     <div className="row" id="row3">
@@ -136,7 +157,7 @@ class Dashboard extends React.Component {
                     </div>
                     <div className="row" id="row4">
                         <div className="col">
-                            {listofRecommendedPlaylistDisplays}
+                            <Carousel responsive={this.state.responsive} infinite="true" centerMode="true">{listofRecommendedPlaylistDisplays}</Carousel>
                         </div>
                     </div>
                 </div>
