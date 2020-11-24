@@ -363,9 +363,15 @@ class PlaylistHandler {
                 comment.username = (!userObject)? "Anonymous" : userObject.username;
             }
 
-            const selfUserIdObject = MongoClient.ObjectID(self_user_id);
-            playlistObject.liked = playlistObject.likes.filter( id => id.equals(selfUserIdObject)).length > 0;
+            //const selfUserIdObject = MongoClient.ObjectID(self_user_id);
+            playlistObject.liked = playlistObject.likes.filter( id => id.equals(self_user_id)).length > 0;
 
+            const userBookmarkQuery = {"_id": self_user_id};
+            const userBookmarkObj = await client.db(monogDbName).collection(mongoUserCollection).findOne(userBookmarkQuery);
+            if(userBookmarkObj) {
+                playlistObject.bookmarked = userBookmarkObj.bookmarks.filter( id => id.equals(idObject)).length > 0;
+            }
+            
             return {
                 status: 0,
                 result: playlistObject
@@ -381,7 +387,9 @@ class PlaylistHandler {
     }
 
     static async getPlaylistRoute(req, res) {
-        const user_id = req.session.user_id;
+        const username = req.body.username;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
         const playlist_id = req.params.playlistId;
         const statusObject = await PlaylistHandler.getPlaylist(user_id, playlist_id);
 
@@ -504,6 +512,63 @@ class PlaylistHandler {
         const idResponse = await PlaylistHandler.getUserId(username);
         const user_id = new MongoClient.ObjectID(idResponse.result);
         const statusObject = await PlaylistHandler.updateLikes(user_id, playlistId);
+
+        res.send(statusObject);
+     }
+
+     static async updateBookmarks(user_id, playlistId) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const userCollection = client.db(monogDbName).collection(mongoUserCollection);
+            const playlistConnection = client.db(monogDbName).collection(mongoPlaylistCollection);
+            const idObject = MongoClient.ObjectID(playlistId);
+            const foundPlaylist = await playlistConnection.findOne({"_id": idObject});
+            if (!foundPlaylist) {
+                console.log('playlist not found');
+                return {status: -1};
+            }
+
+            const foundUser = await userCollection.findOne({"_id": user_id});
+
+            var bookmarks = foundUser.bookmarks;
+
+            if(bookmarks.filter( id => id.equals(idObject)).length > 0)
+                bookmarks = bookmarks.filter( id => !id.equals(idObject));
+
+            else
+                bookmarks.push(idObject);
+
+            await userCollection.updateOne({"_id": user_id}, {$set: {bookmarks: bookmarks}}); //add status checking for update?
+            return {status: 0};
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally {
+            client.close();
+        }
+     }
+
+     static async updateBookmarksRoute(req, res) {
+        const username = req.body.username;
+        const playlistId = req.body.playlistId;
+        const idResponse = await PlaylistHandler.getUserId(username);
+        const user_id = new MongoClient.ObjectID(idResponse.result);
+        const statusObject = await PlaylistHandler.updateBookmarks(user_id, playlistId);
 
         res.send(statusObject);
      }

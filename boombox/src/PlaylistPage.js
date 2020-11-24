@@ -10,7 +10,8 @@ import './css/bootstrap.min.css';
 import './PlaylistPage.css';
 import like_img from './images/favorite_border-24px.svg';
 import liked_img from './images/favorite-24px.svg';
-import bookmark_img from './images/bookmark-24px.svg';
+import bookmarked_img from './images/bookmark-24px.svg';
+import bookmark_img from './images/bookmark_border-black-24dp.svg';
 import default_playlist_img from './images/default-playlist-cover.png';
 import link_img from './images/link-24px.svg';
 import edit_img from './images/create-24px.svg';
@@ -52,7 +53,8 @@ class PlaylistPageDisplay extends React.Component {
             //current_song: 2, //temporary for showing
             is_song_playing: false,
             imageData: null,
-            charCount: 0
+            charCount: 0,
+            likeCount: 0,
         }
 
         this.likePlaylist = this.likePlaylist.bind(this);
@@ -71,12 +73,23 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`/getPlaylistData/${this.props.playlistId}`)
+        const body = JSON.stringify({
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/getPlaylistData/${this.props.playlistId}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
             if (obj.status == 0) {
-                this.setState({data: obj.result});
+                this.setState({
+                    data: obj.result,
+                    likeCount: obj.result.likes.length
+                });
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
                 }
@@ -134,6 +147,13 @@ class PlaylistPageDisplay extends React.Component {
             return liked_img;
 
         return like_img;
+    }
+
+    getBookmarkImage() {
+        if(this.state.data.bookmarked)
+            return bookmarked_img;
+
+        return bookmark_img;
     }
 
     getPreviousButtonImage() {
@@ -230,6 +250,48 @@ class PlaylistPageDisplay extends React.Component {
                 var data = {...this.state.data};
                 data.liked = !data.liked;
                 this.setState({data});
+                if(data.liked){
+                    this.setState({
+                        likeCount: this.state.likeCount + 1
+                    })
+                }
+                else {
+                    this.setState({
+                        likeCount: this.state.likeCount - 1
+                    })
+                }
+            });
+        }
+    }
+
+    bookmarkPlaylist = () => {
+        var user = this.cookie.get('username');
+        if (!user){
+            alert("Please log in to bookmark this playlist!");
+        }
+        else {
+            const body = JSON.stringify({
+                'playlistId': this.props.playlistId,
+                'username': this.cookie.get('username'),
+            });
+            const headers = {"Content-Type": "application/json"};
+            fetch('/updateBookmarks', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            }).then(res => res.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.status == 0) {
+                    console.log('Playlist bookmarked!');
+                }
+                else {
+                    console.log('Unauthorized');
+                }
+    
+                var data = {...this.state.data};
+                data.bookmarked = !data.bookmarked;
+                this.setState({data});
             });
         }
     }
@@ -276,6 +338,7 @@ class PlaylistPageDisplay extends React.Component {
                         content: comment,
                         date: date,
                         user_id: userId,
+                        username: user
                     }
                     dataCopy.comments.push(currentComment);
                     this.setState({data: dataCopy});
@@ -298,7 +361,7 @@ class PlaylistPageDisplay extends React.Component {
             if(user !== this.state.data.comments[i].username){
                 alert("You are not authorized to delete this comment!");
             }
-            else {
+            else { //redo this so it's not so stupid and repeats code
                 const body = JSON.stringify({
                     'playlistId': this.props.playlistId,
                     'index': i
@@ -404,7 +467,7 @@ class PlaylistPageDisplay extends React.Component {
             }
 
             var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
-            var bookmarkButton = <img src={bookmark_img} height="30px" width="30px" />
+            var bookmarkButton = <img src={this.getBookmarkImage()} height="30px" width="30px" onClick = {this.bookmarkPlaylist} />
             
             if(!this.cookie.get('username')){
                 likeButton = null;
@@ -441,7 +504,7 @@ class PlaylistPageDisplay extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col">
-                                        {this.state.data.likes ? this.state.data.likes.length : 0} Likes
+                                        {this.state.likeCount ? this.state.likeCount : 0} Likes
                                     </div>
                                 </div>
                                 <div className="row">

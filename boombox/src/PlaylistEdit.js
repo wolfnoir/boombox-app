@@ -196,7 +196,7 @@ class PlaylistSettings extends React.Component {
         .then(obj => {
             console.log(obj);
             if (obj.status === 0) {
-                alert('successfully deleted playlist');
+                //alert('successfully deleted playlist');
                 window.location = '/';
             }
             else if (obj.status === 1) {
@@ -397,7 +397,15 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`/getPlaylistData/${this.props.playlistId}`)
+        const body = JSON.stringify({
+            'username': this.cookie.get('username'),
+        });
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/getPlaylistData/${this.props.playlistId}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             if (obj.status == 0) {
@@ -623,7 +631,8 @@ class PlaylistEditDisplay extends React.Component {
             console.log(obj);
             //need to make response better
             if (obj.status == 0) {
-                alert('Playlist saved!');
+                //alert('Playlist saved!');
+                window.location = '/playlist/' + this.props.playlistId;
             }
             else if (obj.status == 1) {
                 alert('You are not authorized to edit this playlist!');
