@@ -19,6 +19,7 @@ import PlaylistEdit from './PlaylistEdit';
 import PlaylistPage from './PlaylistPage';
 import Register from './Register';
 import SearchResults from './SearchResults';
+import TagResults from './TagResults';
 import SettingsPane from './SettingsPane';
 import FollowersPage from './FollowersPage';
 import FollowingPage from './FollowingPage';
@@ -58,6 +59,7 @@ class MyRouter extends React.Component {
 					<Route path="/user/:username/following" component={FollowingPage} />
 					<Route path="/user/:username" component={UserProfile} />
 					<Route path="/search/:query" component={SearchResults} />
+					<Route path="/tag/:tag" component={TagResults} />
 					<Route path="/error" component={PageNotFound} />
 				</Switch>
 			</div>
