@@ -117,6 +117,8 @@ app.post("/getNewPlaylists", UserHandler.getNewPlaylistsRoute);
 
 app.all("/getTags", TagHandler.getTagsRoute);
 
+app.all("/getTagResults/:tag", TagHandler.getTagResultsRoute);
+
 /*
 app.all("/getNewPlaylists", (req, res) => {
 	var data = {

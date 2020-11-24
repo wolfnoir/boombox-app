@@ -1,0 +1,16 @@
+.tag-results {
+    width: 60%;
+    font-family: 'Roboto Condensed';
+    margin: auto;
+}
+
+.tag-result-label {
+    font-family: 'Orbitron';
+    font-weight: 600;
+    font-size: 28px;
+    text-align: center;
+}
+
+.playlists-results {
+    text-align: left;
+}
