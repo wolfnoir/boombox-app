@@ -186,6 +186,8 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getUserMatch/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
+            console.log(obj);
+            
             if(obj.status == 0)
                 this.setState({match: Math.trunc(obj.result)});
         });

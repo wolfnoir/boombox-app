@@ -1321,14 +1321,15 @@ class UserHandler {
                 user2Playlists.forEach(playlist => {user2Count += playlist.songs.length * (playlist.tags.includes(tag))? 1: 0;});
                 const user2Ratio = user2Count / user2PlaylistSongs;
 
-                ratios[tag] = [user1Ratio, user2Ratio];
+                if(user1Ratio != 0 || user2Ratio != 0)
+                    ratios[tag] = [user1Ratio, user2Ratio];
             });
 
             //Using simple Euclidean distance for now
             var distance = 0;
 
             for(const [key, value] of Object.entries(ratios)) {
-                const difference = value[0] - value[1];
+                const difference = value[0] - value[1] / Math.max(value[0], value[1]);
                 distance += Math.pow(difference, 2);
             }
 
