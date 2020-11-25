@@ -55,27 +55,28 @@ class Bookmarks extends React.Component {
         ]
         /*--------------------------------------------------*/
 
-        var listofPlaylistDisplays = this.state.bookmarks.map((playlist, i) => {
-            //need to figure out how to load image
-            //albumCover={playlist.image} 
-            return (
-                <PlaylistDisplay
-                    albumCover={staticImages[i]} 
-                    title={playlist.name}
-                    author={playlist.author}
-                    likes={playlist.likes} 
-                    url={playlist.url}
-                    image_url={playlist.image_url}
-                    key={playlist.key}
-                    id = {playlist._id}
-                    isPrivate = {playlist.isPrivate}
-                />
-            )
-        });
-
-        var noBookmarks = null;
-        if (this.state.bookmarks.length === 0){
-            noBookmarks = "No bookmarks found! :-(";
+        var listofPlaylistDisplays = null;
+        if (this.state.bookmarks.length === 0) {
+            listofPlaylistDisplays = <div style = {{fontFamily: 'Roboto Condensed', textAlign: 'center'}}>No bookmarks found! :-(</div>
+        }
+        else {
+            listofPlaylistDisplays = this.state.bookmarks.map((playlist, i) => {
+                //need to figure out how to load image
+                //albumCover={playlist.image} 
+                return (
+                    <PlaylistDisplay
+                        albumCover={staticImages[i]} 
+                        title={playlist.name}
+                        author={playlist.author}
+                        likes={playlist.likes} 
+                        url={playlist.url}
+                        image_url={playlist.image_url}
+                        key={playlist.key}
+                        id = {playlist._id}
+                        isPrivate = {playlist.isPrivate}
+                    />
+                )
+            });
         }
         
         
@@ -88,7 +89,6 @@ class Bookmarks extends React.Component {
                             {/*   <img src={require('./images/watermelon-wolf.jpg')} alt="" />   */}
                         </div>
                     </div>
-                    <div style = {{fontFamily: 'Roboto Condensed', textAlign: 'center'}}>{noBookmarks}</div>
                     <div className="row" id="row2">
                         <div className="col">
                             {listofPlaylistDisplays}
