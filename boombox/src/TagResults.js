@@ -66,7 +66,7 @@ class TagResults extends React.Component {
             <NavBarWrapper>
                 <div className = "tag-results">
                     <div className="tag-result-label">
-                        {this.state.tag}
+                        Tag Search: {this.state.tag}
                     </div>
                     
                     <div className = "playlists-results">

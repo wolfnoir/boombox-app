@@ -552,7 +552,7 @@ class PlaylistPageDisplay extends React.Component {
                                                                     <img className="song-arrow" id={"song-arrow-" + i} src={this.getArrow(i)} height="30px" width="30px" alt=">" onClick={(e) => {this.handleSongArrowClick(i, e)}}/>
                                                                     : null
                                                                 }
-                                                                <b>{(i+1) + "."}</b>
+                                                                <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
                                                             <div className="col songs-col1">
                                                                 <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
