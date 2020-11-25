@@ -50,9 +50,9 @@ class Bookmarks extends React.Component {
          /*--------------------------------------------------*/
         /* TEMPORARY STATIC IMAGE IMPORTS                   */
         /*--------------------------------------------------*/
-        var staticImages = [
-            wolf_img, mountain_img, church_img, noir_img, leafy_img, noir2_img
-        ]
+        // var staticImages = [
+        //     wolf_img, mountain_img, church_img, noir_img, leafy_img, noir2_img
+        // ]
         /*--------------------------------------------------*/
 
         var listofPlaylistDisplays = null;
@@ -61,11 +61,9 @@ class Bookmarks extends React.Component {
         }
         else {
             listofPlaylistDisplays = this.state.bookmarks.map((playlist, i) => {
-                //need to figure out how to load image
-                //albumCover={playlist.image} 
                 return (
                     <PlaylistDisplay
-                        albumCover={staticImages[i]} 
+                        //albumCover={staticImages[i]} 
                         title={playlist.name}
                         author={playlist.author}
                         likes={playlist.likes} 
@@ -87,7 +85,6 @@ class Bookmarks extends React.Component {
                     <div className="row" id="row1">
                         <div className="col" id = "bookmarks-header">
                             <img src={bookmark_icon} width="30px" height="30px" alt="" /> bookmarks
-                            {/*   <img src={require('./images/watermelon-wolf.jpg')} alt="" />   */}
                         </div>
                     </div>
                     <div className="row" id="row2">
