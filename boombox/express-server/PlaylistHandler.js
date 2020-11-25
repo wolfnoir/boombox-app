@@ -272,9 +272,9 @@ class PlaylistHandler {
             return {status: -1};
         }
         
-        finally {
-            client.close();
-        }
+        // finally {
+        //     client.close();
+        // }
         console.log("Success");
         return {status: 0};
     }
@@ -450,9 +450,9 @@ class PlaylistHandler {
             console.log(err);
             return {status: -1};
         }
-        finally {
-            client.close();
-        }
+        // finally {
+        //     client.close();
+        // }
     }
 
     static async getPlaylistCoverDataRoute(req, res) {
