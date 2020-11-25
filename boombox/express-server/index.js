@@ -87,6 +87,8 @@ app.post("/checkIfFollowing", UserHandler.checkIfFollowingRoute);
 
 app.post("/getUsername", UserHandler.getUsernameRoute);
 
+app.all("/getUserMatch/:username", UserHandler.getUserMatchRoute);
+
 app.post("/createPlaylist", PlaylistHandler.createPlaylistRoute);
 
 app.post("/deletePlaylist", PlaylistHandler.deletePlaylistRoute);
