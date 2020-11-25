@@ -441,15 +441,17 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     keyPressed = (e) => {
-        if (e.which === 80 || e.keyCode === 80) {
-            this.handlePrevButton();
-        }
-        if (e.which === 78 || e.keyCode === 78) {
-            this.handleNextButton();
-        }
-        if (e.which === 32 || e.keyCode === 32) {
-            e.preventDefault();
-            this.handlePlayButton();
+        if (e.target != document.getElementById("comment-entry")) {
+            if (e.which === 80 || e.keyCode === 80) {
+                this.handlePrevButton();
+            }
+            if (e.which === 78 || e.keyCode === 78) {
+                this.handleNextButton();
+            }
+            if (e.which === 32 || e.keyCode === 32) {
+                e.preventDefault();
+                this.handlePlayButton();
+            }
         }
     }
 
