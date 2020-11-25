@@ -826,7 +826,7 @@ class PlaylistEditDisplay extends React.Component {
                                     <div className="col" id="playlist-edit-state-buttons-col">
                                         <button type="button" className="btn btn-primary" onClick = {() => this.saveChanges()}>Save Changes</button>
                                         <a href={"/playlist/" + this.props.playlistId}>
-                                            <button type="button" className="btn btn-danger">Cancel</button>
+                                            <button type="button" className="btn btn-danger">Back</button>
                                         </a>
                                     </div>
                                 </div>

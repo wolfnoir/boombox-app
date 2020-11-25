@@ -28,20 +28,18 @@ class Bookmarks extends React.Component {
         fetch('/getBookmarks')
         .then(res => res.json())
         .then(obj => {
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 console.log(obj);
                 this.setState({bookmarks: obj.result});
-                /*
-                for (var i = 0; i < this.state.bookmarks.length; i++) {
-                    this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
-                    this.state.bookmarks[i].key = "bookmarkedPlaylist" + i;
-                }
-                */
             }
             else {
-                this.setState({data: null}) //need to change the component to have a not found page
+                this.setState({bookmarks: null}) //need to change the component to have a not found page
             }
         });
+        for (var i = 0; i < this.state.bookmarks.length; i++) {
+            this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
+            this.state.bookmarks[i].key = "bookmarkedPlaylist" + i;
+        }
     }
 
     componentDidMount() {
@@ -74,6 +72,11 @@ class Bookmarks extends React.Component {
                 />
             )
         });
+
+        var noBookmarks = null;
+        if (this.state.bookmarks.length === 0){
+            noBookmarks = "No bookmarks found! :-(";
+        }
         
         
         return (
@@ -85,6 +88,7 @@ class Bookmarks extends React.Component {
                             {/*   <img src={require('./images/watermelon-wolf.jpg')} alt="" />   */}
                         </div>
                     </div>
+                    <div style = {{fontFamily: 'Roboto Condensed', textAlign: 'center'}}>{noBookmarks}</div>
                     <div className="row" id="row2">
                         <div className="col">
                             {listofPlaylistDisplays}
