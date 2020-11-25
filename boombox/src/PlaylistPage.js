@@ -441,7 +441,7 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     keyPressed = (e) => {
-        if (e.target != document.getElementById("comment-entry")) {
+        if (e.target != document.getElementById("comment-entry") && e.target != document.getElementById("search-input")) {
             if (e.which === 80 || e.keyCode === 80) {
                 this.handlePrevButton();
             }
