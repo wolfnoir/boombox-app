@@ -546,7 +546,10 @@ class PlaylistEditDisplay extends React.Component {
             }
             dataCopy.songs.push(currentSong);
             this.addToHistory(dataCopy.songs);
-            this.setState({data: dataCopy});
+            this.setState({
+                data: dataCopy,
+                charCount: 0
+            });
             this.toggleAddSong();
 
             urlField.value = "";
@@ -884,8 +887,8 @@ class PlaylistEditDisplay extends React.Component {
                                                                 
                                                             <img className="song-arrow" id={"song-arrow-" + i} 
                                                                 src={this.getArrow(i)} 
-                                                                height="30px" width="30px" alt=">"/> {/* should add onclick to toggle arrow*/}
-                                                                <b>{(i+1) + "."}</b>
+                                                                height="25px" width="25px" alt=">"/> {/* should add onclick to toggle arrow*/}
+                                                                <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
                                                             <div className="col songs-col1">
                                                                 <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}

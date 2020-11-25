@@ -5,7 +5,9 @@ import './Tag.css';
 class Tag extends React.Component {
     render() {
         return(
-            <button type="button" className="btn btn-primary tag-button" key={"tag"+ this.props.number}>{this.props.content}</button>
+            <a href={"/tag/" + this.props.content}>
+                <button type="button" className="btn btn-primary tag-button" key={"tag"+ this.props.number}>{this.props.content}</button>
+            </a>
         )
     }
 }

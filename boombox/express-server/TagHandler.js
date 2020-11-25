@@ -10,6 +10,8 @@ const fs = require("fs");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const mongoDbName = 'boombox';
+const mongoUserCollection = 'users';
+const mongoPlaylistsCollection = 'playlists';
 const mongoTagsCollection = 'tags';
 
 class TagHandler {
@@ -48,10 +50,77 @@ class TagHandler {
             console.log(err);
             return {status: -1};
         }
+
+        finally{
+            client.close();
+        }
     }
 
     static async getTagsRoute(req, res) {
         const statusObject = await TagHandler.getTags();
+        res.send(statusObject);
+    }
+
+    static async getTagResults(tag) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const userCollection = client.db(mongoDbName).collection(mongoUserCollection);
+            const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistsCollection);
+            const taggedPlaylists = []
+
+            const cursor = await playlistCollection.find({"tags": tag, "isPrivate": false});
+            if (!cursor) {
+                console.log("playlists not found");
+                return {status: 1};
+            }
+            
+            while(await cursor.hasNext()){
+                var playlistObject = await cursor.next();
+
+                const userQuery = {"_id": playlistObject.user_id};
+                const playlistUserObject = await userCollection.findOne(userQuery);
+
+                if (!playlistUserObject)
+                    playlistObject.author = null;
+
+                else
+                    playlistObject.author = playlistUserObject.username;
+
+                playlistObject.url = "/playlist/" + playlistObject._id;
+
+                taggedPlaylists.push(playlistObject);
+            };
+
+            return {
+                status: 0,
+                result: taggedPlaylists
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+
+        finally{
+            client.close();
+        }
+    }
+
+    static async getTagResultsRoute(req, res) {
+        const tag = req.params.tag;
+        const statusObject = await TagHandler.getTagResults(tag);
         res.send(statusObject);
     }
 }
