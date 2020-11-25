@@ -220,6 +220,7 @@ class UserProfileDisplay extends React.Component {
                         )
                     }
                 });
+                listOfUserPlaylists.reverse();
             }
 
             return(

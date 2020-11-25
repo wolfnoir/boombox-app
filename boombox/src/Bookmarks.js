@@ -77,6 +77,7 @@ class Bookmarks extends React.Component {
                     />
                 )
             });
+            listofPlaylistDisplays.reverse();
         }
         
         
