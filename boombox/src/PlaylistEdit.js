@@ -314,11 +314,17 @@ class PlaylistTags extends React.Component {
 
     fetchUnusedTags() {
         const unusedTags = this.state.allTags.filter((element) => !this.state.tags.includes(element));
-        return unusedTags.map( tag => ({ name: tag,value: tag}));
+
+        if(this.state.tags.length + this.state.selectedTags.length >= 10)
+            return unusedTags.map( tag => ({ name: tag, value: tag, disabled: true}));
+
+        else
+            return unusedTags.map( tag => ({ name: tag, value: tag}));
     }
 
     changedValues = (event) => {
-        this.setState({selectedTags: event});
+        if(this.state.tags.length + this.state.selectedTags.length < 10)
+            this.setState({selectedTags: event});
     }
 
     addTags() {
@@ -335,7 +341,7 @@ class PlaylistTags extends React.Component {
 
         return(
             <div>
-                <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" onClick={handleShow}/>
+                {this.state.tags && this.state.tags.length < 10? <img id="add-tag-icon" src={add_circle_img} height="30px" width="30px" onClick={handleShow}/> : null}
 
                 <Modal show={this.state.show} onHide={handleClose} size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
