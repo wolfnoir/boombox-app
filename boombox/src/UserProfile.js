@@ -33,6 +33,7 @@ class UserProfileDisplay extends React.Component {
             following: {},
             followers: {},
             isFollowing: false,
+            match: null
         }
         this.afterSettingsUpdate = this.afterSettingsUpdate.bind(this);
     }
@@ -181,10 +182,20 @@ class UserProfileDisplay extends React.Component {
         }
     }
 
+    getUserMatch() {
+        fetch(`/getUserMatch/${this.props.username}`)
+        .then(res => res.json())
+        .then(obj => {
+            if(obj.status == 0)
+                this.setState({match: Math.trunc(obj.result)});
+        });
+    }
+
     componentDidMount(){
         this.getUserData();
         this.getProfileImageData(); //COMMENT THIS IN LATER
         this.checkIfUserFollowing();
+        this.getUserMatch();
     }
 
     render(){
@@ -255,10 +266,14 @@ class UserProfileDisplay extends React.Component {
                                 </td>
 
                                 <td className = "user-profile-match-followers">
-                                    <div className = "user-profile-header-text match-followers">
-                                        Music Match<br/>
-                                        53%
-                                    </div>
+                                    {
+                                        this.state.match?
+                                        <div className = "user-profile-header-text match-followers">
+                                            Music Match<br/>
+                                            {this.state.match}%
+                                        </div>
+                                        : null
+                                    }
 
                                     <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
                                         Following<br/>

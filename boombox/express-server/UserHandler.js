@@ -854,7 +854,7 @@ class UserHandler {
             return;
         }
         
-        const statusObject = await UserHandler.getFollowing(username);
+        const statusObject = await UserHandler.getUserPlaylists(username);
         res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
     }
 
@@ -1263,9 +1263,104 @@ class UserHandler {
         }
     }
 
+    static async getUserMatch(username1, username2) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
 
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const userObject1 = await this.getProfilePageData(username1, username1);
+            const userObject2 = await this.getProfilePageData(username2, username2);
+
+            if(!userObject1 || !userObject2)
+                return {status: -1};
+
+            else if(userObject1.status != 0)
+                return {status: userObject1.status};
+
+            else if(userObject2.status != 0)
+                return {status: userObject2.status};
+
+            const user1Playlists = userObject1.result.playlists;
+            const user2Playlists = userObject2.result.playlists;
+
+            var user1PlaylistSongs = 0;
+            var user2PlaylistSongs = 0;
+
+            var tags = new Set([]);
+
+            user1Playlists.forEach(playlist => {
+                const playlistTags = playlist.tags;
+                playlistTags.forEach(tag => tags.add(tag));
+                user1PlaylistSongs++;
+            });
+
+            user2Playlists.forEach(playlist => {
+                const playlistTags = playlist.tags;
+                playlistTags.forEach(tag => tags.add(tag));
+                user2PlaylistSongs++;
+            });
+
+            var ratios = {};
+
+            tags.forEach(tag => {
+                var user1Count = 0;
+                user1Playlists.forEach(playlist => {user1Count += playlist.songs.length * (playlist.tags.includes(tag))? 1: 0;});
+                const user1Ratio = user1Count / user1PlaylistSongs;
+
+                var user2Count = 0;
+                user2Playlists.forEach(playlist => {user2Count += playlist.songs.length * (playlist.tags.includes(tag))? 1: 0;});
+                const user2Ratio = user2Count / user2PlaylistSongs;
+
+                ratios[tag] = [user1Ratio, user2Ratio];
+            });
+
+            //Using simple Euclidean distance for now
+            var distance = 0;
+
+            for(const [key, value] of Object.entries(ratios)) {
+                const difference = value[0] - value[1];
+                distance += Math.pow(difference, 2);
+            }
+
+            distance = Math.sqrt(distance / Object.keys(ratios).length);
+            const result = (1 - distance) * 100;
+
+            return {
+                status: 0,
+                result: result
+            };
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    static async getUserMatchRoute(req, res) {
+        const username1 = req.params.username;
+        const username2 = req.cookies.username;
+        
+        if (!username1 || !username2) {
+            res.send({status: 1});
+            return;
+        }
+        
+        const statusObject = await UserHandler.getUserMatch(username1, username2);
+        res.send(statusObject); //[status] -1: error occurred, 0: success, 1: user not found
+    }
 }
-
-
 
 module.exports = UserHandler;
