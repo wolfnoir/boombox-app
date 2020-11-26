@@ -27,26 +27,29 @@ class SearchResults extends React.Component {
     }
 
     getResultingUsers() {
-        fetch(`/getSearchResults/${this.state.queryString}`)
+        fetch(`/searchUsers/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
-            this.setState({users: obj.users});
+            if(obj.status == 0)
+                this.setState({users: obj.result});
         });
     }
 
     getResultingPlaylists() {
-        fetch(`/getSearchResults/${this.state.queryString}`)
+        fetch(`/searchPlaylists/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
-            this.setState({playlists: obj.playlists});
+            if(obj.status == 0)
+                this.setState({playlists: obj.result});
         });
     }
 
     getResultingTags() {
-        fetch(`/getSearchResults/${this.state.queryString}`)
+        fetch(`/searchTags/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
-            this.setState({tags: obj.tags});
+            if(obj.status == 0)
+                this.setState({tags: obj.result});
         });
     }
 
@@ -57,6 +60,18 @@ class SearchResults extends React.Component {
             this.getResultingPlaylists();
             this.getResultingTags();
         });
+    }
+
+    componentDidUpdate(prevprops){
+        if(prevprops != this.props){
+            const{ query } = this.props.match.params;
+
+            this.setState({queryString: query}, () => {
+                this.getResultingUsers();
+                this.getResultingPlaylists();
+                this.getResultingTags();
+            });
+        }
     }
 
     render(){
@@ -102,6 +117,8 @@ class SearchResults extends React.Component {
                 />
             )
         });
+
+        console.log(playlistsList);
 
         return(
             <NavBarWrapper>
