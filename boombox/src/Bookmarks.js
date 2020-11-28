@@ -28,20 +28,18 @@ class Bookmarks extends React.Component {
         fetch('/getBookmarks')
         .then(res => res.json())
         .then(obj => {
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 console.log(obj);
                 this.setState({bookmarks: obj.result});
-                /*
-                for (var i = 0; i < this.state.bookmarks.length; i++) {
-                    this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
-                    this.state.bookmarks[i].key = "bookmarkedPlaylist" + i;
-                }
-                */
             }
             else {
-                this.setState({data: null}) //need to change the component to have a not found page
+                this.setState({bookmarks: null}) //need to change the component to have a not found page
             }
         });
+        for (var i = 0; i < this.state.bookmarks.length; i++) {
+            this.state.bookmarks[i].image = require(this.state.bookmarks[i].image_url);
+            this.state.bookmarks[i].key = "bookmarkedPlaylist" + i;
+        }
     }
 
     componentDidMount() {
@@ -57,23 +55,30 @@ class Bookmarks extends React.Component {
         ]
         /*--------------------------------------------------*/
 
-        var listofPlaylistDisplays = this.state.bookmarks.map((playlist, i) => {
-            //need to figure out how to load image
-            //albumCover={playlist.image} 
-            return (
-                <PlaylistDisplay
-                    albumCover={staticImages[i]} 
-                    title={playlist.name}
-                    author={playlist.author}
-                    likes={playlist.likes} 
-                    url={playlist.url}
-                    image_url={playlist.image_url}
-                    key={playlist.key}
-                    id = {playlist._id}
-                    isPrivate = {playlist.isPrivate}
-                />
-            )
-        });
+        var listofPlaylistDisplays = null;
+        if (this.state.bookmarks.length === 0) {
+            listofPlaylistDisplays = <div style = {{fontFamily: 'Roboto Condensed', textAlign: 'center'}}>No bookmarks found! :-(</div>
+        }
+        else {
+            listofPlaylistDisplays = this.state.bookmarks.map((playlist, i) => {
+                //need to figure out how to load image
+                //albumCover={playlist.image} 
+                return (
+                    <PlaylistDisplay
+                        albumCover={staticImages[i]} 
+                        title={playlist.name}
+                        author={playlist.author}
+                        likes={playlist.likes} 
+                        url={playlist.url}
+                        image_url={playlist.image_url}
+                        key={playlist.key}
+                        id = {playlist._id}
+                        isPrivate = {playlist.isPrivate}
+                    />
+                )
+            });
+            listofPlaylistDisplays.reverse();
+        }
         
         
         return (
