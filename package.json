@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd boombox && npm run-script heroku-start"
+    "start": "cd boombox && npm run-script heroku-start",
+    "heroku-postbuild": "cd boombox && npm run-script heroku-post"
   },
   "repository": {
     "type": "git",
