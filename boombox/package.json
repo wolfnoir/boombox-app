@@ -31,8 +31,8 @@
     "universal-cookie": "4.0.4"
   },
   "scripts": {
-    "heroku-start": "npm install --only=dev && npm install && react-scripts build && cd express-server && npm start",
-    "heroku-start-two": "npm run-script start-server && npm run-script start-client",
+    "heroku-start": "cd express-server && node index.js",
+    "heroku-post": "npm install --only=dev && npm install && react-scripts build",
     "start": "react-scripts build && cd express-server && npm start",
     "start-client": "react-scripts start",
     "start-server": "cd express-server && nodemon index.js",
