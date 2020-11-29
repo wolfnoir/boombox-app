@@ -1331,7 +1331,9 @@ class UserHandler {
             var distance = 0;
 
             for(const [key, value] of Object.entries(ratios)) {
-                const difference = (value[0] - value[1]) / Math.max(value[0], value[1]);
+                const greater = Math.max(value[0], value[1]);
+                const lesser = Math.min(value[0], value[1]);
+                const difference = (greater - lesser) / greater;
                 distance += Math.pow(difference, 2);
             }
 
