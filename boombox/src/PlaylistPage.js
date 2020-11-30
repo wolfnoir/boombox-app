@@ -55,6 +55,7 @@ class PlaylistPageDisplay extends React.Component {
             imageData: null,
             charCount: 0,
             likeCount: 0,
+            comments: []
         }
 
         this.likePlaylist = this.likePlaylist.bind(this);
@@ -86,9 +87,12 @@ class PlaylistPageDisplay extends React.Component {
         .then(obj => {
             console.log(obj);
             if (obj.status == 0) {
+                var commentArray = obj.result.comments.slice();
+                commentArray.reverse();
                 this.setState({
                     data: obj.result,
-                    likeCount: obj.result.likes.length
+                    likeCount: obj.result.likes.length,
+                    comments: commentArray
                 });
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
@@ -341,7 +345,12 @@ class PlaylistPageDisplay extends React.Component {
                         username: user
                     }
                     dataCopy.comments.push(currentComment);
-                    this.setState({data: dataCopy});
+                    var commentReverse = dataCopy.comments.slice();
+                    commentReverse.reverse();
+                    this.setState({
+                        data: dataCopy,
+                        comments: commentReverse
+                    });
                     textbox.value = "";
                     this.setState({charCount: 0});
                 }
@@ -357,40 +366,17 @@ class PlaylistPageDisplay extends React.Component {
         if (!user){
             alert("Please log in to delete this comment!");
         }
-        else if (user !== this.state.data.author) {
-            if(user !== this.state.data.comments[i].username){
-                alert("You are not authorized to delete this comment!");
-            }
-            else { //redo this so it's not so stupid and repeats code
-                const body = JSON.stringify({
-                    'playlistId': this.props.playlistId,
-                    'index': i
-                });
-                const headers = {"Content-Type": "application/json"};
-                fetch('/deleteComment', {
-                    method: 'POST',
-                    body: body,
-                    headers: headers
-                }).then(res => res.json())
-                .then(obj => {
-                    console.log(obj);
-                    if (obj.status === 0) {
-                        console.log('Deleted comment');
-                        //update state here
-                        var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
-                        dataCopy.comments.splice(i, 1);
-                        this.setState({data: dataCopy});
-                    }
-                    else {
-                        console.log('Unauthorized');
-                    }
-                });
-            }
+        else if (user !== this.state.data.author && user !== this.state.comments[i].username) {
+            alert("You are not authorized to delete this comment!");
         }
         else {
+            var newComments = this.state.comments.slice();
+            newComments.splice(i, 1);
+            newComments.reverse();
+            console.log(newComments);
             const body = JSON.stringify({
                 'playlistId': this.props.playlistId,
-                'index': i
+                'comments': newComments
             });
             const headers = {"Content-Type": "application/json"};
             fetch('/deleteComment', {
@@ -404,8 +390,11 @@ class PlaylistPageDisplay extends React.Component {
                     console.log('Deleted comment');
                     //update state here
                     var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
-                    dataCopy.comments.splice(i, 1);
-                    this.setState({data: dataCopy});
+                    dataCopy.comments = newComments;
+                    this.setState({
+                        data: dataCopy,
+                        comments: newComments.reverse()
+                    });
                 }
                 else {
                     console.log('Unauthorized');
@@ -610,8 +599,8 @@ class PlaylistPageDisplay extends React.Component {
                                 <div className="row" id="displayed-comments-row">
                                     <div className="col">
                                         {
-                                            this.state.data.comments ?
-                                            this.state.data.comments.map((comment, i) => (
+                                            this.state.comments ?
+                                            this.state.comments.map((comment, i) => (
                                                 <div className="row comment-row" key={"comment"+i}>
                                                     <div className="col">
                                                         <div className="row">
