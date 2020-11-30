@@ -62,7 +62,8 @@ class FollowingPageDisplay extends React.Component {
             this.getFollowingUsers();
 
             for(var i = 0; i < this.state.following.length; i++) {
-                this.state.following[i].image = require(this.state.following[i].profile_image_url);
+                this.state.following[i].image = require(this.state.following[i].icon_url);
+                this.state.followers[i].key = "follower-" + i;
             }
         });
     }
@@ -84,7 +85,7 @@ class FollowingPageDisplay extends React.Component {
                 return (
                     <UserDisplay 
                         //picture = {user.image}
-                        picture = {staticImages[i % 3]}
+                        icon_url={user.icon_url}
                         username = {user.username}
                     />
                 )

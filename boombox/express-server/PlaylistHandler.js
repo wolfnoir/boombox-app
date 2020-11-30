@@ -358,7 +358,8 @@ class PlaylistHandler {
             //Getting usernames for each comment
             for(var i = 0; i < playlistObject.comments.length; i++){
                 var comment = playlistObject.comments[i];
-                const userQuery = {"_id": comment.user_id};
+                var userId = MongoClient.ObjectID(comment.user_id);
+                const userQuery = {"_id": userId};
                 const userObject = await client.db(monogDbName).collection(mongoUserCollection).findOne(userQuery);
                 comment.username = (!userObject)? "Anonymous" : userObject.username;
             }
@@ -901,7 +902,7 @@ class PlaylistHandler {
         res.send(statusObject);
     }
 
-    static async deleteComment(index, playlistId){
+    static async deleteComment(comments, playlistId){
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -925,9 +926,9 @@ class PlaylistHandler {
             }
             
             //delete comment from playlist
-            var commentArray = foundPlaylist.comments;
-            commentArray.splice(index, 1)
-            await collection.updateOne({"_id": idObject}, {$set: {comments: commentArray}}); //add status checking for update?
+            // var commentArray = foundPlaylist.comments;
+            // commentArray.splice(index, 1)
+            await collection.updateOne({"_id": idObject}, {$set: {comments: comments}}); //add status checking for update?
 
             return  {status: 0 };
         }
@@ -943,9 +944,9 @@ class PlaylistHandler {
 
     static async deleteCommentRoute(req, res){
         const playlist_id = req.body.playlistId;
-        const index = req.body.index;
+        const comments = req.body.comments;
 
-        const statusObject = await PlaylistHandler.deleteComment(index, playlist_id);
+        const statusObject = await PlaylistHandler.deleteComment(comments, playlist_id);
 
         res.send(statusObject);
     }

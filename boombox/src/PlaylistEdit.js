@@ -323,7 +323,10 @@ class PlaylistTags extends React.Component {
 
     addTags() {
         this.props.onSubmit(this.state.selectedTags);
-        this.setState({show: false});
+        this.setState({
+            show: false,
+            selectedTags: []
+        });
     }
 
     render() {

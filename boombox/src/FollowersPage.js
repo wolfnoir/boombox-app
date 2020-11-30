@@ -60,7 +60,8 @@ class FollowersPageDisplay extends React.Component {
             this.getFollowers();
 
             for(var i = 0; i < this.state.followers.length; i++) {
-                this.state.followers[i].image = require(this.state.followers[i].profile_image_url);
+                this.state.followers[i].image = require(this.state.followers[i].icon_url);
+                this.state.followers[i].key = "follower-" + i;
             }
         });
     }
@@ -79,10 +80,11 @@ class FollowersPageDisplay extends React.Component {
             var returnUrl = "/user/" + this.state.user;
 
             var followersList = this.state.followers.map((user, i) => {
+                //console.log(user);
                 return (
                     <UserDisplay 
                         //picture = {user.image}
-                        picture = {staticImages[i % 3]}
+                        icon_url={user.icon_url}
                         username = {user.username}
                     />
                 )
