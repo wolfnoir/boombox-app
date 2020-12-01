@@ -28,10 +28,12 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.3",
     "react-select-search": "2.2.0",
+    "react-tooltip": "^4.2.11",
     "universal-cookie": "4.0.4"
   },
   "scripts": {
     "heroku-start": "cd express-server && node index.js",
+    "postinstall": "npm run build",
     "heroku-post": "npm install && npm run build",
     "start": "react-scripts build && cd express-server && npm start",
     "start-client": "react-scripts start",

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd boombox && npm run-script heroku-start",
+    "start": "cd boombox && npm start",
     "heroku-postbuild": "cd boombox && npm run-script heroku-post"
   },
   "repository": {
@@ -21,6 +21,7 @@
   "dependencies": {
     "react": "^16.13.1",
     "react-select-search": "^2.2.0",
+    "react-tooltip": "^4.2.11",
     "tmp": "^0.2.1"
   }
 }
