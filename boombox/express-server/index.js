@@ -23,6 +23,7 @@ app.use(cookieParser());
 
 const UserHandler = require('./UserHandler.js');
 const TagHandler = require("./TagHandler");
+const SearchHandler = require("./SearchHandler");
 
 const mongoUrl = "mongodb+srv://admin:o8chnzxErmyP7sgK@cluster0.avhnr.mongodb.net?retryWrites=true&w=majority";
 const monogDbName = 'boombox';
@@ -122,6 +123,12 @@ app.post("/getNewPlaylists", UserHandler.getNewPlaylistsRoute);
 app.all("/getTags", TagHandler.getTagsRoute);
 
 app.all("/getTagResults/:tag", TagHandler.getTagResultsRoute);
+
+app.all("/searchTags/:keyword", SearchHandler.searchTagsRoute);
+
+app.all("/searchUsers/:keyword", SearchHandler.searchUsersRoute);
+
+app.all("/searchPlaylists/:keyword", SearchHandler.searchPlaylistsRoute);
 
 /*
 app.all("/getNewPlaylists", (req, res) => {

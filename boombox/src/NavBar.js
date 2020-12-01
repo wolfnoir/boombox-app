@@ -100,7 +100,6 @@ class NavBar extends React.Component {
 
     updateInput = (event) => {
         this.setState({inputVal: event.target.value});
-        console.log(this.state.inputVal);
     }
 
     showMenu (event) {
