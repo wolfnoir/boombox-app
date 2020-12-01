@@ -208,3 +208,10 @@
 #playlist-page-container #prev-song-img, #playlist-page-container #play-pause-img, #play-pause-img-top, #playlist-page-container #next-song-img {
     cursor: pointer;
 }
+
+.playlist-tooltip{
+    font-family: 'Roboto Condensed' !important;
+    font-weight: normal;
+    font-size: 16px !important;
+    padding: 7px !important;
+}

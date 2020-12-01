@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import NavBarWrapper from './NavBarWrapper';
 import YoutubeVideo from './YoutubeVideo';
 import Tag from './Tag';
+import ReactTooltip from 'react-tooltip';
 import Cookie from 'universal-cookie';
 
 import './css/bootstrap.min.css';
@@ -452,13 +453,13 @@ class PlaylistPageDisplay extends React.Component {
             return <Redirect to="/error" />
         }
         else{
-            var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" /></a>
+            var editButton = <a href= {"/playlist/" + this.props.playlistId + "/edit"}><img src={edit_img} height="30px" width="30px" data-tip = "Edit"/></a>
             if(this.state.data && this.state.data.author !== this.cookie.get('username')){
                 editButton = null;
             }
 
-            var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} />
-            var bookmarkButton = <img src={this.getBookmarkImage()} height="30px" width="30px" onClick = {this.bookmarkPlaylist} />
+            var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} data-tip = "Like"/>
+            var bookmarkButton = <img src={this.getBookmarkImage()} height="30px" width="30px" onClick = {this.bookmarkPlaylist} data-tip = "Bookmark"/>
             
             if(!this.cookie.get('username')){
                 likeButton = null;
@@ -466,6 +467,7 @@ class PlaylistPageDisplay extends React.Component {
             }
             return (
                 <NavBarWrapper>
+                    <ReactTooltip place="bottom" type="dark" effect="solid" className = "playlist-tooltip"/>
                     <div className="container" id="playlist-page-container">
                         <div className="row" id="row1">
                             <div className="col" id="playlist-cover-container">
@@ -482,7 +484,7 @@ class PlaylistPageDisplay extends React.Component {
                                         <div id="icons-div" className="col">
                                             {likeButton}
                                             {bookmarkButton}
-                                            <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} />
+                                            <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} data-tip = "Link"/>
                                             {editButton}
                                         </div>
                                         
