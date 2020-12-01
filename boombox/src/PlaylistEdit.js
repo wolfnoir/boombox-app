@@ -920,7 +920,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                             <div id = {"edit-song-error-"+i} className = "song-error"></div>
                                                                             <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
                                                                             <div id={"edit-song-url-validator-"+i} className="song-url-validator"></div>
-                                                                            <input type="hidden" id={"edit-song-video-length-"+i} />
+                                                                            <input type="hidden" id={"edit-song-video-length-"+i} value={song.length} />
 
                                                                             <Form.Label>Title</Form.Label>
                                                                             <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
