@@ -388,6 +388,7 @@ class PlaylistEditDisplay extends React.Component {
             data: {},
             song_notes_open: [],
             charCount: 0,
+            noteCharCounts: [],
             imageData: null,
             history: [],
             historyStep: 0,
@@ -417,17 +418,17 @@ class PlaylistEditDisplay extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 this.setState({data: obj.result});
                 this.setState({currentData: obj.result});
                 for (var i = 0; i < this.state.data.songs.length; i++) {
                     this.state.song_notes_open.push(false);
+                    this.state.noteCharCounts.push(this.state.data.songs[i].note.length);
                 }
                 const songs = this.state.data.songs
                 this.setState ({
                     history: [songs]
                 });
-                console.log(this.state.history);
             }
             else {
                 this.setState({data: null});
@@ -614,6 +615,7 @@ class PlaylistEditDisplay extends React.Component {
         artistField.value = currentSong.artist;
         albumField.value = currentSong.album;
         noteField.value = currentSong.note;
+        this.editSongNote(i);
     }
     
     handleAddTags = (tags) => {
@@ -704,10 +706,17 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     addSongNote() {
-        var songChars = document.getElementById("add-song-char-count");
         var songNote = document.getElementById("add-song-note");
         var length = songNote.value.length;
         this.setState({charCount: length});
+    }
+
+    editSongNote(i) {
+        var songNote = document.getElementById("edit-song-note-" + i);
+        var length = songNote.value.length;
+        var array = this.state.noteCharCounts.slice();
+        array[i] = length;
+        this.setState({noteCharCounts: array});
     }
 
     keyPressed = (e) => {
@@ -920,7 +929,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                             <div id = {"edit-song-error-"+i} className = "song-error"></div>
                                                                             <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
                                                                             <div id={"edit-song-url-validator-"+i} className="song-url-validator"></div>
-                                                                            <input type="hidden" id={"edit-song-video-length-"+i} />
+                                                                            <input type="hidden" id={"edit-song-video-length-"+i} value={song.length} />
 
                                                                             <Form.Label>Title</Form.Label>
                                                                             <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
@@ -935,7 +944,8 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>Note</Form.Label>
-                                                                            <Form.Control as="textarea" id = {"edit-song-note-"+i} className = "edit-song-textarea" maxLength = "250" ></Form.Control>
+                                                                            <Form.Control as="textarea" id = {"edit-song-note-"+i} className = "edit-song-textarea" maxLength = "250" onChange = {() => this.editSongNote(i)} ></Form.Control>
+                                                                            <span id = {"edit-song-char-count-" + i}>{this.state.noteCharCounts[i]}</span><span id = "edit-song-max-char">/250</span>
                                                                         </Form.Group>
                                                                     </Col>
                                                                 </Row>
