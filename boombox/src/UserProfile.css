@@ -86,3 +86,9 @@
 .user-playlists {
     margin: auto;
 }
+
+.match-tooltip{
+    font-family: 'Roboto Condensed' !important;
+    font-weight: normal;
+    font-size: 14px !important;
+}

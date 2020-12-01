@@ -6,6 +6,7 @@ import PlaylistDisplay from './PlaylistDisplay';
 import './css/bootstrap.min.css';
 import './UserProfile.css';
 import profile_icon from './images/account_circle-24px.svg';
+import ReactTooltip from 'react-tooltip';
 import Cookie from 'universal-cookie';
 
 /*--------------------------------------------------*/
@@ -271,13 +272,18 @@ class UserProfileDisplay extends React.Component {
                                 <td className = "user-profile-match-followers">
                                     {
                                         this.state.match?
-                                        <div className = "user-profile-header-text match-followers">
+                                        <div className = "user-profile-header-text match-followers"
+                                            data-tip="Music Match is calculated<br />
+                                            based on your playlist tags.<br />
+                                            Add more tags to your playlists<br/>
+                                            for a more accurate match!">
                                             Music Match<br/>
                                             {this.state.match}%
+                                            <ReactTooltip place="bottom" type="dark" effect="solid" multiline className = "match-tooltip"/>
                                         </div>
                                         : null
                                     }
-
+                                    
                                     <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
                                         Following<br/>
                                         {this.state.data.following ? this.state.data.following.length : 0}
