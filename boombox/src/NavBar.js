@@ -96,6 +96,7 @@ class NavBar extends React.Component {
 
     componentDidMount() {
         this.closeSettings()
+        document.onkeypress = this.keyPressed;
     }
 
     updateInput = (event) => {
@@ -130,6 +131,15 @@ class NavBar extends React.Component {
                     this.setState({data: null}); //do stuff for showing not found
                 }
             });
+        }
+    }
+
+    keyPressed = (e) => {
+        if (e.target === document.getElementById("search-input")) {
+            if (e.which === 13 || e.keyCode === 13) {
+                e.preventDefault();
+                this.handleSearch();
+            }
         }
     }
 
