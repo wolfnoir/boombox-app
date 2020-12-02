@@ -151,22 +151,26 @@ class SearchHandler {
                 return {status: -1};
 
             var playlists = await cursor.toArray();
+            var playlistsFinal = [];
 
             for(var playlistObject of playlists) {
-                const userQuery = {"_id": playlistObject.user_id};
-                const userObject = await client.db(mongoDbName).collection(mongoUserCollection).findOne(userQuery);
-                if (!userObject) 
-                    playlistObject.author = null;
+                if(!playlistObject.isPrivate){
+                    const userQuery = {"_id": playlistObject.user_id};
+                    const userObject = await client.db(mongoDbName).collection(mongoUserCollection).findOne(userQuery);
+                    if (!userObject) 
+                        playlistObject.author = null;
 
-                else 
-                    playlistObject.author = userObject.username;
+                    else 
+                        playlistObject.author = userObject.username;
 
-                playlistObject.url = "/playlist/" + playlistObject._id;
+                    playlistObject.url = "/playlist/" + playlistObject._id;
+                    playlistsFinal.push(playlistObject);
+                }
             }
 
             return {
                 status: 0,
-                result: playlists
+                result: playlistsFinal
             };
         }
         catch (err) {

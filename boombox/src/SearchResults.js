@@ -87,7 +87,7 @@ class SearchResults extends React.Component {
             return (
                 <UserDisplay 
                     //picture = {user.image}
-                    picture = {staticImages[i % 3]}
+                    icon_url = {user.icon_url}
                     username = {user.username}
                 />
             )
@@ -111,7 +111,7 @@ class SearchResults extends React.Component {
                     likes={playlist.likes} 
                     url={playlist.url}
                     image_url={playlist.image_url}
-                    key={playlist.key}
+                    key={playlist._id}
                     id = {playlist._id}
                     isPrivate = {playlist.isPrivate}
                 />
@@ -130,23 +130,39 @@ class SearchResults extends React.Component {
                     <table>
                         <tbody>
                             <tr>
-                                <td className="user-results">
-                                    <div className="search-result-label">Users</div> <br />
-                                    {usersList}
-                                </td>
-
-                                <td className="tag-results">
-                                    <div className="search-result-label">Tags</div> <br />
-                                    {tagsList}
-                                </td>
+                                {
+                                    usersList.length > 0 ?
+                                    <td className="user-results">
+                                        <div className="search-result-label">Users</div> <br />
+                                        {usersList}
+                                    </td>
+                                    : null
+                                }
+                                
+                                {
+                                    tagsList.length > 0 ?
+                                    <td className="tag-results">
+                                        <div className="search-result-label">Tags</div> <br />
+                                        {tagsList}
+                                    </td>
+                                    : null
+                                }
                             </tr>
                         </tbody>
                     </table>
 
-                    <div className = "playlists-results">
-                        <div className = "search-result-label">Playlists</div> <br />
-                        {playlistsList}
-                    </div>
+                    {
+                        playlistsList.length > 0 ?
+                        <div className = "playlists-results">
+                            <div className = "search-result-label">Playlists</div> <br />
+                            {playlistsList}
+                        </div>
+                        : 
+                        <div className = "playlists-results">
+                            <div className = "search-result-label">No playlists found!</div>
+                        </div>
+                    }
+                    
                 </div>
             </NavBarWrapper>
         );
