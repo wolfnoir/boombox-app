@@ -216,7 +216,7 @@ class UserHandler {
             }
             if (newEmail) {
                 //check if the email already exists
-                const foundEmailObject = await collection.findOne({email: { $regex: new RegEx(newEmail, "i") }});
+                const foundEmailObject = await collection.findOne({email: { $regex: new RegExp(newEmail, "i") }});
                 if (foundEmailObject) {
                     console.log("email in use");
                     return {status: 2};

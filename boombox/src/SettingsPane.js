@@ -130,6 +130,11 @@ class SettingsPane extends React.Component {
                 error.innerHTML = "Username already taken!";
                 confirm.innerHTML = "";
             }
+            else if (obj.status === 2) {
+                //alert('Username already taken!');
+                error.innerHTML = "Email already in use!";
+                confirm.innerHTML = "";
+            }
             else {
                 //alert('somehow it broke');
                 error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
