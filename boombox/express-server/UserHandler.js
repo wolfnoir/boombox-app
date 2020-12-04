@@ -204,7 +204,7 @@ class UserHandler {
             */
             if (newUsername) {
                 //check if username has already been taken
-                const foundUserObject = await collection.findOne({username: newUsername});
+                const foundUserObject = await collection.findOne({username: { $regex: new RegExp(newUsername, "i") }});
                 if (foundUserObject) {
                     console.log("Username already taken");
                     return {status: 5};
