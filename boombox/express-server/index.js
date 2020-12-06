@@ -168,6 +168,9 @@ app.all("/getNewPlaylists", (req, res) => {
 });
 */
 
+app.all("/getRecommendedPlaylists", UserHandler.getRecommendedPlaylistsRoute);
+
+/*
 app.all("/getRecommendedPlaylists", (req, res) => {
 	var data = {
 		playlists: [
@@ -192,7 +195,7 @@ app.all("/getRecommendedPlaylists", (req, res) => {
 	}; 
 	res.json(data);
 });
-
+*/
 
 /*----------------------------- ------------------------
 React routes

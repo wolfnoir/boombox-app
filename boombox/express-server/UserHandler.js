@@ -1123,6 +1123,136 @@ class UserHandler {
         res.send(statusObject);
     }
 
+    static async getRecommendedPlaylistsRoute(req, res) {
+        const username = req.cookies.username;
+        const statusObject = await UserHandler.getRecommendedPlaylists(username);
+        res.send(statusObject);
+    }
+
+    static async getRecommendedPlaylists(username) {
+        const client = await MongoClient.connect(mongoUrl, {
+            useNewUrlParser: true,  
+            useUnifiedTopology: true
+        }).catch(err => {
+            console.log(err);
+            return {status: -1};
+        });
+
+        if (!client) {
+            console.log("Client is null");
+            return {status: -1};
+        }
+
+        try {
+            const userCollection = client.db(mongoDbName).collection(mongoUserCollection);
+            const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistCollection);
+
+            const userQuery = {username: username}
+            const userObject = await userCollection.findOne(userQuery);
+
+            const basicSearchAggregator = [
+                {"$project": {
+                    "com_enabled": 1,
+                    "comments": 1,
+                    "creation_time": 1,
+                    "description": 1,
+                    "image_url": 1,
+                    "isPrivate": 1,
+                    "last_modified": 1,
+                    "likes": 1,
+                    "name": 1,
+                    "tags": 1,
+                    "user_id": 1,
+                    "songs": 1,
+                    "length": {"$size": "$likes"}
+                }},
+                {"$sort": {"length": -1, "creation_time": -1}}
+            ];
+
+            const listOfRecommendedPlaylists = [];
+            const idList = [];
+            var playlistObject;
+
+            if (userObject) {
+                const userFollowing = [];
+                var followingBookmarks = [];
+                var followingTags = [];
+                for (var i = 0; i < userObject.following.length; i++) {
+                    const followerObject = await userCollection.findOne({"_id": userObject.following[i]});
+                    userFollowing.push(followerObject);
+                    followingBookmarks = followingBookmarks.concat(followerObject.bookmarks);
+                }
+
+                //get bookmarks of following
+                playlistObject = await playlistCollection.find({"_id": {"$in": followingBookmarks}});
+                await playlistObject.forEach((playlist) => {
+                    if (listOfRecommendedPlaylists.length < 8 && !playlist.user_id.equals(userObject._id)) {
+                        listOfRecommendedPlaylists.push(playlist);
+                        idList.push(playlist._id.toString());
+                    }
+                });
+                listOfRecommendedPlaylists.sort((a, b) => (a.likes.length > b.likes.length) ? -1 : 1)
+
+                //get playlists of tags of following
+                if (listOfRecommendedPlaylists.length < 8) {
+                    for (var i = 0; i < userObject.following.length; i++) {
+                        playlistObject = await playlistCollection.find({user_id: userObject.following[i]});
+                        await playlistObject.forEach((playlist) => {
+                            followingTags = followingTags.concat(playlist.tags);
+                        });
+                    }
+
+                    const tagSearchAggregator = [...basicSearchAggregator];
+                    tagSearchAggregator[0]["$project"]["commonToBoth"] = { "$setIntersection": [ followingTags, "$tags" ] };
+                    playlistObject = await playlistCollection.aggregate(tagSearchAggregator);
+                    await playlistObject.forEach((playlist) => {
+                        if (listOfRecommendedPlaylists.length < 8 && !playlist.user_id.equals(userObject._id) && playlist.commonToBoth.length > 0 && !idList.includes(playlist._id.toString())) {
+                            console.log(playlist._id);
+                            listOfRecommendedPlaylists.push(playlist);
+                            idList.push(playlist._id.toString());
+                        }
+                    });
+                }
+            }
+            
+            //random playlists. sorted by likes
+            if (listOfRecommendedPlaylists.length < 8) {
+                playlistObject = await playlistCollection.aggregate(basicSearchAggregator);
+                await playlistObject.forEach((playlist) => {
+                    if (listOfRecommendedPlaylists.length < 8 && !playlist.user_id.equals(userObject._id)) {
+                        listOfRecommendedPlaylists.push(playlist);
+                    }
+                });
+            }
+
+            //add additional data for recommended playlists
+            for (var i = 0; i < listOfRecommendedPlaylists.length; i++) {
+                const playlist = listOfRecommendedPlaylists[i];
+                const userQuery = {"_id": playlist.user_id};
+                const playlistUserObject = await userCollection.findOne(userQuery);
+                if (!playlistUserObject) {
+                    playlist.author = null;
+                }
+                else {
+                    playlist.author = playlistUserObject.username;
+                }
+                playlist.url = "/playlist/" + playlist._id;
+            }
+
+            return {
+                status: 0,
+                playlists: listOfRecommendedPlaylists
+            }
+        }
+        catch (err) {
+            console.log(err);
+            return {status: -1};
+        }
+        finally {
+            client.close();
+        }
+    }
+
     /*------------------------*/
     /* STANDALONE IMAGE STUFF */
     /*------------------------*/
