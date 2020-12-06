@@ -1185,13 +1185,17 @@ class UserHandler {
 
                 //get bookmarks of following
                 playlistObject = await playlistCollection.find({"_id": {"$in": followingBookmarks}});
+                const temp = [];
                 await playlistObject.forEach((playlist) => {
+                    temp.push(playlist);
+                });
+                temp.sort((a, b) => (a.likes.length > b.likes.length) ? -1 : 1)
+                await temp.forEach((playlist) => {
                     if (listOfRecommendedPlaylists.length < 8 && !playlist.user_id.equals(userObject._id)) {
                         listOfRecommendedPlaylists.push(playlist);
                         idList.push(playlist._id.toString());
                     }
                 });
-                listOfRecommendedPlaylists.sort((a, b) => (a.likes.length > b.likes.length) ? -1 : 1)
 
                 //get playlists of tags of following
                 if (listOfRecommendedPlaylists.length < 8) {
