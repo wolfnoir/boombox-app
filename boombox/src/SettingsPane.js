@@ -75,7 +75,7 @@ class SettingsPane extends React.Component {
             alert("not an image");
             return;
         }
-        if (file.size > 500000) {
+        if (file.size > 2000000) {
             alert("file too big");
             return;
         }
@@ -335,7 +335,7 @@ class SettingsPane extends React.Component {
                                     {/* <button id="change-icon-button" className="btn btn-primary" type="button" >Change Icon</button> */}
                                     <form id ="upload-profile-img-form">
                                         <p><input type = "file" id = "fileInput" accept=".png, .jpeg, .jpg, .gif" /></p>
-                                        <p>Image must be under 500KB and must be a PNG, JPEG, or GIF.</p>
+                                        <p>Image must be under 2MB and must be a PNG, JPEG, or GIF.</p>
                                         <button type="submit" id="change-icon-button" className="btn btn-primary" onClick = {this.editUserIcon}>Change Icon</button>
                                     </form>
                                 </div>

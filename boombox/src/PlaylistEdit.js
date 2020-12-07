@@ -103,7 +103,7 @@ class PlaylistSettings extends React.Component {
                 alert("not an image");
                 return;
             }
-            if (input.files[0].size > 500000) {
+            if (input.files[0].size > 2000000) {
                 alert("file too big");
                 return;
             }
@@ -231,7 +231,7 @@ class PlaylistSettings extends React.Component {
                         </Form.File>
                         <div style = {{display: 'inline-block', fontFamily: 'Roboto Condensed', width: '30%', verticalAlign: 'middle'}}>
                             <b>Upload Cover</b><br/>
-                            Must be JPG, JPEG, PNG, or GIF, under 500KB
+                            Must be JPG, JPEG, PNG, or GIF, under 2MB
                         </div>
                     </Form.Group>
 

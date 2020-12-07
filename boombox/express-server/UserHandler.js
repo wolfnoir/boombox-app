@@ -293,7 +293,7 @@ class UserHandler {
             console.log('not an image');
             return {status: 3} //not a proper image file
         }
-        if (uploadedFile.size > 500000) {
+        if (uploadedFile.size > 2000000) {
             return {status: 4} //too big
         }
         const filepath = uploadedFile.path;
