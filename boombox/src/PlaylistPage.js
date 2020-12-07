@@ -460,14 +460,15 @@ class PlaylistPageDisplay extends React.Component {
 
             var likeButton = <img src={this.getLikeImage()} height="30px" width="30px" onClick = {this.likePlaylist} data-tip = "Like"/>
             var bookmarkButton = <img src={this.getBookmarkImage()} height="30px" width="30px" onClick = {this.bookmarkPlaylist} data-tip = "Bookmark"/>
-            
+            var reactTooltip = <ReactTooltip place="bottom" type="dark" effect="solid" className = "playlist-tooltip"/> 
             if(!this.cookie.get('username')){
                 likeButton = null;
                 bookmarkButton = null;
+                reactTooltip = null;
             }
             return (
                 <NavBarWrapper>
-                    <ReactTooltip place="bottom" type="dark" effect="solid" className = "playlist-tooltip"/>
+                    {reactTooltip}
                     <div className="container" id="playlist-page-container">
                         <div className="row" id="row1">
                             <div className="col" id="playlist-cover-container">
@@ -486,9 +487,7 @@ class PlaylistPageDisplay extends React.Component {
                                             {bookmarkButton}
                                             <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} data-tip = "Link"/>
                                             {editButton}
-                                        </div>
-                                        
-                                    
+                                        </div>       
                                 </div>
                                 <div className="row">
                                     <div className="col">
@@ -613,7 +612,7 @@ class PlaylistPageDisplay extends React.Component {
                                                                 {
                                                                     //this.state.commentUsername[i] === this.cookie.get('username') || //(checking if the user comment is the same as logged in user)
                                                                     comment.username === this.cookie.get('username') || this.state.data.author === this.cookie.get('username') ?
-                                                                    <img className = "delete-comment-button" src={delete_img} width = "20px" height = "20px" onClick = {() => this.deleteComment(i)}></img>
+                                                                    <img className = "delete-comment-button" alt="Delete Comment" src={delete_img} width = "20px" height = "20px" onClick = {() => this.deleteComment(i)}></img>
                                                                     : null
                                                                 }
                                                             </div>
