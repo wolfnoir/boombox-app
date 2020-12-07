@@ -899,12 +899,13 @@ class PlaylistEditDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row" id = "song-row" onClick = {() => this.toggleEditFields(i)}>
+                                                        <div className="row" id = "song-row">
                                                             <div className="col songs-col0">
                                                                 {/* should decide based on state? */}
                                                                 
                                                             <img className="song-arrow" id={"song-arrow-" + i} 
                                                                 src={this.getArrow(i)} 
+                                                                onClick = {() => this.toggleEditFields(i)}
                                                                 height="25px" width="25px" alt=">"/> {/* should add onclick to toggle arrow*/}
                                                                 <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
