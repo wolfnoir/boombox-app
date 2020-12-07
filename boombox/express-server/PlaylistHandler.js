@@ -659,7 +659,7 @@ class PlaylistHandler {
                 console.log('playlist not found');
                 return {status: -1};
             }
-            if (foundPlaylist.user_id != user_id) { //if we want to admin debug, add an AND != for admin account
+            if (foundPlaylist.user_id !== user_id) { //if we want to admin debug, add an AND != for admin account
                 console.log("not authorized");
                 return {status: 1};
             }

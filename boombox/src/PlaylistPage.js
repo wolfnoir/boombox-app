@@ -27,15 +27,6 @@ import skip_previous_img from './images/skip_previous-24px.svg';
 import skip_previous_grey_img from './images/skip_previous-grey-24px.png';
 import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 
-
-/*-----------------------------------------*/
-/* STATIC IMPORT                           */
-/*-----------------------------------------*/
-import horse_img from './images/horse.png';
-import { NavItem } from 'react-bootstrap';
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
-/*-----------------------------------------*/
-
 function PlaylistPage() {
     let { playlistId } = useParams();
     console.log(playlistId);
@@ -87,7 +78,7 @@ class PlaylistPageDisplay extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 var commentArray = obj.result.comments.slice();
                 commentArray.reverse();
                 this.setState({
@@ -245,7 +236,7 @@ class PlaylistPageDisplay extends React.Component {
             }).then(res => res.json())
             .then(obj => {
                 console.log(obj);
-                if (obj.status == 0) {
+                if (obj.status === 0) {
                     console.log('Playlist liked!');
                 }
                 else {
@@ -287,7 +278,7 @@ class PlaylistPageDisplay extends React.Component {
             }).then(res => res.json())
             .then(obj => {
                 console.log(obj);
-                if (obj.status == 0) {
+                if (obj.status === 0) {
                     console.log('Playlist bookmarked!');
                 }
                 else {
@@ -431,7 +422,7 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     keyPressed = (e) => {
-        if (e.target != document.getElementById("comment-entry") && e.target != document.getElementById("search-input")) {
+        if (e.target !== document.getElementById("comment-entry") && e.target !== document.getElementById("search-input")) {
             if (e.which === 80 || e.keyCode === 80) {
                 this.handlePrevButton();
             }

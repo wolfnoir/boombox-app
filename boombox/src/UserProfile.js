@@ -9,15 +9,6 @@ import profile_icon from './images/account_circle-24px.svg';
 import ReactTooltip from 'react-tooltip';
 import Cookie from 'universal-cookie';
 
-/*--------------------------------------------------*/
-/* TEMPORARY STATIC IMAGE IMPORTS                   */
-/*--------------------------------------------------*/
-import wolf_img from './images/watermelon-wolf.jpg';
-import horse_img from './images/horse.png';
-import leafy_img from "./images/leafy.jpg";
-import Cookies from 'universal-cookie';
-/*--------------------------------------------------*/
-
 function UserProfile() {
     let { username } = useParams();
     console.log(username);
@@ -36,7 +27,8 @@ class UserProfileDisplay extends React.Component {
             isFollowing: false,
             followingCount: 0,
             followersCount: 0,
-            match: null
+            match: null,
+            loggedIn: false,
         }
         this.afterSettingsUpdate = this.afterSettingsUpdate.bind(this);
     }
@@ -53,7 +45,7 @@ class UserProfileDisplay extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 this.setState({
                     data: obj.result,
                     followersCount: obj.result.followers.length,
@@ -205,7 +197,7 @@ class UserProfileDisplay extends React.Component {
         .then(obj => {
             console.log(obj);
             
-            if(obj.status == 0)
+            if(obj.status === 0)
                 this.setState({match: Math.trunc(obj.result)});
         });
     }
@@ -218,17 +210,10 @@ class UserProfileDisplay extends React.Component {
     }
 
     render(){
-        if(this.state.data == null) {
+        if(this.state.data === null) {
             return <Redirect to="/error" />
         }
         else{
-            /*--------------------------------------------------*/
-            /* TEMPORARY STATIC IMAGE IMPORTS                   */
-            /*--------------------------------------------------*/
-            var staticImages = [
-                wolf_img, leafy_img, horse_img
-            ]
-            /*--------------------------------------------------*/
             var listOfUserPlaylists;
             if (this.state.data && this.state.data.playlists) {
                 listOfUserPlaylists = this.state.data.playlists.map((playlist, i) => {
@@ -237,7 +222,6 @@ class UserProfileDisplay extends React.Component {
                     if(!playlist.isPrivate || this.cookie.get('username') === this.state.data.username){
                         return (
                             <PlaylistDisplay
-                                albumCover={staticImages[i]} 
                                 title={playlist.name}
                                 author={playlist.author}
                                 likes={playlist.likes} 
@@ -287,7 +271,7 @@ class UserProfileDisplay extends React.Component {
 
                                 <td className = "user-profile-match-followers">
                                     {
-                                        this.state.match?
+                                        this.state.match !== null ?
                                         <div className = "user-profile-header-text match-followers"
                                             data-tip="Music Match is calculated<br />
                                             based on your playlist tags.<br />

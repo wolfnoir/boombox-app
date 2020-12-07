@@ -5,17 +5,6 @@ import './css/bootstrap.min.css';
 import './Bookmarks.css';
 import bookmark_icon from './images/bookmark-24px.svg';
 
-/*--------------------------------------------------*/
-/* TEMPORARY STATIC IMAGE IMPORTS                   */
-/*--------------------------------------------------*/
-import wolf_img from './images/watermelon-wolf.jpg';
-import mountain_img from "./images/mountain.jpg";
-import church_img from "./images/disco-church.png";
-import noir_img from "./images/noir.jpg";
-import leafy_img from "./images/leafy.jpg";
-import noir2_img from "./images/noir2.png";
-/*--------------------------------------------------*/
-
 class Bookmarks extends React.Component {
     constructor(props) {
         super(props);

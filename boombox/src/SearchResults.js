@@ -30,7 +30,7 @@ class SearchResults extends React.Component {
         fetch(`/searchUsers/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
-            if(obj.status == 0)
+            if(obj.status === 0)
                 this.setState({users: obj.result});
         });
     }
@@ -39,7 +39,7 @@ class SearchResults extends React.Component {
         fetch(`/searchPlaylists/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
-            if(obj.status == 0)
+            if(obj.status === 0)
                 this.setState({playlists: obj.result});
         });
     }
@@ -48,7 +48,7 @@ class SearchResults extends React.Component {
         fetch(`/searchTags/${this.state.queryString}`)
         .then(res => res.json())
         .then(obj => {
-            if(obj.status == 0)
+            if(obj.status=0)
                 this.setState({tags: obj.result});
         });
     }
@@ -63,7 +63,7 @@ class SearchResults extends React.Component {
     }
 
     componentDidUpdate(prevprops){
-        if(prevprops != this.props){
+        if(prevprops !== this.props){
             const{ query } = this.props.match.params;
 
             this.setState({queryString: query}, () => {

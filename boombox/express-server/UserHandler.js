@@ -35,7 +35,7 @@ class UserHandler {
             const collection = client.db(mongoDbName).collection(mongoUserCollection);
             const userQuery = {'$or': [{username: username}, {email: email}]};
             var cursor = collection.find(userQuery);
-            if (await cursor.count() != 0) {
+            if (await cursor.count() !== 0) {
                 console.log("duplicate");
                 return {status: 1};
             }
@@ -147,7 +147,7 @@ class UserHandler {
         const email = req.body.email; 
         const password = req.body.password;
         const statusObject = await UserHandler.loginUser(email, password);
-        if (statusObject.status == 0) {
+        if (statusObject.status === 0) {
             res.cookie('username', statusObject.username);
             req.session.logged_in = true;
             req.session.username = statusObject.username;
@@ -226,7 +226,7 @@ class UserHandler {
             if (newPassword) {
                 const salt = userObject.salt;
                 const hashedPassword = crypto.createHash('sha256').update(currentPassword + salt).digest('hex');
-                if (userObject.password != hashedPassword) {
+                if (userObject.password !== hashedPassword) {
                     return {status: 3};
                 }
                 if (newPassword !== newPasswordConfirm) {
@@ -261,7 +261,7 @@ class UserHandler {
         const newPassword = req.body.newPassword;
         const newPasswordConfirm = req.body.newPasswordConfirm;
         const statusObject = await UserHandler.editUserSettings(username, newUsername, newBio, newEmail, currentPassword, newPassword, newPasswordConfirm);
-        if (statusObject.status == 0 && newUsername) {
+        if (statusObject.status === 0 && newUsername) {
             res.cookie('username', newUsername);
             req.session.username = newUsername;
         }
@@ -283,7 +283,7 @@ class UserHandler {
         const [fields, files] = await formPromise;
         const uploadedFile = files.file[0];
         const imageExts = ["jpeg", "jpg", "png", "gif"];
-        if (!uploadedFile || uploadedFile.size == 0) {
+        if (!uploadedFile || uploadedFile.size === 0) {
             return {status: 2}; //no file selected
         }
         const filename = uploadedFile.originalFilename;
@@ -1418,10 +1418,10 @@ class UserHandler {
             if(!userObject1 || !userObject2)
                 return {status: -1};
 
-            else if(userObject1.status != 0)
+            else if(userObject1.status !== 0)
                 return {status: userObject1.status};
 
-            else if(userObject2.status != 0)
+            else if(userObject2.status !== 0)
                 return {status: userObject2.status};
 
             const user1Playlists = userObject1.result.playlists;
@@ -1455,7 +1455,7 @@ class UserHandler {
                 user2Playlists.forEach(playlist => {user2Count += playlist.songs.length * (playlist.tags.includes(tag))? 1: 0;});
                 const user2Ratio = user2Count / user2PlaylistSongs;
 
-                if(user1Ratio != 0 || user2Ratio != 0)
+                if(user1Ratio !== 0 || user2Ratio !== 0)
                     ratios[tag] = [user1Ratio, user2Ratio];
             });
 

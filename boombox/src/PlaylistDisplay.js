@@ -45,13 +45,12 @@ class PlaylistDisplay extends React.Component{
     }
 
     render(){
-        const albumCover = this.state.albumCover;
         var priv = null;
         if(this.state.isPrivate){
             priv = <span id = "private-span" className = "private-span">(private)</span>;
         }
         return(
-            <div className = "playlist-display" key={this.state.id}>
+            <div className = "playlist-display" key={this.state.key} id = {this.state.id}>
                 <a href={this.props.url}><img className = {"playlist-cover " + this.state.id} src = {this.getImageSrc()}/></a>
                 <a href={this.props.url}><div className = "playlist-title"><EllipsisWithTooltip placement="bottom">{this.state.title}</EllipsisWithTooltip></div></a>
                 <div className = "playlist-info">

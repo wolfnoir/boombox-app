@@ -31,7 +31,7 @@ class SettingsPane extends React.Component {
         const fileInput = document.getElementById("fileInput");
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
-        if(fileInput.value == ""){
+        if(fileInput.value === ""){
             e.preventDefault();
             //alert("Please select a file.");
             error.innerHTML = "Please select a file.";
@@ -205,7 +205,7 @@ class SettingsPane extends React.Component {
         .then(obj => {
             console.log(obj);
             //need to make response better
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 //alert('Bio successfully changed!');
                 error.innerHTML = "";
                 confirm.innerHTML = "Bio successfully changed!";
@@ -248,7 +248,7 @@ class SettingsPane extends React.Component {
         .then(obj => {
             console.log(obj);
             //need to make response better
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 //alert('password successfully changed');
                 error.innerHTML = "";
                 confirm.innerHTML = "Password successfully changed!";
@@ -256,12 +256,12 @@ class SettingsPane extends React.Component {
                 newPassword.value = null;
                 confirmPassword.value = null;
             }
-            else if (obj.status == 3) {
+            else if (obj.status === 3) {
                 //alert('incorrect password');
                 error.innerHTML = "Incorrect password.";
                 confirm.innerHTML = "";
             }
-            else if (obj.status == 4) {
+            else if (obj.status === 4) {
                 //alert('new password fields did not match');
                 error.innerHTML = "New password fields did not match. Please try again.";
                 confirm.innerHTML = "";

@@ -26,7 +26,7 @@ class Login extends React.Component {
         .then(obj => {
             console.log(obj);
             console.log(obj.status);
-            if(obj.status != 0){
+            if(obj.status !== 0){
                 this.errorUpdate(obj.status);
             }
             else {

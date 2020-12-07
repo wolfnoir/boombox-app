@@ -79,7 +79,7 @@ class NavBar extends React.Component {
 			headers: headers
         }).then(res => res.json())
         .then(obj => {
-            if(obj.status == 0){
+            if(obj.status === 0){
                 this.setState({
                     redirect: true,
                     redirect_link: "/playlist/" + obj.playlist_id + "/edit"
@@ -124,7 +124,7 @@ class NavBar extends React.Component {
             fetch(`/getUserSettings/${user}`)
             .then(res => res.json())
             .then(obj => {
-                if (obj.status == 0) {
+                if (obj.status === 0) {
                     this.setState({data: obj.result});
                 }
                 else {

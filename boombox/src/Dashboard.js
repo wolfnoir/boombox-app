@@ -5,18 +5,6 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import './css/bootstrap.min.css';
 import './Dashboard.css';
-import bookmark_icon from './images/bookmark-24px.svg';
-
-/*--------------------------------------------------*/
-/* TEMPORARY STATIC IMAGE IMPORTS                   */
-/*--------------------------------------------------*/
-import horse_img from './images/horse.png';
-import mountain_img from "./images/mountain.jpg";
-import church_img from "./images/disco-church.png";
-import noir2_img from "./images/noir2.png";
-import leafy_img from "./images/leafy.jpg";
-import noir_img from "./images/noir.jpg";
-/*--------------------------------------------------*/
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -53,7 +41,7 @@ class Dashboard extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 this.setState({newPlaylists: obj.playlists});
             }
         });
@@ -84,25 +72,12 @@ class Dashboard extends React.Component {
     }
 
     render() {
-         /*--------------------------------------------------*/
-        /* TEMPORARY STATIC IMAGE IMPORTS                   */
-        /*--------------------------------------------------*/
-        var staticImages1 = [
-            horse_img, mountain_img, church_img, noir2_img
-        ]
-
-        var staticImages2 = [
-            leafy_img, noir_img
-        ]
-        /*--------------------------------------------------*/
-
         var listofNewPlaylistDisplays = this.state.newPlaylists.map((playlist, i) => {
             //need to figure out how to load image
             //albumCover={playlist.image} 
             if(!playlist.isPrivate){
                 return (
                     <PlaylistDisplay
-                        albumCover={staticImages1[i]} 
                         title={playlist.name}
                         author={playlist.author}
                         likes={playlist.likes} 
@@ -122,7 +97,6 @@ class Dashboard extends React.Component {
             if(!playlist.isPrivate){
                 return (
                     <PlaylistDisplay
-                        albumCover={staticImages2[i]} 
                         title={playlist.name}
                         author={playlist.author}
                         likes={playlist.likes} 
