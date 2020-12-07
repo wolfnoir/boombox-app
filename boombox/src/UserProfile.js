@@ -260,7 +260,7 @@ class UserProfileDisplay extends React.Component {
                         <tbody>
                             <tr>
                                 <td>
-                                <div className = "user-profile-img">
+                                <div className = {"user-profile-img " + this.props.username}>
                                     {this.getProfileImage()}
                                 </div>
                                 </td>
