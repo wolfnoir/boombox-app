@@ -34,6 +34,8 @@ class UserProfileDisplay extends React.Component {
             following: {},
             followers: {},
             isFollowing: false,
+            followingCount: 0,
+            followersCount: 0,
             match: null
         }
         this.afterSettingsUpdate = this.afterSettingsUpdate.bind(this);
@@ -52,7 +54,11 @@ class UserProfileDisplay extends React.Component {
         .then(obj => {
             console.log(obj);
             if (obj.status == 0) {
-                this.setState({data: obj.result});
+                this.setState({
+                    data: obj.result,
+                    followersCount: obj.result.followers.length,
+                    followingCount: obj.result.following.length
+                });
             }
             else {
                 this.setState({data: null}); //do stuff for showing not found
@@ -78,7 +84,9 @@ class UserProfileDisplay extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            this.setState({following: obj.users});
+            this.setState({
+                following: obj.users,
+            });
         })
     }
 
@@ -87,7 +95,9 @@ class UserProfileDisplay extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            this.setState({followers: obj.users});
+            this.setState({
+                followers: obj.users,
+            });
         })
     }
 
@@ -125,8 +135,14 @@ class UserProfileDisplay extends React.Component {
             }).then(res => res.json())
             .then(obj => {
                 console.log(obj);
-                if (obj.status == 0) {
+                if (obj.status === 0) {
                     console.log('Success!');
+                    if(this.state.isFollowing){
+                        this.setState({ followersCount: this.state.followersCount - 1 });
+                    }
+                    else {
+                        this.setState({ followersCount: this.state.followersCount + 1 });
+                    }
                     this.setState({ isFollowing: !this.state.isFollowing });
                 }
                 else {
@@ -286,12 +302,12 @@ class UserProfileDisplay extends React.Component {
                                     
                                     <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/following/"}>
                                         Following<br/>
-                                        {this.state.data.following ? this.state.data.following.length : 0}
+                                        {this.state.followingCount}
                                     </a>
 
                                     <a className = "user-profile-header-text match-followers followers-link" href = {"/user/" + this.state.data.username + "/followers"}>
                                         Followers<br/>
-                                        {this.state.data.followers ? this.state.data.followers.length : 0}
+                                        {this.state.followersCount}
                                     </a>
                                 </td>
                             </tr>

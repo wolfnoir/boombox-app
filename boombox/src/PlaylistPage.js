@@ -554,7 +554,6 @@ class PlaylistPageDisplay extends React.Component {
                                                                 {song.album ? song.album : "N/A"}
                                                             </div>
                                                             <div className="col songs-col3">
-                                                                {/* TODO: get this from youtube data api */}
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}
                                                             </div>
                                                         </div>
