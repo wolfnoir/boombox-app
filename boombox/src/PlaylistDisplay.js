@@ -51,8 +51,8 @@ class PlaylistDisplay extends React.Component{
             priv = <span id = "private-span" className = "private-span">(private)</span>;
         }
         return(
-            <div className = "playlist-display" key={this.state.key}>
-                <a href={this.props.url}><img className = "playlist-cover" src = {this.getImageSrc()}/></a>
+            <div className = "playlist-display" key={this.state.id}>
+                <a href={this.props.url}><img className = {"playlist-cover " + this.state.id} src = {this.getImageSrc()}/></a>
                 <a href={this.props.url}><div className = "playlist-title"><EllipsisWithTooltip placement="bottom">{this.state.title}</EllipsisWithTooltip></div></a>
                 <div className = "playlist-info">
                     by <a href={"/user/" + this.state.author}>{this.state.author}</a> {priv}<br/>
