@@ -40,7 +40,7 @@ class UserDisplay extends React.Component {
         return (
             <div className="user-display">
                 <a href={url}>
-                    <img src={this.getImageSrc()} className="user-picture" alt="" />
+                    <img src={this.getImageSrc()} className={"user-picture " + this.props.username} alt="" />
                     <div className="user-name" >{this.props.username}</div>
                 </a>
             </div>

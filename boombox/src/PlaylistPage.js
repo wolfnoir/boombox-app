@@ -66,11 +66,11 @@ class PlaylistPageDisplay extends React.Component {
     getPlaylistImage() {
         if (this.state.imageData) {
             return (
-                <img src={`data:image/jpeg;base64,${this.state.imageData}`} id="playlist-cover" width="250px" height="250px"/>
+                <img src={`data:image/jpeg;base64,${this.state.imageData}`} id={"playlist-cover " + this.state.data._id} width="250px" height="250px"/>
             )
         }
         return (
-            <img src={default_playlist_img} id="playlist-cover" width="250px" height="250px"/>
+            <img src={default_playlist_img} id={"playlist-cover " + this.state.data._id} width="250px" height="250px"/>
         );
     }
 
