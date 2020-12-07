@@ -72,9 +72,7 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        var listofNewPlaylistDisplays = this.state.newPlaylists.map((playlist, i) => {
-            //need to figure out how to load image
-            //albumCover={playlist.image} 
+        var listofNewPlaylistDisplays = this.state.newPlaylists.map((playlist, i) => { 
             if(!playlist.isPrivate){
                 return (
                     <PlaylistDisplay
@@ -92,8 +90,6 @@ class Dashboard extends React.Component {
         });
 
         var listofRecommendedPlaylistDisplays = this.state.recommendedPlaylists.map((playlist, i) => {
-            //need to figure out how to load image
-            //albumCover={playlist.image} 
             if(!playlist.isPrivate){
                 return (
                     <PlaylistDisplay
