@@ -1223,7 +1223,7 @@ class UserHandler {
             if (listOfRecommendedPlaylists.length < 8) {
                 playlistObject = await playlistCollection.aggregate(basicSearchAggregator);
                 await playlistObject.forEach((playlist) => {
-                    if (listOfRecommendedPlaylists.length < 8 && !playlist.user_id.equals(userObject._id)) {
+                    if (listOfRecommendedPlaylists.length < 8 && (!userObject || !playlist.user_id.equals(userObject._id))) {
                         listOfRecommendedPlaylists.push(playlist);
                     }
                 });
