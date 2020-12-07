@@ -648,16 +648,16 @@ class PlaylistPageDisplay extends React.Component {
                                 <div className="col" id="play-track-right-col">
                                     <div className="row">
                                         <div className="col">
-                                            <EllipsisWithTooltip placement="top"><h2>{this.state.data.name} by {this.state.data.author}</h2></EllipsisWithTooltip>
-                                            </div>
+                                            {
+                                                this.state.current_song !== null && this.state.data.songs &&  this.state.data.songs[this.state.current_song] ?
+                                                <EllipsisWithTooltip placement="top"><h2>{this.state.current_song + 1}. {this.state.data.songs[this.state.current_song].name} - {this.state.data.songs[this.state.current_song].artist}</h2></EllipsisWithTooltip>
+                                                : null
+                                            }
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="col">
-                                            {
-                                                this.state.current_song !== null && this.state.data.songs &&  this.state.data.songs[this.state.current_song] ?
-                                                <EllipsisWithTooltip placement="top">{this.state.current_song + 1}. {this.state.data.songs[this.state.current_song].name} - {this.state.data.songs[this.state.current_song].artist}</EllipsisWithTooltip>
-                                                : null
-                                            }
+                                            <EllipsisWithTooltip placement="top">{this.state.data.name} by {this.state.data.author}</EllipsisWithTooltip>
                                         </div>
                                     </div>
                                 </div>
