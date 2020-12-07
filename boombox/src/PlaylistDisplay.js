@@ -45,7 +45,6 @@ class PlaylistDisplay extends React.Component{
     }
 
     render(){
-        const albumCover = this.state.albumCover;
         var priv = null;
         if(this.state.isPrivate){
             priv = <span id = "private-span" className = "private-span">(private)</span>;

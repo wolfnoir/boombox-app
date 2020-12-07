@@ -11,7 +11,7 @@ function PageNotFound(){
                 <div id = "not-found-header">
                     ERROR!<br/>
                 </div>
-                <img src={cassette_image} id = "cassette_image"/>
+                <img src={cassette_image} id = "cassette_image" alt = "Error!"/>
                 <div id = "not-found-subtitle">
                     Whoops! Page not found and/or you are not authorized to view this page. Try navigating back to the <a href="/">dashboard</a> and try again.
                 </div>

@@ -11,10 +11,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import like_img from './images/favorite_border-24px.svg';
-import bookmark_img from './images/bookmark-24px.svg';
 import default_playlist_img from './images/default-playlist-cover.png';
-import link_img from './images/link-24px.svg';
 import arrow_right_img from './images/keyboard_arrow_right-24px.svg';
 import arrow_down_img from './images/keyboard_arrow_down-24px.svg';
 import settings_img from './images/settings-24px.svg';
@@ -22,17 +19,8 @@ import add_circle_img from './images/add_circle-24px.svg';
 import add_box_img from './images/add_box-24px.svg';
 import remove_circle_img from './images/remove_circle-24px.svg';
 import delete_img from './images/delete-black-24dp.svg';
-import edit_img from './images/edit-24px.svg';
 import SelectSearch from 'react-select-search';
 import moment from 'moment';
-
-/*-----------------------------------------*/
-/* STATIC IMPORT                           */
-/*-----------------------------------------*/
-import horse_img from './images/horse.png';
-import { render, wait } from '@testing-library/react';
-// import { addSong } from '../express-server/PlaylistHandler';
-/*-----------------------------------------*/
 
 function PlaylistEdit() {
     let { playlistId } = useParams();
@@ -77,7 +65,7 @@ class PlaylistSettings extends React.Component {
     }
 
     componentDidUpdate(prevprops) {
-        if(prevprops != this.props) {
+        if(prevprops !== this.props) {
                 this.setState({
                     com_enabled: this.props.com_enabled,
                     name: this.props.playlistName,
@@ -299,7 +287,7 @@ class PlaylistTags extends React.Component {
     }
 
     componentDidUpdate(prevprops) {
-        if(prevprops != this.props)
+        if(prevprops !== this.props)
             this.setState({tags: this.props.tags});
     }
 
@@ -307,7 +295,7 @@ class PlaylistTags extends React.Component {
         fetch('/getTags')
         .then(res => res.json())
         .then(data => {
-            if(data.status == 0)
+            if(data.status === 0)
                 this.setState({ allTags: data.result });
         });
     }
@@ -644,11 +632,11 @@ class PlaylistEditDisplay extends React.Component {
         .then(obj => {
             console.log(obj);
             //need to make response better
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 //alert('Playlist saved!');
                 window.location = '/playlist/' + this.props.playlistId;
             }
-            else if (obj.status == 1) {
+            else if (obj.status === 1) {
                 alert('You are not authorized to edit this playlist!');
             }
             else {
@@ -672,10 +660,10 @@ class PlaylistEditDisplay extends React.Component {
         .then(obj => {
             console.log(obj);
             //need to make response better
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 console.log('Playlist saved!');
             }
-            else if (obj.status == 1) {
+            else if (obj.status === 1) {
                 console.log('You are not authorized to edit this playlist!');
             }
             else {
@@ -686,7 +674,7 @@ class PlaylistEditDisplay extends React.Component {
 
     deleteTag = (tag) => {
         var data = {...this.state.data};
-        data.tags = data.tags.filter((element) => element != tag);
+        data.tags = data.tags.filter((element) => element !== tag);
         this.setState({data}, () => {
             console.log(this.state.data.tags);
         });
@@ -730,7 +718,7 @@ class PlaylistEditDisplay extends React.Component {
 
     handleUndo(){
         var step = this.state.historyStep;
-        if(step === 0 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT' || document.activeElement.nodeName == 'MODAL'){
+        if(step === 0 || document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT' || document.activeElement.nodeName === 'MODAL'){
             return;
         }
         else {
@@ -748,7 +736,7 @@ class PlaylistEditDisplay extends React.Component {
 
     handleRedo(){
         var step = this.state.historyStep;
-        if(step === this.state.history.length - 1 || document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT'){
+        if(step === this.state.history.length - 1 || document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT'){
             return;
         }
         else {
@@ -821,7 +809,7 @@ class PlaylistEditDisplay extends React.Component {
     render() {
         var filler_work_break = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var filler = "aaaaaa aaaa aaaaaa aaaaaaa aaaaaa aaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaa aaaaaaa aaaaaa aaaaa";
-        if(this.state.data == null) {
+        if(this.state.data === null) {
             return <Redirect to="/error" />
         }
         else if (this.state.data.author && this.state.data.author !== this.cookie.get('username')){

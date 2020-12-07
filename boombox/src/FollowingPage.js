@@ -45,7 +45,7 @@ class FollowingPageDisplay extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 this.setState({following: obj.result});
                 this.setState({user: this.props.username});
             }

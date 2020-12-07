@@ -45,7 +45,7 @@ class FollowersPageDisplay extends React.Component {
         .then(res => res.json())
         .then(obj => {
             console.log(obj);
-            if (obj.status == 0) {
+            if (obj.status === 0) {
                 this.setState({followers: obj.result});
                 this.setState({user: this.props.username});
             }
