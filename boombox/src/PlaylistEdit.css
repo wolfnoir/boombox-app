@@ -243,6 +243,29 @@
     transition: 0.3s;
 }
 
+#playlist-edit-container #add-song {
+    margin-bottom: 20px;
+}
+
+#playlist-edit-container #search-open-modal {
+    font-family: 'Orbitron';
+    font-size: 24px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+#playlist-edit-container #search-open-modal:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#search-youtube-input {
+    font-family: 'Roboto Condensed';
+    margin: 10px;
+    display: inline-block;
+    width: 50%;
+}
+
 #add-song-form {
     /* width: 50%; */
     font-family: 'Roboto Condensed'
