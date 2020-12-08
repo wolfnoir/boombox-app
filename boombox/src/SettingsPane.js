@@ -360,8 +360,8 @@ class SettingsPane extends React.Component {
                             settings
                         </div>
 
-                        <div id = "settings-error"></div>
-                        <div id = "settings-confirm"></div>
+                        <center><div id = "settings-error"></div>
+                        <div id = "settings-confirm"></div></center>
 
                         <div className="row" id="row2">
                     <div className="col-6" id="left-col">
