@@ -23,18 +23,13 @@ class SearchHandler {
 
         try {
             const collection = client.db(mongoDbName).collection(mongoTagsCollection);
+            const query = "\"" + keyword + "\"";
 
-            var cursor = await collection.aggregate([
-                {
-                    $search: {
-                        "text": {
-                            "query": keyword,
-                            "path": "tag_id"
-                        }
-                    }
-                },
-                {$limit: 10}
-            ]);
+            var cursor = await collection.find({
+                $text: { $search: query } 
+            })
+            .project({ score: { $meta: "textScore" } })
+            .sort( { score: { $meta: "textScore" } } );
 
             if(!cursor)
                 return {status: -1};
@@ -80,17 +75,13 @@ class SearchHandler {
         try {
             const collection = client.db(mongoDbName).collection(mongoUserCollection);
 
-            const cursor = await collection.aggregate([
-                {
-                    $search: {
-                        "text": {
-                            "query": keyword,
-                            "path": "username"
-                        }
-                    }
-                },
-                {$limit: 9}
-            ]);
+            const query = "\"" + keyword + "\"";
+
+            var cursor = await collection.find({
+                $text: { $search: query } 
+            })
+            .project({ score: { $meta: "textScore" } })
+            .sort( { score: { $meta: "textScore" } } );
 
             if(!cursor)
                 return {status: -1};
@@ -134,23 +125,13 @@ class SearchHandler {
 
         try {
             const collection = client.db(mongoDbName).collection(mongoPlaylistsCollection);
-            const maxErrors = Math.ceil(keyword.length / 7);
+            const query = "\"" + keyword + "\"";
 
-            //TODO: Limit number of playlists returned
-            const cursor = await collection.aggregate([
-                {
-                    $search: {
-                        "text": {
-                            "query": keyword,
-                            "path": ["name", "songs", "tags"],
-                            "fuzzy": {
-                                "maxEdits": maxErrors,
-                                "prefixLength": 2,
-                            }
-                        }
-                    }
-                }
-            ]);
+            var cursor = await collection.find({
+                $text: { $search: query } 
+            })
+            .project({ score: { $meta: "textScore" } })
+            .sort( { score: { $meta: "textScore" } } );
 
             if(!cursor)
                 return {status: -1};
