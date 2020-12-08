@@ -134,6 +134,7 @@ class SearchHandler {
 
         try {
             const collection = client.db(mongoDbName).collection(mongoPlaylistsCollection);
+            const maxErrors = Math.ceil(keyword.length / 7);
 
             //TODO: Limit number of playlists returned
             const cursor = await collection.aggregate([
@@ -141,7 +142,11 @@ class SearchHandler {
                     $search: {
                         "text": {
                             "query": keyword,
-                            "path": ["name", "songs", "tags"]
+                            "path": ["name", "songs", "tags"],
+                            "fuzzy": {
+                                "maxEdits": maxErrors,
+                                "prefixLength": 2,
+                            }
                         }
                     }
                 }
