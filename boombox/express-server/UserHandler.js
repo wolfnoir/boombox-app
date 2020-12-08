@@ -884,6 +884,7 @@ class UserHandler {
             const options = {
                 sort: {creation_date: -1}
             }
+            const playlistLimit = 10;
             if (username) {
                 const userQuery = { username : username };
                 const userObject = await collection.findOne(userQuery);
@@ -895,7 +896,7 @@ class UserHandler {
             }
 
             const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistCollection);
-            const playlistsObject = await playlistCollection.find(playlistQuery, options) //.limit(4);
+            const playlistsObject = await playlistCollection.find(playlistQuery, options).limit(playlistLimit); //.limit(4);
             if (!playlistsObject) {
                 console.log("playlists not found");
                 return {status: 1};
@@ -1173,6 +1174,7 @@ class UserHandler {
 
             const listOfRecommendedPlaylists = [];
             const idList = [];
+            const playlistLimit = 10;
             var playlistObject;
 
             if (userObject) {
@@ -1193,14 +1195,14 @@ class UserHandler {
                 });
                 temp.sort((a, b) => (a.likes.length > b.likes.length) ? -1 : 1)
                 await temp.forEach((playlist) => {
-                    if (listOfRecommendedPlaylists.length < 8 && !playlist.user_id.equals(userObject._id)) {
+                    if (listOfRecommendedPlaylists.length < playlistLimit && !playlist.user_id.equals(userObject._id)) {
                         listOfRecommendedPlaylists.push(playlist);
                         idList.push(playlist._id.toString());
                     }
                 });
 
                 //get playlists of tags of following
-                if (listOfRecommendedPlaylists.length < 8) {
+                if (listOfRecommendedPlaylists.length < playlistLimit) {
                     for (var i = 0; i < userObject.following.length; i++) {
                         playlistObject = await playlistCollection.find({user_id: userObject.following[i]});
                         await playlistObject.forEach((playlist) => {
@@ -1212,7 +1214,7 @@ class UserHandler {
                     tagSearchAggregator[0]["$project"]["commonToBoth"] = { "$setIntersection": [ followingTags, "$tags" ] };
                     playlistObject = await playlistCollection.aggregate(tagSearchAggregator);
                     await playlistObject.forEach((playlist) => {
-                        if (listOfRecommendedPlaylists.length < 8 && !playlist.user_id.equals(userObject._id) && playlist.commonToBoth.length > 0 && !idList.includes(playlist._id.toString())) {
+                        if (listOfRecommendedPlaylists.length < playlistLimit && !playlist.user_id.equals(userObject._id) && playlist.commonToBoth.length > 0 && !idList.includes(playlist._id.toString())) {
                             console.log(playlist._id);
                             listOfRecommendedPlaylists.push(playlist);
                             idList.push(playlist._id.toString());
@@ -1222,10 +1224,10 @@ class UserHandler {
             }
             
             //random playlists. sorted by likes
-            if (listOfRecommendedPlaylists.length < 8) {
+            if (listOfRecommendedPlaylists.length < playlistLimit) {
                 playlistObject = await playlistCollection.aggregate(basicSearchAggregator);
                 await playlistObject.forEach((playlist) => {
-                    if (listOfRecommendedPlaylists.length < 8 && (!userObject || !playlist.user_id.equals(userObject._id))) {
+                    if (listOfRecommendedPlaylists.length < playlistLimit && (!userObject || !playlist.user_id.equals(userObject._id))) {
                         listOfRecommendedPlaylists.push(playlist);
                     }
                 });
