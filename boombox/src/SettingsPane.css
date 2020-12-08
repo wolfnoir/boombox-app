@@ -1,8 +1,8 @@
 #settings-pane {
-    margin-top: 10px;
-    width: 80%;
-    background: black;
-    color: white;
+    /* margin-top: 10px; */
+    /* width: 80%; */
+    /* background: black;
+    color: white; */
     font-family: 'Roboto Condensed';
     font-size: 24px;
     z-index: 2000 !important;
@@ -46,27 +46,32 @@
 #settings-pane .btn-primary {
     border-radius: 250px;
     background-color: rgb(0, 136, 209);
-    font-size: 24px;
+    font-size: 18px;
 }
 
 #settings-pane h1 {
-    font-size: 30px;
+    font-size: 20px;
 }
 
 #settings-pane h2 {
-    font-size: 24px;
+    font-size: 18px;
 }
 
 #settings-pane p {
-    font-size: 16px;
+    font-size: 14px;
+    font-family: 'Roboto Condensed';
 }
 
 #settings-pane input {
     width: 100%;
+    font-size: 18px;
+    font-family: 'Roboto Condensed';
 }
 
 #settings-pane textarea {
     width: 100%;
+    font-size: 18px;
+    font-family: 'Roboto Condensed';
 }
 
 .invert-color {
@@ -81,4 +86,9 @@
 #settings-confirm {
     color: green;
     font-size: 18px;
+}
+
+.navbar-settings-modal {
+    width: 70vw;
+    max-width: 70vw;
 }

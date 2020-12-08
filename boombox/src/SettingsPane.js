@@ -1,8 +1,10 @@
 import React from 'react'
 import './css/bootstrap.min.css';
 import './SettingsPane.css';
-import back_icon from './images/keyboard_backspace-24px.png'
+import back_icon from './images/keyboard_backspace-24px.svg'
+import settings_icon from './images/settings-24px.svg';
 import profile_icon from './images/account_circle-24px.svg';
+import Modal from 'react-bootstrap/Modal'
 import Cookie from 'universal-cookie';
 
 class SettingsPane extends React.Component {
@@ -11,19 +13,47 @@ class SettingsPane extends React.Component {
         //this.props.closeWindow.bind(this);
         this.cookie = new Cookie();
         this.state = {
+            data: null,
             profile_image_data: null,
+            show: false,
             username: "",
             bio: "",
-            bioCharCount: 0,
-            email: ""
+            bioCount: 0,
+            email: "",
         }
     }
 
     getProfileImage = () => {
         if (this.state.profile_image_data) {
-            return <img id="profile-image" src={`data:image/jpeg;base64,${this.state.profile_image_data}`} width="256px" height="256px" alt=""/>
+            return <img id="profile-image" src={`data:image/jpeg;base64,${this.state.profile_image_data}`} width="200px" height="200px" alt=""/>
         }
         return <img id="profile-image" src={profile_icon} width="256px" height="256px" className="invert-color" alt=""/>
+    }
+
+    getUserSettings(){
+        var user = this.cookie.get('username');
+        if(!user){
+            alert("ERROR: User cookie does not exist!");
+            return;
+        }
+        else {
+            fetch(`/getUserSettings/${user}`)
+            .then(res => res.json())
+            .then(obj => {
+                if (obj.status === 0) {
+                    this.setState({
+                        data: obj.result,
+                        username: obj.result.username,
+                        bio: obj.result.bio,
+                        email: obj.result.email,
+                        bioCount: obj.result.bio.length
+                    });
+                }
+                else {
+                    this.setState({data: null}); //do stuff for showing not found
+                }
+            });
+        }
     }
 
     send_add_media_request = (e) => {
@@ -96,7 +126,7 @@ class SettingsPane extends React.Component {
     changeUsername = (e) => {
         e.preventDefault();
         //need to check if username already taken
-        const username =  document.getElementById('username-entry');
+        const username =  this.state.username;
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
         if (!username || username.value === "") {
@@ -106,7 +136,7 @@ class SettingsPane extends React.Component {
             return;
         }
         const body = JSON.stringify({
-            'newUsername': username.value
+            'newUsername': username
         });
         const headers = {"Content-Type": "application/json"};
 		fetch('/editUserSettings', {
@@ -145,7 +175,7 @@ class SettingsPane extends React.Component {
 
     changeEmail = (e) => {
         e.preventDefault();
-        const email =  document.getElementById('email-entry');
+        const email =  this.state.email;
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
         if (!email || !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.value)) {
@@ -155,7 +185,7 @@ class SettingsPane extends React.Component {
             return;
         }
         const body = JSON.stringify({
-            'newEmail': email.value
+            'newEmail': email
 		});
         const headers = {"Content-Type": "application/json"};
 		fetch('/editUserSettings', {
@@ -186,15 +216,14 @@ class SettingsPane extends React.Component {
 
     changeBio = (e) => {
         e.preventDefault();
-        const bio = document.getElementById('user-bio-entry');
+        const bio = this.state.bio;
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
-        var value = bio.value;
-        if(!bio.value){
-            value = "";
+        if(!bio){
+            bio = "";
         }
         const body = JSON.stringify({
-            'newBio': value
+            'newBio': bio
         });
         const headers = {"Content-Type": "application/json"};
 		fetch('/editUserSettings', {
@@ -210,7 +239,7 @@ class SettingsPane extends React.Component {
                 error.innerHTML = "";
                 confirm.innerHTML = "Bio successfully changed!";
                 if (this.props.afterSettingsUpdate) {
-                    this.props.afterSettingsUpdate({bio: value});
+                    this.props.afterSettingsUpdate({bio: bio});
                 }
             }
             else {
@@ -292,36 +321,49 @@ class SettingsPane extends React.Component {
 
     componentDidMount() {
         this.getProfileImageData();
+        this.getUserSettings();
     }
 
-    handleFieldChange = (event) => {
-        switch(event.target.id) {
-            case "username-entry":
-                this.setState({ username: event.target.value });
-            case "email-entry":
-                this.setState({ email: event.target.value });
-        }
+    handleUsernameChange = (event) => {
+        this.setState({ username: event.target.value });
+    }
+
+    handleEmailChange = (event) => {
+        this.setState({ email: event.target.value });
     }
 
     handleBioChange = (event) => {
-        this.setState({ bio: event.target.value, bioCharCount: event.target.value.length });
+        this.setState({ bio: event.target.value, bioCount: event.target.value.length });
     }
 
-    render() {
-        return (
-            <div className="container-fluid" id="settings-pane">
-                <div className="row" id="row1">
-                    <div className="col-auto">
+    handleShow = () => {
+        this.getUserSettings();
 
-                        <img id="back-icon" src={back_icon} width="30px" heigh="30px" alt="" onClick={this.props.closeWindow} />
-                    </div>
-                    <div className="col">
-                        <h1>Settings</h1>
+        this.setState({ show: true });      
+    }
+
+    handleClose = () => {
+        this.setState({ show: false });
+    }
+
+    render () {
+        return (
+            <div>
+                <img src={settings_icon} height="30px" width="30px" id = "settings-icon" alt="Settings" onClick={this.handleShow} className="invert-color" />
+
+                <Modal id = "settings-pane" dialogClassName = "navbar-settings-modal" show={this.state.show} onHide={this.handleClose} size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    keyboard={false}>
+                        <img id="back-icon" src={back_icon} width="30px" heigh="30px" alt="" onClick={this.handleClose} className="invert-color" />
+                        <div className = "settings-modal-header">
+                            settings
+                        </div>
+
                         <div id = "settings-error"></div>
                         <div id = "settings-confirm"></div>
-                    </div>
-                </div>
-                <div className="row" id="row2">
+
+                        <div className="row" id="row2">
                     <div className="col-6" id="left-col">
                         <div id="change-icon-section">
                             <div className="row">
@@ -332,7 +374,6 @@ class SettingsPane extends React.Component {
                                     {this.getProfileImage()}
                                 </div>
                                 <div className="col" id="user-icon-right-side">
-                                    {/* <button id="change-icon-button" className="btn btn-primary" type="button" >Change Icon</button> */}
                                     <form id ="upload-profile-img-form">
                                         <p><input type = "file" id = "fileInput" accept=".png, .jpeg, .jpg, .gif" /></p>
                                         <p>Image must be under 2MB and must be a PNG, JPEG, or GIF.</p>
@@ -350,7 +391,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input type="text" id="username-entry" placeholder="Username" maxLength = "32" onChange = {this.handleFieldChange}/>
+                                    <input type="text" id="username-entry" placeholder="Username" maxLength = "32" onChange = {this.handleUsernameChange} value = {this.state.username}/>
                                 </div>
                             </div>
                             <div className="row">
@@ -368,8 +409,8 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <textarea id="user-bio-entry" maxLength = "500" onChange = {this.handleBioChange} onKeyDown = {this.handleBioChange}/>
-                                    <span id = "user-bio-char-count">{this.state.bioCharCount}</span><span id = "user-bio-char-max">/500</span>
+                                    <textarea id="user-bio-entry" maxLength = "500" onChange = {this.handleBioChange} onKeyDown = {this.handleBioChange} value = {this.state.bio}/>
+                                    <span id = "user-bio-char-count">{this.state.bioCount}</span><span id = "user-bio-char-max">/500</span>
                                 </div>
                             </div>
                             <div className="row">
@@ -388,7 +429,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input id="email-entry" type="text" onChange = {this.handleFieldChange}/>
+                                    <input id="email-entry" type="text" onChange = {this.handleEmailChange} value = {this.state.email}/>
                                 </div>
                             </div>
                             <div className="row">
@@ -401,7 +442,7 @@ class SettingsPane extends React.Component {
                         <div id="change-password-section">
                             <div className="row">
                                 <div className="col">
-                                    Change Password
+                                    <b>Change Password</b>
                                 </div>
                             </div>
                             <div className="row">
@@ -441,8 +482,9 @@ class SettingsPane extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>         
-            </div>          
+                </div>
+                </Modal>
+            </div>
         )
     }
 }

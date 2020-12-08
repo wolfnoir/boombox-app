@@ -52,8 +52,8 @@ class NavBar extends React.Component {
         if(user){
             this.getUserSettings();
         }
-        document.getElementById("settings-pane-fixed-top").style.display = "none";
-        document.getElementById("settings-pane").style.display = "none";
+        // document.getElementById("settings-pane-fixed-top").style.display = "none";
+        // document.getElementById("settings-pane").style.display = "none";
     }
 
     logoutUser = () => {
@@ -148,7 +148,8 @@ class NavBar extends React.Component {
         var createPlaylist = <div id="create-playlist" onClick={this.createPlaylist}><img src={add_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color"/> new playlist</div>;
         var myBookmarks = <a href="/my-bookmarks"><img src={bookmark_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> bookmarks</a>;
         var logoutButton = <div id="logout-click" onClick={this.logoutUser}><img id="logout-icon" src={logout_icon} alt="" width={this.iconSize} height={this.iconSize} className = "menu-item invert-color" /> log out</div>;
-        var settingsIcon = <img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettings} className="invert-color" />;
+        //var settingsIcon = <img id="settings-icon" src={settings_icon} alt="Settings" width={this.iconSize} height={this.iconSize} onClick={this.openSettingsClick} className="invert-color" />;
+        var settingsIcon = <SettingsPane username = {this.state.data.username} bio = {this.state.data.bio} email = {this.state.data.username} />
         if (!this.cookie.get('username')) {
             settingsIcon = <div id="login-register-div">
                             <div id="login-link"><a href="/login">login</a></div>
@@ -189,13 +190,14 @@ class NavBar extends React.Component {
                     </Nav>
                 </Navbar>
 
-                    <div className="fixed-top" id="settings-pane-fixed-top">
+                    {/* <div className="fixed-top" id="settings-pane-fixed-top">
                      <SettingsPane 
                         closeWindow={this.closeSettings}
                         profile_image={this.props.profile_image}
                         afterSettingsUpdate={this.props.afterSettingsUpdate}
+                        ref = {this.settingsPaneRef}
                         />
-                    </div>
+                    </div> */}
             </div>
         );
     }

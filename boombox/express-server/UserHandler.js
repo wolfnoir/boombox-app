@@ -204,7 +204,8 @@ class UserHandler {
             */
             if (newUsername) {
                 //check if username has already been taken
-                const foundUserObject = await collection.findOne({username: { $regex: new RegExp(newUsername, "i") }});
+                var regExp = new RegExp("^" + newUsername + "$", 'i');
+                const foundUserObject = await collection.findOne({username: regExp});
                 if (foundUserObject) {
                     console.log("Username already taken");
                     return {status: 5};
@@ -216,7 +217,8 @@ class UserHandler {
             }
             if (newEmail) {
                 //check if the email already exists
-                const foundEmailObject = await collection.findOne({email: { $regex: new RegExp(newEmail, "i") }});
+                var regExp = new RegExp("^" + newEmail + "$", 'i');
+                const foundEmailObject = await collection.findOne({email: regExp});
                 if (foundEmailObject) {
                     console.log("email in use");
                     return {status: 2};
