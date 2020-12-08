@@ -986,13 +986,13 @@ class PlaylistEditDisplay extends React.Component {
                                                                             <input type="hidden" id={"edit-song-video-length-"+i} value={song.length} />
 
                                                                             <Form.Label>Title</Form.Label>
-                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
 
                                                                             <Form.Label>Artist</Form.Label>
-                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
 
                                                                             <Form.Label>Album</Form.Label>
-                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
                                                                         </Form.Group>
                                                                     </Col>
                                                                     <Col>
@@ -1045,13 +1045,13 @@ class PlaylistEditDisplay extends React.Component {
                                                             <input type="hidden" id="add-song-video-length" />
 
                                                             <Form.Label>Title</Form.Label>
-                                                            <Form.Control id = "add-song-title" className = "add-song-textbox" maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-title" className = "add-song-textbox" maxLength = "100"></Form.Control>
 
                                                             <Form.Label>Artist</Form.Label>
-                                                            <Form.Control id = "add-song-artist" className = "add-song-textbox" maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-artist" className = "add-song-textbox" maxLength = "100"></Form.Control>
 
                                                             <Form.Label>Album</Form.Label>
-                                                            <Form.Control id = "add-song-album" className = "add-song-textbox" maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-album" className = "add-song-textbox" maxLength = "100"></Form.Control>
                                                         </Form.Group>
                                                     </Col>
                                                     <Col>
