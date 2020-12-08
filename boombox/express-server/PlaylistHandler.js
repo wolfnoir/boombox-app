@@ -40,12 +40,12 @@ class PlaylistHandler {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
 
             serverResp = await collection.insertOne({
-                com_enabled: false,
+                com_enabled: true,
                 comments: [],
                 creation_date: date,
                 description: '',
                 image_url: '',
-                isPrivate: false,
+                isPrivate: true,
                 last_modified: date,
                 likes: [],
                 name: 'Untitled',
