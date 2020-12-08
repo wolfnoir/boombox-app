@@ -179,6 +179,14 @@ class PlaylistPageDisplay extends React.Component {
             this.videoRef.current.pauseVideo();
             this.setState({current_song: i, currentYoutubeVideoId: this.state.data.songs[i].url});
             this.videoRef.current.loadVideoWithId(this.state.data.songs[i].url, autoplay);
+            for(var j = 0; j < this.state.data.songs.length; j++){
+                var element = document.getElementById("song-" + j);
+                if (element.classList.contains("highlighted")){
+                    element.classList.remove("highlighted");
+                }
+            }
+            var songElement = document.getElementById("song-" + i);
+            songElement.classList.add("highlighted");
         }
     }
 
@@ -528,7 +536,7 @@ class PlaylistPageDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row song-row" onClick={() => {this.selectSong(i, 1)}}>
+                                                        <div className="row song-row" id = {"song-" + i} onClick={() => {this.selectSong(i, 1)}}>
                                                             <div className="col songs-col0">
                                                                 {
                                                                     song.note && song.note.length > 0 ? 
