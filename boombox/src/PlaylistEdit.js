@@ -328,6 +328,8 @@ class PlaylistTags extends React.Component {
     }
 
     render() {
+        console.log(this.state);
+
         const handleClose = () => this.setState({show: false});
         const handleShow = () => this.setState({show: true});
 
@@ -346,6 +348,7 @@ class PlaylistTags extends React.Component {
                     <div><center>
                         <SelectSearch 
                             id = "select-tag-search"
+                            closeOnSelect = {false}
                             options = {this.state.tags && this.state.allTags? this.fetchUnusedTags() : null}
                             multiple
                             search
@@ -1013,7 +1016,7 @@ class PlaylistEditDisplay extends React.Component {
                                                             <Form id = {"edit-song-form-" + i} hidden>
                                                                 <Row>
                                                                     <Col>
-                                                                        {/* <PlaylistYoutubeSearch index = {i}/> */}
+                                                                        <PlaylistYoutubeSearch index = {i}/>
                                                                     </Col>
                                                                 </Row>
                                                                 <Row>
