@@ -242,7 +242,7 @@ class PlaylistSettings extends React.Component {
 
                     <Form.Group>
                         <Form.Label>Name</Form.Label>
-                        <Form.Control defaultValue = {this.state.name} onChange={this.updateName} /><br/>
+                        <Form.Control defaultValue = {this.state.name} onChange={this.updateName} maxLength = "100" /><br/>
                         <Form.Label>Description</Form.Label><br/>
                         <textarea className = "settings-modal-description" defaultValue = {this.state.desc} onChange={this.updateDescription} maxLength = "500"/>
                     </Form.Group>
@@ -946,7 +946,7 @@ class PlaylistEditDisplay extends React.Component {
                                             {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
-                                                    <div key={"song"+i}>
+                                                    <div key={"song-"+i}>
                                                         <div className="row" id = "song-row">
                                                             <div className="col songs-col0">
                                                                 {/* should decide based on state? */}
