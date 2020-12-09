@@ -958,10 +958,10 @@ class PlaylistEditDisplay extends React.Component {
                                                                 <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
+                                                                <b>{song.name ? song.name : ""}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
-                                                                {song.album ? song.album : "N/A"}
+                                                                {song.album ? song.album : ""}
                                                             </div>
                                                             <div className="col songs-col3">
                                                                 {/* @TODO: get this from youtube data api */}

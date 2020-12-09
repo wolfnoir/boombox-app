@@ -546,10 +546,10 @@ class PlaylistPageDisplay extends React.Component {
                                                                 <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
+                                                                <b>{song.name ? song.name : ""}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
-                                                                {song.album ? song.album : "N/A"}
+                                                                {song.album ? song.album : ""}
                                                             </div>
                                                             <div className="col songs-col3">
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}
