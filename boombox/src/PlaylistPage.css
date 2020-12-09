@@ -193,6 +193,10 @@
     z-index: 1000;
 }
 
+#playlist-page-container .highlighted {
+    background-color: rgba(255, 255, 255, 0.3)
+}
+
 #playlist-page-container {
     padding-bottom: calc(80px + 30px); /* could use some changes for smaller viewport */
 }

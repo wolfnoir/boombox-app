@@ -19,6 +19,7 @@ import add_circle_img from './images/add_circle-24px.svg';
 import add_box_img from './images/add_box-24px.svg';
 import remove_circle_img from './images/remove_circle-24px.svg';
 import delete_img from './images/delete-black-24dp.svg';
+import search_img from './images/search-black-24dp.svg';
 import SelectSearch from 'react-select-search';
 import moment from 'moment';
 
@@ -217,7 +218,6 @@ class PlaylistSettings extends React.Component {
                 <Modal id = "settings-modal" show={this.state.show} onHide={handleClose} size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
-                    backdrop="static"
                     keyboard={false}> 
 
                 <div className = "settings-modal-header">
@@ -242,9 +242,9 @@ class PlaylistSettings extends React.Component {
 
                     <Form.Group>
                         <Form.Label>Name</Form.Label>
-                        <Form.Control defaultValue = {this.state.name} onChange={this.updateName} /><br/>
+                        <Form.Control defaultValue = {this.state.name} onChange={this.updateName} maxLength = "100" /><br/>
                         <Form.Label>Description</Form.Label><br/>
-                        <textarea className = "settings-modal-description" defaultValue = {this.state.desc} onChange={this.updateDescription}/>
+                        <textarea className = "settings-modal-description" defaultValue = {this.state.desc} onChange={this.updateDescription} maxLength = "500"/>
                     </Form.Group>
                 </Form>
 
@@ -334,7 +334,6 @@ class PlaylistTags extends React.Component {
                 <Modal show={this.state.show} onHide={handleClose} size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
-                    backdrop="static"
                     keyboard={false}>
                     <div className = "tags-modal-header">
                         tags
@@ -354,13 +353,74 @@ class PlaylistTags extends React.Component {
                     </div>
 
                     <center>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Cancel
-                        </Button>
-
                         <Button onClick={this.addTags}>
                             Add Tags
                         </Button>
+
+                        <Button variant="secondary" onClick={handleClose}>
+                            Cancel
+                        </Button>
+                    </center>
+                </Modal>
+            </div>
+        );
+    }
+}
+
+class PlaylistYoutubeSearch extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            show: false,
+            index: this.props.index,
+        }
+    }
+
+    componentDidMount() {
+        
+    }
+
+    render() {
+        const handleClose = () => this.setState({show: false});
+        const handleShow = () => this.setState({show: true});
+
+        return(
+            <div>
+                <div onClick = {handleShow} id = "search-open-modal">
+                    <img src={search_img} id = "search-youtube-icon" width = "50"/>
+                    SEARCH FOR YOUTUBE VIDEO
+                </div>
+                
+                <Modal show={this.state.show} onHide={handleClose} size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    keyboard={false}>
+                    <div className = "tags-modal-header">
+                        search
+                    </div>
+
+                    <div id = "search-youtube">
+                        <center>
+                            <img src={search_img} id = "search-youtube-icon" width = "30" className = "invert-color"/>
+                            <input id = "search-youtube-input"/>
+
+                             <Button variant="secondary"  /*onClick={search here}*/> 
+                                Search
+                            </Button>
+                        </center>
+                    </div>
+
+                    {/* Search results show up here. */}
+
+                    <center>
+                        <Button onClick={handleClose}>
+                            Add Song
+                        </Button>
+
+                        <Button variant="secondary" onClick={handleClose}>
+                            Cancel
+                        </Button>                      
                     </center>
                 </Modal>
             </div>
@@ -886,7 +946,7 @@ class PlaylistEditDisplay extends React.Component {
                                             {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
-                                                    <div key={"song"+i}>
+                                                    <div key={"song-"+i}>
                                                         <div className="row" id = "song-row">
                                                             <div className="col songs-col0">
                                                                 {/* should decide based on state? */}
@@ -898,10 +958,10 @@ class PlaylistEditDisplay extends React.Component {
                                                                 <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
+                                                                <b>{song.name ? song.name : ""}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
-                                                                {song.album ? song.album : "N/A"}
+                                                                {song.album ? song.album : ""}
                                                             </div>
                                                             <div className="col songs-col3">
                                                                 {/* @TODO: get this from youtube data api */}
@@ -913,21 +973,26 @@ class PlaylistEditDisplay extends React.Component {
                                                             <Form id = {"edit-song-form-" + i} hidden>
                                                                 <Row>
                                                                     <Col>
+                                                                        <PlaylistYoutubeSearch index = {i}/>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col>
                                                                         <Form.Group>
                                                                             <Form.Label>URL</Form.Label>
                                                                             <div id = {"edit-song-error-"+i} className = "song-error"></div>
-                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Or, paste YouTube URL here." maxLength = "50"></Form.Control>
                                                                             <div id={"edit-song-url-validator-"+i} className="song-url-validator"></div>
                                                                             <input type="hidden" id={"edit-song-video-length-"+i} value={song.length} />
 
                                                                             <Form.Label>Title</Form.Label>
-                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
 
                                                                             <Form.Label>Artist</Form.Label>
-                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
 
                                                                             <Form.Label>Album</Form.Label>
-                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" maxLength = "50"></Form.Control>
+                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
                                                                         </Form.Group>
                                                                     </Col>
                                                                     <Col>
@@ -967,21 +1032,26 @@ class PlaylistEditDisplay extends React.Component {
                                             <Form id = "add-song-form" hidden>
                                                 <Row>
                                                     <Col>
-                                                        <Form.Group>
+                                                        <PlaylistYoutubeSearch index = {-1}/>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col>
+                                                        <Form.Group>                                                          
                                                             <Form.Label>URL</Form.Label>
                                                             <div id = {"add-song-error"} className = "song-error"></div>
-                                                            <Form.Control id = "add-song-url" className = "add-song-textbox" onChange={() => {this.autofillSongTitle(-1)}} placeholder = "Paste YouTube URL here." maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-url" className = "add-song-textbox" onChange={() => {this.autofillSongTitle(-1)}} placeholder = "Or, paste YouTube URL here." maxLength = "50"></Form.Control>
                                                             <div id="add-song-url-validator" className="song-url-validator"></div>
                                                             <input type="hidden" id="add-song-video-length" />
 
                                                             <Form.Label>Title</Form.Label>
-                                                            <Form.Control id = "add-song-title" className = "add-song-textbox" maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-title" className = "add-song-textbox" maxLength = "100"></Form.Control>
 
                                                             <Form.Label>Artist</Form.Label>
-                                                            <Form.Control id = "add-song-artist" className = "add-song-textbox" maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-artist" className = "add-song-textbox" maxLength = "100"></Form.Control>
 
                                                             <Form.Label>Album</Form.Label>
-                                                            <Form.Control id = "add-song-album" className = "add-song-textbox" maxLength = "50"></Form.Control>
+                                                            <Form.Control id = "add-song-album" className = "add-song-textbox" maxLength = "100"></Form.Control>
                                                         </Form.Group>
                                                     </Col>
                                                     <Col>

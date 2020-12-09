@@ -179,6 +179,14 @@ class PlaylistPageDisplay extends React.Component {
             this.videoRef.current.pauseVideo();
             this.setState({current_song: i, currentYoutubeVideoId: this.state.data.songs[i].url});
             this.videoRef.current.loadVideoWithId(this.state.data.songs[i].url, autoplay);
+            for(var j = 0; j < this.state.data.songs.length; j++){
+                var element = document.getElementById("song-" + j);
+                if (element.classList.contains("highlighted")){
+                    element.classList.remove("highlighted");
+                }
+            }
+            var songElement = document.getElementById("song-" + i);
+            songElement.classList.add("highlighted");
         }
     }
 
@@ -470,15 +478,15 @@ class PlaylistPageDisplay extends React.Component {
                                     <div className="col-md-auto" style={{paddingRight: "0px"}}>
                                         <img id="play-pause-img-top" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
                                     </div>
-                                    <div className="col-md-auto" style={{margin: "auto", paddingRight: "0px"}}>
+                                    <div className="col-md-auto" style={{margin: "auto", paddingRight: "0px", "maxWidth": "69%"}}>
                                         <h1>{this.state.data.name}</h1>
-                                        </div>
-                                        <div id="icons-div" className="col">
-                                            {likeButton}
-                                            {bookmarkButton}
-                                            <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} data-tip = "Link"/>
-                                            {editButton}
-                                        </div>       
+                                    </div>
+                                    <div id="icons-div" className="col">
+                                        {likeButton}
+                                        {bookmarkButton}
+                                        <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} data-tip = "Link"/>
+                                        {editButton}
+                                    </div>       
                                 </div>
                                 <div className="row">
                                     <div className="col">
@@ -528,7 +536,7 @@ class PlaylistPageDisplay extends React.Component {
                                                 this.state.data.songs ?
                                                 this.state.data.songs.map((song, i) => (
                                                     <div key={"song"+i}>
-                                                        <div className="row song-row" onClick={() => {this.selectSong(i, 1)}}>
+                                                        <div className="row song-row" id = {"song-" + i} onClick={() => {this.selectSong(i, 1)}}>
                                                             <div className="col songs-col0">
                                                                 {
                                                                     song.note && song.note.length > 0 ? 
@@ -538,10 +546,10 @@ class PlaylistPageDisplay extends React.Component {
                                                                 <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
+                                                                <b>{song.name ? song.name : ""}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
-                                                                {song.album ? song.album : "N/A"}
+                                                                {song.album ? song.album : ""}
                                                             </div>
                                                             <div className="col songs-col3">
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}

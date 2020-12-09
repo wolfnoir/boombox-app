@@ -40,12 +40,12 @@ class PlaylistHandler {
             const collection = client.db(monogDbName).collection(mongoPlaylistCollection);
 
             serverResp = await collection.insertOne({
-                com_enabled: false,
+                com_enabled: true,
                 comments: [],
                 creation_date: date,
-                description: '',
+                description: 'This is your playlist description. When you first create a playlist, it is private by default, and can only be shared by sharing the link. To make your playlist public and share it to the world, make sure to edit your playlist settings.',
                 image_url: '',
-                isPrivate: false,
+                isPrivate: true,
                 last_modified: date,
                 likes: [],
                 name: 'Untitled',
