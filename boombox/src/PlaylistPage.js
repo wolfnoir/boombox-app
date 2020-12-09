@@ -635,7 +635,7 @@ class PlaylistPageDisplay extends React.Component {
                                     <img id="play-pause-img" className="invert-color" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
                                     <img id="next-song-img" className="invert-color" src={this.getNextButtonImage()} height="60px" width="60px" onClick={this.handleNextButton} />
                                 </div>
-                                <div className="col" id="play-track-right-col">
+                                <div className="col" id="play-track-right-col" style={{"maxWidth": "69%"}}>
                                     <div className="row">
                                         <div className="col">
                                             {
