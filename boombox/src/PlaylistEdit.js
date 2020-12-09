@@ -402,7 +402,7 @@ class PlaylistYoutubeSearch extends React.Component {
                   function(err) { console.error("Error loading GAPI client for API", err); });
     }
       
-    execute() {
+    execute = () => {
         if(this.state.clientReady){
             window.gapi.client.youtube.search.list({
                 "part": [
@@ -445,7 +445,7 @@ class PlaylistYoutubeSearch extends React.Component {
                             <img src={search_img} id = "search-youtube-icon" width = "30" className = "invert-color"/>
                             <input id = "search-youtube-input" onChange={this.handleSearchChange}/>
 
-                             <Button variant="secondary"  onClick={this.execute()}> 
+                             <Button variant="secondary"  onClick={this.execute}> 
                                 Search
                             </Button>
                         </center>
@@ -1013,7 +1013,7 @@ class PlaylistEditDisplay extends React.Component {
                                                             <Form id = {"edit-song-form-" + i} hidden>
                                                                 <Row>
                                                                     <Col>
-                                                                        <PlaylistYoutubeSearch index = {i}/>
+                                                                        {/* <PlaylistYoutubeSearch index = {i}/> */}
                                                                     </Col>
                                                                 </Row>
                                                                 <Row>
