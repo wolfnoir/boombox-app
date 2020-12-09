@@ -23,6 +23,10 @@ import search_img from './images/search-black-24dp.svg';
 import SelectSearch from 'react-select-search';
 import moment from 'moment';
 
+const YOUTUBE_API_KEY = "AIzaSyAKoDU8scPN2e76sQKwsu5rIg3XTbEfNt4";
+const YOUTUBE_DISCOVERY_DOCS = "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest";
+const MAX_SEARCH_RESULTS = 20;
+
 function PlaylistEdit() {
     let { playlistId } = useParams();
     console.log(playlistId);
@@ -374,11 +378,47 @@ class PlaylistYoutubeSearch extends React.Component {
         this.state = {
             show: false,
             index: this.props.index,
+            clientReady: false,
+            query: "",
+            results: []
         }
+
+        this.loadClient = this.loadClient.bind(this);
     }
 
-    componentDidMount() {
-        
+    handleSearchChange = (event) => {
+        this.setState({query: event.target.value});
+    }
+
+    componentDidMount(){
+        window.gapi.load("client", this.loadClient);
+    }
+
+    loadClient() {
+        window.gapi.client.setApiKey(YOUTUBE_API_KEY);
+
+        return window.gapi.client.load(YOUTUBE_DISCOVERY_DOCS)
+            .then(() => this.setState({clientReady: true}),
+                  function(err) { console.error("Error loading GAPI client for API", err); });
+    }
+      
+    execute() {
+        if(this.state.clientReady){
+            window.gapi.client.youtube.search.list({
+                "part": [
+                    "snippet"
+                ],
+                "maxResults": MAX_SEARCH_RESULTS,
+                "q": this.state.query,
+                "type": [
+                    "video"
+                ]
+            })
+            .then(
+                (response) => this.setState({results: response.result.items}),
+                function(err) { console.error("Execute error", err); }
+            );
+        }
     }
 
     render() {
@@ -403,9 +443,9 @@ class PlaylistYoutubeSearch extends React.Component {
                     <div id = "search-youtube">
                         <center>
                             <img src={search_img} id = "search-youtube-icon" width = "30" className = "invert-color"/>
-                            <input id = "search-youtube-input"/>
+                            <input id = "search-youtube-input" onChange={this.handleSearchChange}/>
 
-                             <Button variant="secondary"  /*onClick={search here}*/> 
+                             <Button variant="secondary"  onClick={this.execute()}> 
                                 Search
                             </Button>
                         </center>
