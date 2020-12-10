@@ -40,7 +40,6 @@ class Dashboard extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 this.setState({newPlaylists: obj.playlists});
             }
@@ -56,7 +55,6 @@ class Dashboard extends React.Component {
         fetch('/getRecommendedPlaylists')
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             this.setState({recommendedPlaylists: obj.playlists});
         });
 

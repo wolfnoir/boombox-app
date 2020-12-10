@@ -40,7 +40,6 @@ class Register extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if(obj.status !== 0){
                     this.errorUpdate(obj.status);
                 }

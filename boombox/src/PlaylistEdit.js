@@ -1,6 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { Redirect } from "react-router-dom";
+import { DragDropContext } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
+import { Draggable } from 'react-beautiful-dnd';
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
 import Cookie from 'universal-cookie';
@@ -25,7 +28,6 @@ import moment from 'moment';
 
 function PlaylistEdit() {
     let { playlistId } = useParams();
-    console.log(playlistId);
     return <PlaylistEditDisplay playlistId={playlistId}/>
 }
 
@@ -48,7 +50,6 @@ class PlaylistSettings extends React.Component {
 
     getUploadImageIcon() {
         var imageSrc = this.state.imageSrc;
-        //console.log(imageSrc);
         if (imageSrc) {
             return (
                 <div>
@@ -97,9 +98,7 @@ class PlaylistSettings extends React.Component {
     handleImageUpload = () => {
         const imageExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
         const input = document.getElementById("file-input");
-        console.log("hi");
         if (input.files && input.files[0]) {
-            console.log(input.files[0]);
             if (!imageExts.includes(input.files[0].type)) {
                 alert("not an image");
                 return;
@@ -111,7 +110,6 @@ class PlaylistSettings extends React.Component {
             const reader = new FileReader();
             reader.onload = (e) => {
                 this.setState({imageSrc: e.target.result});
-                //console.log(e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -152,7 +150,6 @@ class PlaylistSettings extends React.Component {
 			//headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 console.log('successfully saved playlist');
             }
@@ -183,7 +180,6 @@ class PlaylistSettings extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 //alert('successfully deleted playlist');
                 window.location = '/';
@@ -512,8 +508,6 @@ class PlaylistEditDisplay extends React.Component {
             songNotesOpen[i] = !songNotesOpen[i];
             this.setState({song_notes_open: songNotesOpen});
 
-            //this.state.song_notes_open[i] = !this.state.song_notes_open[i];
-            console.log(this.state.song_notes_open[i]);
             if (this.state.song_notes_open[i]) {
                 songNote.style.display = "block";
              }
@@ -525,10 +519,8 @@ class PlaylistEditDisplay extends React.Component {
 
     handleDeleteSong = (e, i) => {
         e.stopPropagation();
-        console.log("call");
         var dataCopy = JSON.parse(JSON.stringify(this.state.data));
         if (dataCopy.songs && i < dataCopy.songs.length) {
-            console.log("delete ", i);
             dataCopy.songs.splice(i, 1);
         }
         for(var j = 0; j < dataCopy.songs.length; j ++){
@@ -555,7 +547,6 @@ class PlaylistEditDisplay extends React.Component {
         
             var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the song array
             var currentSong = dataCopy.songs[i];
-            console.log(currentSong);
 
             currentSong.url = songId;
             currentSong.url_type = "youtube.com/watch?v=";
@@ -566,7 +557,6 @@ class PlaylistEditDisplay extends React.Component {
             currentSong.length = parseInt(lengthField.value);
             errorField.innerHTML = "";
 
-            console.log(dataCopy);
             this.addToHistory(dataCopy.songs);
             this.setState({data: dataCopy});
 
@@ -622,6 +612,32 @@ class PlaylistEditDisplay extends React.Component {
         }   
     }
 
+    onDragEnd = (result) => {
+        //update the state for the new drag and drop result
+        //save new state to history for undo/redo
+        const { destination, source, draggableId } = result;
+
+        if(!destination){
+            return;
+        }
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {
+            return;
+        }
+
+        var dataCopy = JSON.parse(JSON.stringify(this.state.data));
+        const newSongs = Array.from(this.state.data.songs);
+        const song = newSongs[source.index];
+        newSongs.splice(source.index, 1);
+        newSongs.splice(destination.index, 0, song);
+        dataCopy.songs = newSongs;
+
+        this.addToHistory(dataCopy.songs);
+        this.setState({data: dataCopy});
+    }
+
     addToHistory(songs){
         const history = this.state.history.slice(0, this.state.historyStep + 1);
         const newHistory = history.concat([songs]);
@@ -638,15 +654,11 @@ class PlaylistEditDisplay extends React.Component {
     }
 
     toggleEditFields(i){
-        console.log("test");
-
         const songNotesOpen = this.state.song_notes_open;
         songNotesOpen[i] = !songNotesOpen[i];
         this.setState({song_notes_open: songNotesOpen});
 
         var editField = document.getElementById("edit-song-form-" + i);
-        console.log("edit-song-form-" + i);
-        console.log(editField);
         var isHidden = editField.hidden;
         editField.hidden = !isHidden;
         var currentSong = this.state.data.songs[i];
@@ -690,7 +702,6 @@ class PlaylistEditDisplay extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 //alert('Playlist saved!');
@@ -718,7 +729,6 @@ class PlaylistEditDisplay extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 console.log('Playlist saved!');
@@ -829,7 +839,6 @@ class PlaylistEditDisplay extends React.Component {
             fetch(endpoint)
             .then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.items.length > 0) {
                     titleField.value = obj.items[0].snippet.title;
                     validatorField.innerHTML = null;
@@ -883,6 +892,10 @@ class PlaylistEditDisplay extends React.Component {
                 <div onKeyDown = {this.keyPressed} tabIndex="0">
                 <NavBarWrapper>
                     <div className="container" id="playlist-edit-container" >
+                    <DragDropContext
+                        onDragStart={this.onDragStart}
+                        onDragEnd = {this.onDragEnd}
+                    >
                         <div className="row" id="row1">
                             <div className="col" id="playlist-cover-container">
                                 {this.getPlaylistImage()}
@@ -942,80 +955,95 @@ class PlaylistEditDisplay extends React.Component {
                                     </div>
                                 </div>
                                 <div className="row" id="songs-data-container-row">
-                                        <div className="col songs-data-container">
-                                            {
-                                                this.state.data.songs ?
-                                                this.state.data.songs.map((song, i) => (
-                                                    <div key={"song-"+i}>
-                                                        <div className="row" id = "song-row">
-                                                            <div className="col songs-col0">
-                                                                {/* should decide based on state? */}
-                                                                
-                                                            <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                src={this.getArrow(i)} 
-                                                                onClick = {() => this.toggleEditFields(i)}
-                                                                height="25px" width="25px" alt=">"/> {/* should add onclick to toggle arrow*/}
-                                                                <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
+                                    <Droppable droppableId = "edit-playlist-droppable">
+                                            { (provided) => (
+                                                <div className="col songs-data-container"
+                                                    ref = {provided.innerRef}
+                                                    {...provided.droppableProps}
+                                                >
+                                                {
+                                                    this.state.data.songs ?
+                                                    this.state.data.songs.map((song, i) => (
+                                                        <Draggable draggableId = {"song-" + i} index = {i}>
+                                                            {(provided) => (
+                                                                <div key={"song-"+i}
+                                                                    ref = {provided.innerRef}
+                                                                    {...provided.draggableProps}
+                                                                    {...provided.dragHandleProps}
+                                                                >
+                                                                <div className="row" id = "song-row" >
+                                                                    <div className="col songs-col0">
+                                                                        
+                                                                    <img className="song-arrow" id={"song-arrow-" + i} 
+                                                                        src={this.getArrow(i)}           
+                                                                        onClick = {() => this.toggleEditFields(i)}                                                              
+                                                                        height="25px" width="25px" alt=">"/> {/* should add onclick to toggle arrow*/}
+                                                                        <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
+                                                                    </div>
+                                                                    <div className="col songs-col1">
+                                                                        <b>{song.name ? song.name : ""}</b> {song.artist ? " - " + song.artist : ""}
+                                                                    </div>
+                                                                    <div className="col songs-col2">
+                                                                        {song.album ? song.album : ""}
+                                                                    </div>
+                                                                    <div className="col songs-col3">
+                                                                        {/* @TODO: get this from youtube data api */}
+                                                                        {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}
+                                                                    </div>
+                                                                    <img className="delete-song-button" id = {"delete-song-"+i} src = {delete_img} onClick = {(e) =>  this.handleDeleteSong(e, i)}/>
+                                                                </div>
+                                                                <center>
+                                                                    <Form id = {"edit-song-form-" + i} hidden>
+                                                                        <Row>
+                                                                            <Col>
+                                                                                <PlaylistYoutubeSearch index = {i}/>
+                                                                            </Col>
+                                                                        </Row>
+                                                                        <Row>
+                                                                            <Col>
+                                                                                <Form.Group>
+                                                                                    <Form.Label>URL</Form.Label>
+                                                                                    <div id = {"edit-song-error-"+i} className = "song-error"></div>
+                                                                                    <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Or, paste YouTube URL here." maxLength = "50"></Form.Control>
+                                                                                    <div id={"edit-song-url-validator-"+i} className="song-url-validator"></div>
+                                                                                    <input type="hidden" id={"edit-song-video-length-"+i} value={song.length} />
+        
+                                                                                    <Form.Label>Title</Form.Label>
+                                                                                    <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
+        
+                                                                                    <Form.Label>Artist</Form.Label>
+                                                                                    <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
+        
+                                                                                    <Form.Label>Album</Form.Label>
+                                                                                    <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
+                                                                                </Form.Group>
+                                                                            </Col>
+                                                                            <Col>
+                                                                                <Form.Group>
+                                                                                    <Form.Label>Note</Form.Label>
+                                                                                    <Form.Control as="textarea" id = {"edit-song-note-"+i} className = "edit-song-textarea" maxLength = "250" onChange = {() => this.editSongNote(i)} ></Form.Control>
+                                                                                    <span id = {"edit-song-char-count-" + i}>{this.state.noteCharCounts[i]}</span><span id = "edit-song-max-char">/250</span>
+                                                                                </Form.Group>
+                                                                            </Col>
+                                                                        </Row>
+                                                                        <Button variant="primary" type="button" id = "add-song-button" onClick = {() =>  this.handleEditSong(i)}>
+                                                                                Submit
+                                                                        </Button>
+                                                                        <Button variant="primary" type="button" id = "add-song-button" onClick = {() => this.toggleEditFields(i)}>
+                                                                                Cancel
+                                                                        </Button>
+                                                                    </Form>
+                                                                </center>
                                                             </div>
-                                                            <div className="col songs-col1">
-                                                                <b>{song.name ? song.name : ""}</b> {song.artist ? " - " + song.artist : ""}
-                                                            </div>
-                                                            <div className="col songs-col2">
-                                                                {song.album ? song.album : ""}
-                                                            </div>
-                                                            <div className="col songs-col3">
-                                                                {/* @TODO: get this from youtube data api */}
-                                                                {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}
-                                                            </div>
-                                                            <img className="delete-song-button" id = {"delete-song-"+i} src = {delete_img} onClick = {(e) =>  this.handleDeleteSong(e, i)}/>
-                                                        </div>
-                                                        <center>
-                                                            <Form id = {"edit-song-form-" + i} hidden>
-                                                                <Row>
-                                                                    <Col>
-                                                                        <PlaylistYoutubeSearch index = {i}/>
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row>
-                                                                    <Col>
-                                                                        <Form.Group>
-                                                                            <Form.Label>URL</Form.Label>
-                                                                            <div id = {"edit-song-error-"+i} className = "song-error"></div>
-                                                                            <Form.Control id = {"edit-song-url-"+i} className = "edit-song-textbox" onChange = {() => this.autofillSongTitle(i)} placeholder = "Or, paste YouTube URL here." maxLength = "50"></Form.Control>
-                                                                            <div id={"edit-song-url-validator-"+i} className="song-url-validator"></div>
-                                                                            <input type="hidden" id={"edit-song-video-length-"+i} value={song.length} />
-
-                                                                            <Form.Label>Title</Form.Label>
-                                                                            <Form.Control id = {"edit-song-title-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
-
-                                                                            <Form.Label>Artist</Form.Label>
-                                                                            <Form.Control id = {"edit-song-artist-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
-
-                                                                            <Form.Label>Album</Form.Label>
-                                                                            <Form.Control id = {"edit-song-album-"+i} className = "edit-song-textbox" maxLength = "100"></Form.Control>
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Group>
-                                                                            <Form.Label>Note</Form.Label>
-                                                                            <Form.Control as="textarea" id = {"edit-song-note-"+i} className = "edit-song-textarea" maxLength = "250" onChange = {() => this.editSongNote(i)} ></Form.Control>
-                                                                            <span id = {"edit-song-char-count-" + i}>{this.state.noteCharCounts[i]}</span><span id = "edit-song-max-char">/250</span>
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                </Row>
-                                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {() =>  this.handleEditSong(i)}>
-                                                                        Submit
-                                                                </Button>
-                                                                <Button variant="primary" type="button" id = "add-song-button" onClick = {() => this.toggleEditFields(i)}>
-                                                                        Cancel
-                                                                </Button>
-                                                            </Form>
-                                                        </center>
-                                                    </div>
-                                                ))
-                                                : null
-                                            }
-                                        </div>
+                                                            )}
+                                                        </Draggable>
+                                                    ))
+                                                    : null
+                                                }
+                                                {provided.placeholder}
+                                                </div> 
+                                            )}
+                                        </Droppable>
                                     </div>
                                 </div>        
                         </div>
@@ -1075,6 +1103,7 @@ class PlaylistEditDisplay extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        </DragDropContext>
                     </div>
 
                 </NavBarWrapper>

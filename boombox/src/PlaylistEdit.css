@@ -144,6 +144,9 @@
 
 #playlist-edit-container #songs-data-container-row {
     padding: 10px 0px;
+    max-height: 50vh;
+    overflow: auto;
+    scrollbar-width: thin;
 }
 
 #playlist-edit-container #songs-data-container-row > * > * {
@@ -155,8 +158,10 @@
     cursor: pointer;
 }
 
-#playlist-edit-container #delete-song:hover {
-    cursor: pointer;
+#playlist-edit-container .delete-song-button {
+    margin-left: -20px;
+    margin-right: 5px;
+    z-index: 100;
 }
 
 #playlist-edit-container #song-row {
