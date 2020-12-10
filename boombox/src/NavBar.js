@@ -136,7 +136,6 @@ class NavBar extends React.Component {
 
     keyPressed = (e) => {
         if (e.target === document.getElementById("search-input")) {
-            e.preventDefault();
             if (e.which === 13 || e.keyCode === 13) {
                 e.preventDefault();
                 this.handleSearch();

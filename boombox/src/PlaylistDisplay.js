@@ -28,7 +28,6 @@ class PlaylistDisplay extends React.Component{
     }
 
     componentDidMount() {
-        console.log(this.props.title, this.props.image_url);
         fetch('/getImage', {
             method: 'POST',
             body: JSON.stringify({
@@ -41,7 +40,6 @@ class PlaylistDisplay extends React.Component{
         .then(data => {
             this.setState({albumCover: data.imageData});
         });
-        console.log("is private?: " + this.state.isPrivate);
     }
 
     render(){

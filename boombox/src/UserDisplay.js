@@ -20,7 +20,6 @@ class UserDisplay extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.username, this.props.icon_url);
         fetch('/getImage', {
             method: 'POST',
             body: JSON.stringify({

@@ -11,7 +11,6 @@ import Cookie from 'universal-cookie';
 
 function UserProfile() {
     let { username } = useParams();
-    console.log(username);
     return <UserProfileDisplay username = {username} />
 }
 
@@ -44,7 +43,6 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getProfilePageData/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 this.setState({
                     data: obj.result,
@@ -62,7 +60,6 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getProfilePageData/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             this.setState({userPlaylists: obj.playlists});
         });
         for (var i = 0; i < this.state.userPlaylists.length; i++) {
@@ -75,7 +72,6 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getFollowing/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             this.setState({
                 following: obj.users,
             });
@@ -86,7 +82,6 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getFollowers/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             this.setState({
                 followers: obj.users,
             });
@@ -104,7 +99,6 @@ class UserProfileDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log(data);
             this.setState({profile_image_data: data.iconData});
         });
     }
@@ -126,7 +120,6 @@ class UserProfileDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
                     console.log('Success!');
                     if(this.state.isFollowing){
@@ -166,7 +159,6 @@ class UserProfileDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
                     this.setState({ isFollowing: true });
                 }
@@ -195,7 +187,6 @@ class UserProfileDisplay extends React.Component {
         fetch(`/getUserMatch/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             
             if(obj.status === 0)
                 this.setState({match: Math.trunc(obj.result)});

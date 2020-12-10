@@ -29,7 +29,6 @@ import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 
 function PlaylistPage() {
     let { playlistId } = useParams();
-    console.log(playlistId);
     return <PlaylistPageDisplay playlistId={playlistId}/>
 }
 
@@ -77,7 +76,6 @@ class PlaylistPageDisplay extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 var commentArray = obj.result.comments.slice();
                 commentArray.reverse();
@@ -106,7 +104,6 @@ class PlaylistPageDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log(data);
             this.setState({imageData: data.imageData});
         });
         document.onkeypress = this.keyPressed;
@@ -127,8 +124,6 @@ class PlaylistPageDisplay extends React.Component {
             songNotesOpen[i] = !songNotesOpen[i];
             this.setState({song_notes_open: songNotesOpen});
 
-            //this.state.song_notes_open[i] = !this.state.song_notes_open[i];
-            console.log(this.state.song_notes_open[i]);
             if (this.state.song_notes_open[i]) {
                 songNote.style.display = "block";
              }
@@ -243,7 +238,6 @@ class PlaylistPageDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
                     console.log('Playlist liked!');
                 }
@@ -332,9 +326,7 @@ class PlaylistPageDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
-                    console.log('Added comment');
                     //update state here
                     var userId = obj.user_id;
                     var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
@@ -373,7 +365,6 @@ class PlaylistPageDisplay extends React.Component {
             var newComments = this.state.comments.slice();
             newComments.splice(i, 1);
             newComments.reverse();
-            console.log(newComments);
             const body = JSON.stringify({
                 'playlistId': this.props.playlistId,
                 'comments': newComments
@@ -385,7 +376,6 @@ class PlaylistPageDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
                     console.log('Deleted comment');
                     //update state here
@@ -478,15 +468,15 @@ class PlaylistPageDisplay extends React.Component {
                                     <div className="col-md-auto" style={{paddingRight: "0px"}}>
                                         <img id="play-pause-img-top" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
                                     </div>
-                                    <div className="col-md-auto" style={{margin: "auto", paddingRight: "0px"}}>
+                                    <div className="col-md-auto" style={{margin: "auto", paddingRight: "0px", "maxWidth": "69%"}}>
                                         <h1>{this.state.data.name}</h1>
-                                        </div>
-                                        <div id="icons-div" className="col">
-                                            {likeButton}
-                                            {bookmarkButton}
-                                            <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} data-tip = "Link"/>
-                                            {editButton}
-                                        </div>       
+                                    </div>
+                                    <div id="icons-div" className="col">
+                                        {likeButton}
+                                        {bookmarkButton}
+                                        <img src={link_img} height="30px" width="30px" onClick = {this.copyLink} data-tip = "Link"/>
+                                        {editButton}
+                                    </div>       
                                 </div>
                                 <div className="row">
                                     <div className="col">
@@ -546,10 +536,10 @@ class PlaylistPageDisplay extends React.Component {
                                                                 <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                             </div>
                                                             <div className="col songs-col1">
-                                                                <b>{song.name}</b> {song.artist ? " - " + song.artist : ""}
+                                                                <b>{song.name ? song.name : ""}</b> {song.artist ? " - " + song.artist : ""}
                                                             </div>
                                                             <div className="col songs-col2">
-                                                                {song.album ? song.album : "N/A"}
+                                                                {song.album ? song.album : ""}
                                                             </div>
                                                             <div className="col songs-col3">
                                                                 {song.length ? Math.floor(song.length / 60) + ":" + this.getSecondsPadder(song.length) + song.length % 60 : "N/A"}
@@ -643,7 +633,7 @@ class PlaylistPageDisplay extends React.Component {
                                     <img id="play-pause-img" className="invert-color" src={this.getPlayButtonImage()} height="60px" width="60px" onClick={this.handlePlayButton} /> 
                                     <img id="next-song-img" className="invert-color" src={this.getNextButtonImage()} height="60px" width="60px" onClick={this.handleNextButton} />
                                 </div>
-                                <div className="col" id="play-track-right-col">
+                                <div className="col" id="play-track-right-col" style={{"maxWidth": "69%"}}>
                                     <div className="row">
                                         <div className="col">
                                             {

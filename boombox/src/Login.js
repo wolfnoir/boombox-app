@@ -24,8 +24,6 @@ class Login extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
-            console.log(obj.status);
             if(obj.status !== 0){
                 this.errorUpdate(obj.status);
             }
