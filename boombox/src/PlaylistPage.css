@@ -117,6 +117,9 @@
 
 #playlist-page-container #songs-data-container-row {
     padding: 10px 0px;
+    max-height: 40vh;
+    overflow: auto;
+    scrollbar-width: thin;
 }
 
 #playlist-page-container #songs-data-container-row > * > * {
