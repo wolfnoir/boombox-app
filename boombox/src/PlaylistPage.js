@@ -29,7 +29,6 @@ import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 
 function PlaylistPage() {
     let { playlistId } = useParams();
-    console.log(playlistId);
     return <PlaylistPageDisplay playlistId={playlistId}/>
 }
 
@@ -77,7 +76,6 @@ class PlaylistPageDisplay extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 var commentArray = obj.result.comments.slice();
                 commentArray.reverse();
@@ -106,7 +104,6 @@ class PlaylistPageDisplay extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log(data);
             this.setState({imageData: data.imageData});
         });
         document.onkeypress = this.keyPressed;
@@ -127,8 +124,6 @@ class PlaylistPageDisplay extends React.Component {
             songNotesOpen[i] = !songNotesOpen[i];
             this.setState({song_notes_open: songNotesOpen});
 
-            //this.state.song_notes_open[i] = !this.state.song_notes_open[i];
-            console.log(this.state.song_notes_open[i]);
             if (this.state.song_notes_open[i]) {
                 songNote.style.display = "block";
              }
@@ -243,7 +238,6 @@ class PlaylistPageDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
                     console.log('Playlist liked!');
                 }
@@ -332,9 +326,7 @@ class PlaylistPageDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
-                    console.log('Added comment');
                     //update state here
                     var userId = obj.user_id;
                     var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the playlist
@@ -373,7 +365,6 @@ class PlaylistPageDisplay extends React.Component {
             var newComments = this.state.comments.slice();
             newComments.splice(i, 1);
             newComments.reverse();
-            console.log(newComments);
             const body = JSON.stringify({
                 'playlistId': this.props.playlistId,
                 'comments': newComments
@@ -385,7 +376,6 @@ class PlaylistPageDisplay extends React.Component {
                 headers: headers
             }).then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.status === 0) {
                     console.log('Deleted comment');
                     //update state here

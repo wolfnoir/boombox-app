@@ -145,7 +145,6 @@ class SettingsPane extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 //alert('Username changed!');
@@ -194,7 +193,6 @@ class SettingsPane extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 //alert('E-mail changed!');
@@ -232,7 +230,6 @@ class SettingsPane extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 //alert('Bio successfully changed!');
@@ -275,7 +272,6 @@ class SettingsPane extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 //alert('password successfully changed');
@@ -314,7 +310,6 @@ class SettingsPane extends React.Component {
         })
         .then(res => res.json()) 
         .then(data => {
-            console.log("was here");
             this.setState({profile_image_data: data.iconData});
         });
     }

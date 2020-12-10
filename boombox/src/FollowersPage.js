@@ -44,7 +44,6 @@ class FollowersPageDisplay extends React.Component {
         fetch(`/getFollowers/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 this.setState({followers: obj.result});
                 this.setState({user: this.props.username});
@@ -80,7 +79,6 @@ class FollowersPageDisplay extends React.Component {
             var returnUrl = "/user/" + this.state.user;
 
             var followersList = this.state.followers.map((user, i) => {
-                //console.log(user);
                 return (
                     <UserDisplay 
                         //picture = {user.image}

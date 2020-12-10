@@ -28,7 +28,6 @@ import moment from 'moment';
 
 function PlaylistEdit() {
     let { playlistId } = useParams();
-    console.log(playlistId);
     return <PlaylistEditDisplay playlistId={playlistId}/>
 }
 
@@ -51,7 +50,6 @@ class PlaylistSettings extends React.Component {
 
     getUploadImageIcon() {
         var imageSrc = this.state.imageSrc;
-        //console.log(imageSrc);
         if (imageSrc) {
             return (
                 <div>
@@ -100,9 +98,7 @@ class PlaylistSettings extends React.Component {
     handleImageUpload = () => {
         const imageExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
         const input = document.getElementById("file-input");
-        console.log("hi");
         if (input.files && input.files[0]) {
-            console.log(input.files[0]);
             if (!imageExts.includes(input.files[0].type)) {
                 alert("not an image");
                 return;
@@ -114,7 +110,6 @@ class PlaylistSettings extends React.Component {
             const reader = new FileReader();
             reader.onload = (e) => {
                 this.setState({imageSrc: e.target.result});
-                //console.log(e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -155,7 +150,6 @@ class PlaylistSettings extends React.Component {
 			//headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 console.log('successfully saved playlist');
             }
@@ -186,7 +180,6 @@ class PlaylistSettings extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 //alert('successfully deleted playlist');
                 window.location = '/';
@@ -515,8 +508,6 @@ class PlaylistEditDisplay extends React.Component {
             songNotesOpen[i] = !songNotesOpen[i];
             this.setState({song_notes_open: songNotesOpen});
 
-            //this.state.song_notes_open[i] = !this.state.song_notes_open[i];
-            console.log(this.state.song_notes_open[i]);
             if (this.state.song_notes_open[i]) {
                 songNote.style.display = "block";
              }
@@ -528,10 +519,8 @@ class PlaylistEditDisplay extends React.Component {
 
     handleDeleteSong = (e, i) => {
         e.stopPropagation();
-        console.log("call");
         var dataCopy = JSON.parse(JSON.stringify(this.state.data));
         if (dataCopy.songs && i < dataCopy.songs.length) {
-            console.log("delete ", i);
             dataCopy.songs.splice(i, 1);
         }
         for(var j = 0; j < dataCopy.songs.length; j ++){
@@ -558,7 +547,6 @@ class PlaylistEditDisplay extends React.Component {
         
             var dataCopy = JSON.parse(JSON.stringify(this.state.data)); //creates a copy of the song array
             var currentSong = dataCopy.songs[i];
-            console.log(currentSong);
 
             currentSong.url = songId;
             currentSong.url_type = "youtube.com/watch?v=";
@@ -569,7 +557,6 @@ class PlaylistEditDisplay extends React.Component {
             currentSong.length = parseInt(lengthField.value);
             errorField.innerHTML = "";
 
-            console.log(dataCopy);
             this.addToHistory(dataCopy.songs);
             this.setState({data: dataCopy});
 
@@ -715,7 +702,6 @@ class PlaylistEditDisplay extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 //alert('Playlist saved!');
@@ -743,7 +729,6 @@ class PlaylistEditDisplay extends React.Component {
 			headers: headers
 		}).then(res => res.json())
         .then(obj => {
-            console.log(obj);
             //need to make response better
             if (obj.status === 0) {
                 console.log('Playlist saved!');
@@ -854,7 +839,6 @@ class PlaylistEditDisplay extends React.Component {
             fetch(endpoint)
             .then(res => res.json())
             .then(obj => {
-                console.log(obj);
                 if (obj.items.length > 0) {
                     titleField.value = obj.items[0].snippet.title;
                     validatorField.innerHTML = null;

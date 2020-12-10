@@ -18,7 +18,6 @@ class Bookmarks extends React.Component {
         .then(res => res.json())
         .then(obj => {
             if (obj.status === 0) {
-                console.log(obj);
                 this.setState({bookmarks: obj.result});
             }
             else {

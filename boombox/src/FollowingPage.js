@@ -44,7 +44,6 @@ class FollowingPageDisplay extends React.Component {
         fetch(`/getFollowing/${this.props.username}`)
         .then(res => res.json())
         .then(obj => {
-            console.log(obj);
             if (obj.status === 0) {
                 this.setState({following: obj.result});
                 this.setState({user: this.props.username});
