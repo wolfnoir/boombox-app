@@ -446,7 +446,7 @@ class PlaylistYoutubeSearch extends React.Component {
                     <div id = "search-youtube">
                         <center>
                             <img src={search_img} id = "search-youtube-icon" width = "30" className = "invert-color"/>
-                            <input id = "search-youtube-input" onChange={this.handleSearchChange}/>
+                            <input id = "search-youtube-input" onChange={this.handleSearchChange} maxLength = "100"/>
 
                              <Button variant="secondary"  onClick={this.execute}> 
                                 Search
