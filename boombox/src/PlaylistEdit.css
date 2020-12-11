@@ -73,6 +73,16 @@
     margin-left: 15px;
 }
 
+#playlist-edit-container #undo-redo-styling {
+    margin: 5px;
+    margin-top: 10px;
+    margin-bottom: -5px;
+}
+
+#playlist-edit-container #undo-redo-styling:hover {
+    cursor: pointer;
+}
+
 #tags-div {
     display: inline-block;
 }

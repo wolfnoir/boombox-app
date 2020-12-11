@@ -7,14 +7,6 @@ import './css/bootstrap.min.css';
 import './FollowingPage.css';
 import arrow_back_img from './images/arrow_back-24px.svg';
 
-/*--------------------------------------------------*/
-/* TEMPORARY STATIC IMAGE IMPORTS                   */
-/*--------------------------------------------------*/
-import wolf_img from './images/watermelon-wolf.jpg';
-import mountain_img from "./images/mountain.jpg";
-import church_img from "./images/disco-church.png";
-/*--------------------------------------------------*/
-
 class ArrowBackComponent extends React.Component {
     render() {
         return (
@@ -72,12 +64,6 @@ class FollowingPageDisplay extends React.Component {
             return <Redirect to="/error" />
         }
         else {
-            /*--------------------------------------------------*/
-            /* TEMPORARY STATIC IMAGE IMPORTS                   */
-            /*--------------------------------------------------*/
-            var staticImages = [wolf_img, mountain_img, church_img];
-            /*--------------------------------------------------*/
-
             var returnUrl = "/user/" + this.state.user;
 
             var followingList = this.state.following.map((user, i) => {
