@@ -73,13 +73,17 @@
     margin-left: 15px;
 }
 
-#playlist-edit-container #undo-redo-styling {
+#playlist-edit-container .undo-redo-styling {
     margin: 5px;
     margin-top: 10px;
     margin-bottom: -5px;
 }
 
-#playlist-edit-container #undo-redo-styling:hover {
+#playlist-edit-container .disabled path {
+    fill: #696969;
+}
+
+#playlist-edit-container .undo-redo-styling:hover {
     cursor: pointer;
 }
 
@@ -233,6 +237,10 @@
 
 .invert-color {
     filter: invert(1);
+}
+
+.disable-svg {
+    filter: invert(0.5);
 }
 
 #playlist-edit-container #row3 {

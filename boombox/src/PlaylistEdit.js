@@ -497,6 +497,24 @@ class PlaylistEditDisplay extends React.Component {
         );
     }
 
+    getUndoImg() {
+        if (this.state.historyStep === 0) {
+            return <img src = {undo_img} onClick = {() => this.handleUndo()} height="30px" width="30px" id = "undo-button" className = "undo-redo-styling disable-svg" data-tip = "Undo (Ctrl + Z)"/>
+        }
+        else {
+            return <img src = {undo_img} onClick = {() => this.handleUndo()} height="30px" width="30px" id = "undo-button" className = "undo-redo-styling" data-tip = "Undo (Ctrl + Z)"/>
+        }
+    }
+
+    getRedoImg() {
+        if (this.state.historyStep === this.state.history.length - 1) {
+            return <img src = {redo_img} onClick = {() => this.handleRedo()} height="30px" width="30px" id = "redo-button" className = "undo-redo-styling disable-svg" data-tip = "Redo (Ctrl + Y)"/>
+        }
+        else {
+            return <img src = {redo_img} onClick = {() => this.handleRedo()} height="30px" width="30px" id = "redo-button" className = "undo-redo-styling" data-tip = "Redo (Ctrl + Y)"/>
+        }
+    }
+
     componentDidMount() {
         const body = JSON.stringify({
             'username': this.cookie.get('username'),
@@ -956,8 +974,8 @@ class PlaylistEditDisplay extends React.Component {
                                         </a>
                                         <br/>
                                         <div id = "undo-redo">
-                                            <img src = {undo_img} onClick = {() => this.handleUndo()} height="30px" width="30px" id = "undo-redo-styling" data-tip = "Undo (Ctrl + Z)"/>
-                                            <img src = {redo_img} onClick = {() => this.handleRedo()} height="30px" width="30px" id = "undo-redo-styling" data-tip = "Redo (Ctrl + Y)"/>
+                                            {this.getUndoImg()}
+                                            {this.getRedoImg()}
                                         </div>
                                     </div>
                                 </div>
