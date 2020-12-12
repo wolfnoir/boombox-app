@@ -127,7 +127,7 @@ class Register extends React.Component {
                         <form className = "registration-form"> 
                             <div id = "error-response"></div>
                         <div className = "form-group">
-                            <input type = "email" className = "form-control" id = "register-email" placeholder = "E-mail" onChange = {this.handleEmailChange} />
+                            <input type = "email" className = "form-control" id = "register-email" placeholder = "E-mail" maxLength = "100" onChange = {this.handleEmailChange} />
                         </div>
 
                         <div className = "form-group">
@@ -135,11 +135,11 @@ class Register extends React.Component {
                         </div>
 
                         <div className = "form-group">
-                            <input type = "password" className = "form-control" id = "register-password" placeholder = "Password" onChange = {this.handlePasswordChange} />
+                            <input type = "password" className = "form-control" id = "register-password" placeholder = "Password" maxLength = "100" onChange = {this.handlePasswordChange} />
                         </div>
 
                         <div className = "form-group">
-                            <input type = "password" className = "form-control" id = "register-confirm-password" placeholder = "Confirm Password" onChange = {this.handlePasswordConfirm}/>
+                            <input type = "password" className = "form-control" id = "register-confirm-password" placeholder = "Confirm Password" maxLength = "100" onChange = {this.handlePasswordConfirm}/>
                             <span id = 'password-message'></span>
                         </div>
 

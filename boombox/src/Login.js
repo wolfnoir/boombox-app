@@ -75,11 +75,11 @@ class Login extends React.Component {
                         <form className = "login-form" id="loginForm"> 
                             <div id = "error-response"></div>
                           <div className = "form-group">
-                              <input type = "email" name="email" className = "form-control" id = "login-email" placeholder = "E-mail" />
+                              <input type = "email" name="email" className = "form-control" id = "login-email" placeholder = "E-mail" maxLength = "100"/>
                           </div>
 
                           <div className = "form-group">
-                              <input type = "password" name="password" className = "form-control" id = "login-password" placeholder = "Password" />
+                              <input type = "password" name="password" className = "form-control" id = "login-password" placeholder = "Password" maxLength = "100"/>
                           </div>
 
                           <button type = "submit" className = "btn btn-primary" role="button" onClick={this.loginUser}>Log In</button>

@@ -243,6 +243,40 @@
     filter: invert(0.5);
 }
 
+#search-youtube-response {
+    color: salmon;
+}
+
+.youtube-search-result {
+    margin: 10px;
+    font-family: 'Roboto Condensed';
+    transition: 0.3s;
+}
+
+.youtube-search-result:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+
+.selected {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.youtube-search-result #video-title {
+    font-family: 'Orbitron';
+}
+
+#youtube-search-results {
+    max-height: 60vh;
+    overflow: auto;
+    margin: auto;
+    scrollbar-width: thin;
+}
+
+.youtube-search-video {
+    padding: 10px;
+}
+
 #playlist-edit-container #row3 {
     text-align-last: center;
     margin: 20px 0px 0px 0px;
