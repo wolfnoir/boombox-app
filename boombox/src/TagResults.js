@@ -3,14 +3,7 @@ import NavBarWrapper from './NavBarWrapper';
 import './css/bootstrap.min.css';
 import './TagResults.css';
 
-/*--------------------------------------------------*/
-/* TEMPORARY STATIC IMAGE IMPORTS                   */
-/*--------------------------------------------------*/
-import wolf_img from './images/watermelon-wolf.jpg';
-import horse_img from './images/horse.png';
-import leafy_img from "./images/leafy.jpg";
 import PlaylistDisplay from './PlaylistDisplay';
-/*--------------------------------------------------*/
 
 class TagResults extends React.Component {
     constructor(props){
@@ -38,18 +31,9 @@ class TagResults extends React.Component {
     }
 
     render(){
-        /*--------------------------------------------------*/
-        /* TEMPORARY STATIC IMAGE IMPORTS                   */
-        /*--------------------------------------------------*/
-        var staticImages = [
-            wolf_img, leafy_img, horse_img
-        ]
-        /*--------------------------------------------------*/
-
         var playlistsList = this.state.playlists? this.state.playlists.map((playlist, i) => {
             return (
                 <PlaylistDisplay
-                    albumCover={staticImages[i]} 
                     title={playlist.name}
                     author={playlist.author}
                     likes={playlist.likes} 

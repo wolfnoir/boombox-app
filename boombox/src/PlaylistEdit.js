@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { DragDropContext } from 'react-beautiful-dnd';
 import { Droppable } from 'react-beautiful-dnd';
 import { Draggable } from 'react-beautiful-dnd';
+import ReactTooltip from 'react-tooltip';
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
 import Cookie from 'universal-cookie';
@@ -23,6 +24,8 @@ import add_box_img from './images/add_box-24px.svg';
 import remove_circle_img from './images/remove_circle-24px.svg';
 import delete_img from './images/delete-black-24dp.svg';
 import search_img from './images/search-black-24dp.svg';
+import redo_img from './images/redo-black-24dp.svg';
+import undo_img from './images/undo-black-24dp.svg';
 import SelectSearch from 'react-select-search';
 import moment from 'moment';
 
@@ -213,7 +216,8 @@ class PlaylistSettings extends React.Component {
         return (
             <div>
                 {this.handleRedirect()}
-                <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button"/>
+                <ReactTooltip place="bottom" type="dark" effect="solid" className = "playlist-tooltip"/> 
+                <img src={settings_img} height="30px" width="30px" onClick={handleShow} id = "playlist-settings-button" style = {{ "display": "inline-block" }} data-tip = "Settings"/>
 
                 <Modal id = "settings-modal" show={this.state.show} onHide={handleClose} size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
@@ -423,7 +427,7 @@ class PlaylistYoutubeSearch extends React.Component {
     render() {
         const handleClose = () => this.setState({show: false});
         const handleShow = () => this.setState({show: true});
-
+        console.log(this.state.results);
         return(
             <div>
                 <div onClick = {handleShow} id = "search-open-modal">
@@ -491,6 +495,24 @@ class PlaylistEditDisplay extends React.Component {
         return (
             <img src={default_playlist_img} id="playlist-cover" width="250px" height="250px"/>
         );
+    }
+
+    getUndoImg() {
+        if (this.state.historyStep === 0) {
+            return <img src = {undo_img} onClick = {() => this.handleUndo()} height="30px" width="30px" id = "undo-button" className = "undo-redo-styling disable-svg" data-tip = "Undo (Ctrl + Z)"/>
+        }
+        else {
+            return <img src = {undo_img} onClick = {() => this.handleUndo()} height="30px" width="30px" id = "undo-button" className = "undo-redo-styling" data-tip = "Undo (Ctrl + Z)"/>
+        }
+    }
+
+    getRedoImg() {
+        if (this.state.historyStep === this.state.history.length - 1) {
+            return <img src = {redo_img} onClick = {() => this.handleRedo()} height="30px" width="30px" id = "redo-button" className = "undo-redo-styling disable-svg" data-tip = "Redo (Ctrl + Y)"/>
+        }
+        else {
+            return <img src = {redo_img} onClick = {() => this.handleRedo()} height="30px" width="30px" id = "redo-button" className = "undo-redo-styling" data-tip = "Redo (Ctrl + Y)"/>
+        }
     }
 
     componentDidMount() {
@@ -934,9 +956,9 @@ class PlaylistEditDisplay extends React.Component {
             return (
                 <div onKeyDown = {this.keyPressed} tabIndex="0">
                 <NavBarWrapper>
+                    <ReactTooltip place="bottom" type="dark" effect="solid" className = "playlist-tooltip"/> 
                     <div className="container" id="playlist-edit-container" >
                     <DragDropContext
-                        onDragStart={this.onDragStart}
                         onDragEnd = {this.onDragEnd}
                     >
                         <div className="row" id="row1">
@@ -950,6 +972,11 @@ class PlaylistEditDisplay extends React.Component {
                                         <a href={"/playlist/" + this.props.playlistId}>
                                             <button type="button" className="btn btn-danger">Back</button>
                                         </a>
+                                        <br/>
+                                        <div id = "undo-redo">
+                                            {this.getUndoImg()}
+                                            {this.getRedoImg()}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="row" id="title-row">

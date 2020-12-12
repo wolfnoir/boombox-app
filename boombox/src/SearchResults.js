@@ -4,15 +4,8 @@ import Tag from './Tag';
 import './css/bootstrap.min.css';
 import './SearchResults.css';
 
-/*--------------------------------------------------*/
-/* TEMPORARY STATIC IMAGE IMPORTS                   */
-/*--------------------------------------------------*/
-import wolf_img from './images/watermelon-wolf.jpg';
-import horse_img from './images/horse.png';
-import leafy_img from "./images/leafy.jpg";
 import UserDisplay from './UserDisplay';
 import PlaylistDisplay from './PlaylistDisplay';
-/*--------------------------------------------------*/
 
 class SearchResults extends React.Component {
     constructor(props){
@@ -75,13 +68,6 @@ class SearchResults extends React.Component {
     }
 
     render(){
-        /*--------------------------------------------------*/
-        /* TEMPORARY STATIC IMAGE IMPORTS                   */
-        /*--------------------------------------------------*/
-        var staticImages = [
-            wolf_img, leafy_img, horse_img
-        ]
-        /*--------------------------------------------------*/
 
         var usersList = this.state.users.map((user, i) => {
             return (
@@ -105,7 +91,6 @@ class SearchResults extends React.Component {
         var playlistsList = this.state.playlists.map((playlist, i) => {
             return (
                 <PlaylistDisplay
-                    albumCover={staticImages[i]} 
                     title={playlist.name}
                     author={playlist.author}
                     likes={playlist.likes} 
