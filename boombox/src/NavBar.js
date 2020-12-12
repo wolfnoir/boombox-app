@@ -182,7 +182,7 @@ class NavBar extends React.Component {
                     </Nav>
                     <Nav>
                     <Form inline id = "nav-search-bar">
-                        <FormControl type="text" placeholder="search" className="mr-sm-2" onChange={this.updateInput} id = "search-input"/>
+                        <FormControl type="text" placeholder="search" className="mr-sm-2" onChange={this.updateInput} id = "search-input" maxLength = "100"/>
 
                         <Button variant="outline-info" onClick = {this.handleSearch}>search</Button>
                         <div>{settingsIcon}</div>

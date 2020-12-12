@@ -424,7 +424,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input id="email-entry" type="text" onChange = {this.handleEmailChange} value = {this.state.email}/>
+                                    <input id="email-entry" type="text" onChange = {this.handleEmailChange} maxLength = "100" value = {this.state.email}/>
                                 </div>
                             </div>
                             <div className="row">
@@ -447,7 +447,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input type="password" id="current-password-entry" placeholder="Current Password" />
+                                    <input type="password" id="current-password-entry" maxLength = "100" placeholder="Current Password" />
                                 </div>
                             </div>
                             <div className="row">
@@ -457,7 +457,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <input type="password" id="new-password-entry" placeholder="New Password" />
+                                    <input type="password" id="new-password-entry" maxLength = "100" placeholder="New Password" />
                                 </div>
                             </div>
                             <div className="row">
@@ -467,7 +467,7 @@ class SettingsPane extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                <input type="password" id="confirm-password-entry" placeholder="Confirm New Password" />
+                                <input type="password" id="confirm-password-entry" maxLength = "100" placeholder="Confirm New Password" />
                                 </div>
                             </div>
                             <div className="row">
