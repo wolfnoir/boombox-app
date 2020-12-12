@@ -7,6 +7,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import ReactTooltip from 'react-tooltip';
 import NavBarWrapper from './NavBarWrapper';
 import Tag from './Tag';
+import YoutubeVideo from './YoutubeVideo';
 import Cookie from 'universal-cookie';
 import './css/bootstrap.min.css';
 import './PlaylistEdit.css';
@@ -328,8 +329,6 @@ class PlaylistTags extends React.Component {
     }
 
     render() {
-        console.log(this.state);
-
         const handleClose = () => this.setState({show: false});
         const handleShow = () => this.setState({show: true});
 
@@ -383,7 +382,9 @@ class PlaylistYoutubeSearch extends React.Component {
             index: this.props.index,
             clientReady: false,
             query: "",
-            results: []
+            results: [],
+            selectedSong: null,
+            selectedSongIndex: null,
         }
 
         this.loadClient = this.loadClient.bind(this);
@@ -424,10 +425,51 @@ class PlaylistYoutubeSearch extends React.Component {
         }
     }
 
+    handleAddSong = () => {
+        var feedback = document.getElementById("search-youtube-response");
+        var results = document.getElementById("youtube-search-results");
+        if (this.state.selectedSong){
+            //pass props up to page 
+            this.props.onSubmit(this.state.selectedSong, this.state.index);
+            this.setState({
+                show: false,
+                selectedSong: null
+            });
+            feedback.innerHTML = "";
+            results.innerHTML = "";
+        }
+        else {
+            feedback.innerHTML = "Please select a video.";
+        }
+    }
+
+    handleSelectSong = (i) => {
+        console.log("index selected: " + i);
+        var currentSelected = document.getElementById("youtube-search-result-" + i);
+        if(this.state.selectedSongIndex === i){
+            currentSelected.classList.remove("selected");
+            this.setState({
+                selectedSong: null,
+                selectedSongIndex: null
+            });
+            return;
+        }
+
+        if(this.state.selectedSongIndex !== null){
+            var element = document.getElementById("youtube-search-result-" + this.state.selectedSongIndex);
+            element.classList.remove("selected");
+        }
+        currentSelected.classList.add("selected");
+        this.setState({
+            selectedSong: this.state.results[i],
+            selectedSongIndex: i
+        });
+        return;
+    }
+
     render() {
         const handleClose = () => this.setState({show: false});
         const handleShow = () => this.setState({show: true});
-        console.log(this.state.results);
         return(
             <div>
                 <div onClick = {handleShow} id = "search-open-modal">
@@ -438,11 +480,12 @@ class PlaylistYoutubeSearch extends React.Component {
                 <Modal show={this.state.show} onHide={handleClose} size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
-                    keyboard={false}>
+                    keyboard={false}
+                    >
                     <div className = "tags-modal-header">
                         search
                     </div>
-
+                    <center><div id = "search-youtube-response"></div></center>
                     <div id = "search-youtube">
                         <center>
                             <img src={search_img} id = "search-youtube-icon" width = "30" className = "invert-color"/>
@@ -453,11 +496,31 @@ class PlaylistYoutubeSearch extends React.Component {
                             </Button>
                         </center>
                     </div>
-
+                    <div id = "youtube-search-results">
                     {/* Search results show up here. */}
+                    {
+                        this.state.results ?
+                        this.state.results.map((video, i) => ( //limits results to 10
+                            <div id = {"youtube-search-result-" + i} className = "youtube-search-result" onClick = {() => this.handleSelectSong(i)}>
+                                <table>
+                                    <tr>
+                                        <td id = {"youtube-search-video-" + i} className = "youtube-search-video">
+                                            <img src= {video.snippet.thumbnails.default.url}></img>
+                                        </td>
 
+                                        <td id = {"youtube-search-snippet-" + i}>
+                                            <span id = "video-title"><b>{video.snippet.title}</b></span><br/>
+                                            <small>By {video.snippet.channelTitle}</small>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        ))
+                        : null
+                    }
+                    </div>
                     <center>
-                        <Button onClick={handleClose}>
+                        <Button onClick={this.handleAddSong}>
                             Add Song
                         </Button>
 
@@ -890,6 +953,8 @@ class PlaylistEditDisplay extends React.Component {
     autofillSongTitle = (i) => {
         const urlField = i >= 0 ? document.getElementById("edit-song-url-"+i) : document.getElementById("add-song-url");
         const titleField = i >= 0 ? document.getElementById("edit-song-title-"+i) : document.getElementById("add-song-title");
+        const artistField = i >= 0 ? document.getElementById("edit-song-artist-"+i) : document.getElementById("add-song-artist");
+        const albumField = i >= 0 ? document.getElementById("edit-song-album-"+i) : document.getElementById("add-song-album");
         const validatorField = i >= 0 ? document.getElementById("edit-song-url-validator-"+i) : document.getElementById("add-song-url-validator");
         const videoLengthField = i >= 0 ? document.getElementById("edit-song-video-length-"+i) : document.getElementById("add-song-video-length");
 
@@ -914,6 +979,8 @@ class PlaylistEditDisplay extends React.Component {
                     videoLengthField.value = length;
                     console.log(duration, length);
                     console.log(videoLengthField.value);
+                    artistField.value = "";
+                    albumField.value = "";
                 }
                 else {
                     console.log("youtube video not found");
@@ -938,6 +1005,17 @@ class PlaylistEditDisplay extends React.Component {
             return '0';
         }
         return '';
+    }
+
+    handleSelectSong = (video, index) => {
+        //if index === -1 then its adding a new song
+        //if index is otherwise a number >= 0, then it's editing a current song
+        console.log("add/edit song index: " + index);
+        const urlField = index >= 0 ? document.getElementById("edit-song-url-"+index) : document.getElementById("add-song-url");
+        const url = "https://www.youtube.com/watch?v=" + video.id.videoId;
+        urlField.value = url;
+        console.log("youtube url: " + url);
+        this.autofillSongTitle(index);
     }
 
     render() {
@@ -1040,13 +1118,14 @@ class PlaylistEditDisplay extends React.Component {
                                                                     ref = {provided.innerRef}
                                                                     {...provided.draggableProps}
                                                                     {...provided.dragHandleProps}
+                                                                    
                                                                 >
                                                                 <div className="row" id = "song-row" >
                                                                     <div className="col songs-col0">
                                                                         
                                                                     <img className="song-arrow" id={"song-arrow-" + i} 
-                                                                        src={this.getArrow(i)}           
-                                                                        onClick = {() => this.toggleEditFields(i)}                                                              
+                                                                        src={this.getArrow(i)}       
+                                                                        onClick = {() => this.toggleEditFields(i)}                                                                  
                                                                         height="25px" width="25px" alt=">"/> {/* should add onclick to toggle arrow*/}
                                                                         <b><span style = {{fontSize: "14px"}}>{(i+1) + "."}</span></b>
                                                                     </div>
@@ -1066,7 +1145,7 @@ class PlaylistEditDisplay extends React.Component {
                                                                     <Form id = {"edit-song-form-" + i} hidden>
                                                                         <Row>
                                                                             <Col>
-                                                                                <PlaylistYoutubeSearch index = {i}/>
+                                                                                <PlaylistYoutubeSearch index = {i} onSubmit = {this.handleSelectSong}/>
                                                                             </Col>
                                                                         </Row>
                                                                         <Row>
@@ -1130,7 +1209,7 @@ class PlaylistEditDisplay extends React.Component {
                                             <Form id = "add-song-form" hidden>
                                                 <Row>
                                                     <Col>
-                                                        <PlaylistYoutubeSearch index = {-1}/>
+                                                        <PlaylistYoutubeSearch index = {-1} onSubmit = {this.handleSelectSong}/>
                                                     </Col>
                                                 </Row>
                                                 <Row>
