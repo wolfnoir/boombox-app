@@ -8,6 +8,10 @@
     z-index: 2000 !important;
 }
 
+#profile-image {
+    border-radius: 50%;
+}
+
 #settings-pane #row1 {
     text-align: center;
 }
