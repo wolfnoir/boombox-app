@@ -31,7 +31,7 @@ class TagResults extends React.Component {
     }
 
     render(){
-        var playlistsList = this.state.playlists? this.state.playlists.map((playlist, i) => {
+        var playlistsList = this.state.playlists? this.state.playlists.reverse().map((playlist, i) => {
             return (
                 <PlaylistDisplay
                     title={playlist.name}
