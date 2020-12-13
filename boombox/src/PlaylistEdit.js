@@ -354,7 +354,7 @@ class PlaylistTags extends React.Component {
                         <SelectSearch 
                             id = "select-tag-search"
                             closeOnSelect = {false}
-                            options = {this.state.tags && this.state.allTags? this.fetchUnusedTags() : null}
+                            options = {this.state.tags && this.state.allTags? this.fetchUnusedTags() : []}
                             multiple
                             search
                             placeholder="Select tags"
