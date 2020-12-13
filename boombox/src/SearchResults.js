@@ -47,7 +47,8 @@ class SearchResults extends React.Component {
     }
 
     componentDidMount() {
-        const{ query } = this.props.match.params;
+        const query = this.props.match.params[0];
+
         this.setState({queryString: query}, () => {
             this.getResultingUsers();
             this.getResultingPlaylists();
@@ -57,7 +58,7 @@ class SearchResults extends React.Component {
 
     componentDidUpdate(prevprops){
         if(prevprops !== this.props){
-            const{ query } = this.props.match.params;
+            const query = this.props.match.params[0];
 
             this.setState({queryString: query}, () => {
                 this.getResultingUsers();

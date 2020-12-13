@@ -54,6 +54,7 @@ class SearchHandler {
 
     static async searchTagsRoute(req, res) {
         const keyword = req.params.keyword;
+        console.log(req);
         const statusObject = await SearchHandler.searchTags(keyword);
         res.send(statusObject);
     }
