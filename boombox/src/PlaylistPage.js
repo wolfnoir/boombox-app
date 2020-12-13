@@ -420,11 +420,14 @@ class PlaylistPageDisplay extends React.Component {
     }
 
     keyPressed = (e) => {
+        console.log(e.target);
         if (e.target !== document.getElementById("comment-entry") && e.target !== document.getElementById("search-input")) {
             if (e.which === 80 || e.keyCode === 80) {
+                e.preventDefault();
                 this.handlePrevButton();
             }
             if (e.which === 78 || e.keyCode === 78) {
+                e.preventDefault();
                 this.handleNextButton();
             }
             if (e.which === 32 || e.keyCode === 32) {

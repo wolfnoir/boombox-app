@@ -181,7 +181,7 @@ class NavBar extends React.Component {
                         <Navbar.Brand href="/" id = "boombox-header">boombox</Navbar.Brand>
                     </Nav>
                     <Nav>
-                    <Form inline id = "nav-search-bar">
+                    <Form inline id = "nav-search-bar" onSubmit = {this.handleSearch}>
                         <FormControl type="text" placeholder="search" className="mr-sm-2" onChange={this.updateInput} id = "search-input" maxLength = "100"/>
 
                         <Button variant="outline-info" onClick = {this.handleSearch}>search</Button>
