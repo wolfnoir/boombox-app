@@ -310,7 +310,7 @@ class PlaylistPageDisplay extends React.Component {
             alert("Please log in to comment!");
         }
         else if (comment === "" || comment === null) {
-            alert("Please write something");
+            alert("Please write something in your comment!");
         }
         else {
             const body = JSON.stringify({

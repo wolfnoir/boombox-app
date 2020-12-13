@@ -63,7 +63,6 @@ class SettingsPane extends React.Component {
         var confirm = document.getElementById("settings-confirm");
         if(fileInput.value === ""){
             e.preventDefault();
-            //alert("Please select a file.");
             error.innerHTML = "Please select a file.";
             confirm.innerHTML = "";
             return;
@@ -93,7 +92,6 @@ class SettingsPane extends React.Component {
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
         if (!fileInput.value) {
-            //alert("Please select a file.");
             error.innerHTML = "Please select a file.";
             confirm.innerHTML = "";
             return;
@@ -102,11 +100,13 @@ class SettingsPane extends React.Component {
         const file = fileInput.files[0];    
         const imageExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
         if (!imageExts.includes(file.type)) {
-            alert("not an image");
+            error.innerHTML = "ERROR: Please pick a compatible file.";
+            confirm.innerHTML = "";
             return;
         }
         if (file.size > 2000000) {
-            alert("file too big");
+            error.innerHTML = "ERROR: File too large. Please pick another picture.";
+            confirm.innerHTML = "";
             return;
         }
 
@@ -130,7 +130,6 @@ class SettingsPane extends React.Component {
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
         if (!username || username.value === "") {
-            //alert('Please provide a valid username.');
             error.innerHTML = "Please provide a valid username.";
             confirm.innerHTML = "";
             return;
@@ -147,7 +146,6 @@ class SettingsPane extends React.Component {
         .then(obj => {
             //need to make response better
             if (obj.status === 0) {
-                //alert('Username changed!');
                 error.innerHTML = "";
                 confirm.innerHTML = "Username changed!";
                 if (this.props.afterSettingsUpdate) {
@@ -155,17 +153,14 @@ class SettingsPane extends React.Component {
                 }
             }
             else if (obj.status === 5) {
-                //alert('Username already taken!');
                 error.innerHTML = "Username already taken!";
                 confirm.innerHTML = "";
             }
             else if (obj.status === 2) {
-                //alert('Username already taken!');
                 error.innerHTML = "Email already in use!";
                 confirm.innerHTML = "";
             }
             else {
-                //alert('somehow it broke');
                 error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
                 confirm.innerHTML = "";
             }
@@ -178,7 +173,6 @@ class SettingsPane extends React.Component {
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
         if (!email || !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.value)) {
-            //alert('Please provide a valid email.');
             error.innerHTML = "Please provide a valid email.";
             confirm.innerHTML = "";
             return;
@@ -195,17 +189,14 @@ class SettingsPane extends React.Component {
         .then(obj => {
             //need to make response better
             if (obj.status === 0) {
-                //alert('E-mail changed!');
                 error.innerHTML = "";
                 confirm.innerHTML = "E-mail changed!";
             }
             else if (obj.status === 2) {
-                //alert('E-mail already in use!');
                 error.innerHTML = "E-mail already in use!";
                 confirm.innerHTML = "";
             }
             else {
-                //alert('somehow it broke');
                 error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
                 confirm.innerHTML = "";
             }
@@ -232,7 +223,6 @@ class SettingsPane extends React.Component {
         .then(obj => {
             //need to make response better
             if (obj.status === 0) {
-                //alert('Bio successfully changed!');
                 error.innerHTML = "";
                 confirm.innerHTML = "Bio successfully changed!";
                 if (this.props.afterSettingsUpdate) {
@@ -240,7 +230,6 @@ class SettingsPane extends React.Component {
                 }
             }
             else {
-                //alert('somehow it broke');
                 error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
                 confirm.innerHTML = "";
             }
@@ -255,7 +244,6 @@ class SettingsPane extends React.Component {
         var error = document.getElementById("settings-error");
         var confirm = document.getElementById("settings-confirm");
         if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
-            //alert('please fill out all fields');
             error.innerHTML = "Please fill out all fields!";
             confirm.innerHTML = "";
             return;
@@ -274,7 +262,6 @@ class SettingsPane extends React.Component {
         .then(obj => {
             //need to make response better
             if (obj.status === 0) {
-                //alert('password successfully changed');
                 error.innerHTML = "";
                 confirm.innerHTML = "Password successfully changed!";
                 currentPassword.value = null;
@@ -282,17 +269,14 @@ class SettingsPane extends React.Component {
                 confirmPassword.value = null;
             }
             else if (obj.status === 3) {
-                //alert('incorrect password');
                 error.innerHTML = "Incorrect password.";
                 confirm.innerHTML = "";
             }
             else if (obj.status === 4) {
-                //alert('new password fields did not match');
                 error.innerHTML = "New password fields did not match. Please try again.";
                 confirm.innerHTML = "";
             }
             else {
-                //alert('somehow it broke');
                 error.innerHTML = "ERROR: Whoops, something went wrong! Try again later.";
                 confirm.innerHTML = "";
             }

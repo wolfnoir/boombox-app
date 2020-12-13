@@ -104,15 +104,16 @@ class PlaylistSettings extends React.Component {
     }
 
     handleImageUpload = () => {
+        var error = document.getElementById("playlist-settings-error");
         const imageExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
         const input = document.getElementById("file-input");
         if (input.files && input.files[0]) {
             if (!imageExts.includes(input.files[0].type)) {
-                alert("not an image");
+                error.innerHTML = "ERROR: Please pick a compatible file.";
                 return;
             }
             if (input.files[0].size > 2000000) {
-                alert("file too big");
+                error.innerHTML = "ERROR: File too large. Please pick another picture.";
                 return;
             }
             const reader = new FileReader();
@@ -159,16 +160,16 @@ class PlaylistSettings extends React.Component {
 		}).then(res => res.json())
         .then(obj => {
             if (obj.status === 0) {
-                console.log('successfully saved playlist');
+                console.log("Success!");
             }
             else if (obj.status === 1) {
-                console.log('not authorized');
+                error.innerHTML = "ERROR: You're not authorized to save this playlist!";
             }
             else if (obj.status === -1) {
-                console.log('error');
+                error.innerHTML = "ERROR: Something broke, whoops! Try again later.";
             }
             else {
-                console.log('somehow it broke');
+                error.innerHTML = "ERROR: Something broke, whoops! Try again later.";
             }
 
             this.props.onSave(this.state.name, this.state.desc, this.state.private, this.state.com_enabled, this.state.imageSrc);
@@ -177,6 +178,7 @@ class PlaylistSettings extends React.Component {
     }
 
     handleDeletePlaylist = () => {
+        var feedback = document.getElementById("playlist-settings-error");
         const body = JSON.stringify({
             'username': this.cookie.get('username'),
             'playlistId': this.props.playlistId
@@ -193,13 +195,13 @@ class PlaylistSettings extends React.Component {
                 window.location = '/';
             }
             else if (obj.status === 1) {
-                alert('not authorized');
+                feedback.innerHTML = "You are not authorized to delete this playlist!";
             }
             else if (obj.status === -1) {
-                alert('error');
+                feedback.innerHTML = "ERROR: Please try again later!";
             }
             else {
-                alert('somehow it broke');
+                feedback.innerHTML = "ERROR: Please try again later!";
             }
         });
     }
@@ -212,8 +214,12 @@ class PlaylistSettings extends React.Component {
     }
 
     render(){
-        const handleClose = () => this.setState({show: false});
-        const handleShow = () => this.setState({show: true});
+        const handleClose = () => {
+            this.setState({show: false});
+        }
+        const handleShow = () => {
+            this.setState({show: true});
+        }
         return (
             <div>
                 {this.handleRedirect()}
@@ -230,6 +236,7 @@ class PlaylistSettings extends React.Component {
                 </div>
 
                 <Form className = "settings-modal-content">
+                    <center><div id = "playlist-settings-error" className = "song-error"></div></center>
                     <Form.Group style = {{display: 'inline-block', marginRight: '50px'}}>
                         <Form.File style = {{display: 'inline-block'}}>
                             {this.getUploadImageIcon()}
@@ -254,7 +261,6 @@ class PlaylistSettings extends React.Component {
                 </Form>
 
                 <center>
-                    <div id = "playlist-settings-error" className = "song-error"></div>
                     <Button variant="primary" onClick={this.handleSavePlaylist}>
                     Save
                     </Button>
@@ -839,7 +845,7 @@ class PlaylistEditDisplay extends React.Component {
                 alert('You are not authorized to edit this playlist!');
             }
             else {
-                alert('somehow it broke');
+                alert('ERROR: Whoops! Something broke. Please try again later.');
             }
         });
     }
