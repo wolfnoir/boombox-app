@@ -124,11 +124,11 @@ app.all("/getTags", TagHandler.getTagsRoute);
 
 app.all("/getTagResults/:tag", TagHandler.getTagResultsRoute);
 
-app.all("/searchTags/:keyword", SearchHandler.searchTagsRoute);
+app.all("/searchTags/:keyword*", SearchHandler.searchTagsRoute);
 
-app.all("/searchUsers/:keyword", SearchHandler.searchUsersRoute);
+app.all("/searchUsers/:keyword*", SearchHandler.searchUsersRoute);
 
-app.all("/searchPlaylists/:keyword", SearchHandler.searchPlaylistsRoute);
+app.all("/searchPlaylists/:keyword*", SearchHandler.searchPlaylistsRoute);
 
 /*
 app.all("/getNewPlaylists", (req, res) => {
