@@ -356,7 +356,7 @@ class SettingsPane extends React.Component {
                                     <form id ="upload-profile-img-form">
                                         <p><input type = "file" id = "fileInput" accept=".png, .jpeg, .jpg, .gif" /></p>
                                         <p>Image must be under 2MB and must be a PNG, JPEG, or GIF.</p>
-                                        <button type="submit" id="change-icon-button" className="btn btn-primary" onClick = {this.editUserIcon}>Change Icon</button>
+                                        <button type="submit" id="change-icon-button" className="btn btn-primary" onClick = {this.editUserIcon}>Upload Icon</button>
                                     </form>
                                 </div>
                             </div>
