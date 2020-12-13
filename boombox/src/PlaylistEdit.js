@@ -473,9 +473,18 @@ class PlaylistYoutubeSearch extends React.Component {
         return;
     }
 
+    handleKeyDown = (e) => {
+        if(e.target === document.getElementById("search-youtube-input")) {
+            if (e.which === 13 || e.keyCode === 13) {
+                e.preventDefault();
+                this.execute();
+            }
+        }
+    }
+
     render() {
-        const handleClose = () => this.setState({show: false});
-        const handleShow = () => this.setState({show: true});
+        const handleClose = () => this.setState({show: false, results: [], selectedSong: null, selectedSongIndex: null, query: ""});
+        const handleShow = () => this.setState({show: true, results: [], selectedSong: null, selectedSongIndex: null, query: ""});
         return(
             <div>
                 <div onClick = {handleShow} id = "search-open-modal">
@@ -495,7 +504,7 @@ class PlaylistYoutubeSearch extends React.Component {
                     <div id = "search-youtube">
                         <center>
                             <img src={search_img} id = "search-youtube-icon" width = "30" className = "invert-color"/>
-                            <input id = "search-youtube-input" onChange={this.handleSearchChange} maxLength = "100"/>
+                            <input id = "search-youtube-input" onChange={this.handleSearchChange} maxLength = "100" onKeyDown = {this.handleKeyDown}/>
 
                              <Button variant="secondary"  onClick={this.execute}> 
                                 Search
