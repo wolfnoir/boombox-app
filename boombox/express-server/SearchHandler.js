@@ -8,7 +8,7 @@ const mongoTagsCollection = 'tags';
 
 const TAGS_PER_PAGE = 10;
 const USERS_PER_PAGE = 9;
-const PLAYLISTS_PER_PAGE = 25;
+const PLAYLISTS_PER_PAGE = 10;
 
 class SearchHandler {
     static async searchTags(keyword, pageNumber) {
