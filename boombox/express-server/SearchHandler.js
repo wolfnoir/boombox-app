@@ -61,7 +61,7 @@ class SearchHandler {
 
     static async searchTagsRoute(req, res) {
         const keyword = req.params.keyword;
-        const page = req.params.page;
+        const page = req.body.page;
         const statusObject = await SearchHandler.searchTags(keyword, page);
         res.send(statusObject);
     }
@@ -115,7 +115,7 @@ class SearchHandler {
 
     static async searchUsersRoute(req, res){
         const keyword = req.params.keyword;
-        const page = req.params.page;
+        const page = req.body.page;
         const statusObject = await SearchHandler.searchUsers(keyword, page);
         res.send(statusObject);
     }
