@@ -158,6 +158,10 @@ class SearchResults extends React.Component {
                 if(obj.status === 0)
                     this.setState({nextTags: obj.result});
             });
+
+        this.getResultingUsers();
+        this.getResultingPlaylists();
+        this.getResultingTags();
     }
 
     handlePrevPage = () => {
@@ -183,13 +187,13 @@ class SearchResults extends React.Component {
         var nextArrow = <Button disabled variant="dark">🡆</Button>
 
         if(this.state.pageNum > 0){
-            prevArrow = <Button variant="dark" onClick = {this.handlePrevPage}>🡄</Button>
+            prevArrow = <Button variant="dark" onClick = {this.handlePrevPage.bind(this)}>🡄</Button>
         }
         else {
             prevArrow = <Button disabled variant="dark">🡄</Button>
         }
         if(this.state.nextUsers.length !== 0 || this.state.nextPlaylists.length !== 0 || this.state.nextTags.length !== 0){
-            nextArrow = <Button variant="dark" onClick = {this.handleNextPage}>🡆</Button>
+            nextArrow = <Button variant="dark" onClick = {this.handleNextPage.bind(this)}>🡆</Button>
         }
         else {
             nextArrow = <Button disabled variant="dark">🡆</Button>

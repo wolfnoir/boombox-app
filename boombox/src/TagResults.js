@@ -62,8 +62,10 @@ class TagResults extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            this.setState({nextPage: obj.result}, console.log(this.state.nextPage));
+            this.setState({nextPage: obj.result});
         });
+
+        this.getResultingPlaylists();
     }
 
     handlePrevPage = () => {
@@ -87,13 +89,13 @@ class TagResults extends React.Component {
         var nextArrow = <Button disabled variant="dark">🡆</Button>
 
         if(this.state.pageNum > 0){
-            prevArrow = <Button variant="dark" onClick = {this.handlePrevPage}>🡄</Button>
+            prevArrow = <Button variant="dark" onClick = {this.handlePrevPage.bind(this)}>🡄</Button>
         }
         else {
             prevArrow = <Button disabled variant="dark">🡄</Button>
         }
         if(this.state.nextPage.length !== 0){
-            nextArrow = <Button variant="dark" onClick = {this.handleNextPage}>🡆</Button>
+            nextArrow = <Button variant="dark" onClick = {this.handleNextPage.bind(this)}>🡆</Button>
         }
         else {
             nextArrow = <Button disabled variant="dark">🡆</Button>
@@ -112,7 +114,6 @@ class TagResults extends React.Component {
     }
 
     render(){
-        console.log(this.state);
         var playlistsList = this.state.playlists.map((playlist, i) => {
             return (
                 <PlaylistDisplay
@@ -127,6 +128,8 @@ class TagResults extends React.Component {
                 />
             )
         });
+
+        console.log(this.state);
 
         return(
             <NavBarWrapper>
