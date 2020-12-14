@@ -14,7 +14,7 @@ const mongoUserCollection = 'users';
 const mongoPlaylistsCollection = 'playlists';
 const mongoTagsCollection = 'tags';
 
-const PLAYLISTS_PER_PAGE = 25;
+const PLAYLISTS_PER_PAGE = 1;
 
 class TagHandler {
     static async getTags() {
@@ -75,7 +75,7 @@ class TagHandler {
         if (!client) {
             console.log("Client is null");
             return {status: -1};
-        }
+        } 
 
         try {
             const userCollection = client.db(mongoDbName).collection(mongoUserCollection);
@@ -84,7 +84,7 @@ class TagHandler {
             const nPerPage = PLAYLISTS_PER_PAGE;
 
             const cursor = await playlistCollection.find({"tags": tag, "isPrivate": false})
-            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .skip( pageNumber > 0 ? ( ( pageNumber ) * nPerPage ) : 0 )
             .limit( nPerPage );
             if (!cursor) {
                 console.log("playlists not found");
