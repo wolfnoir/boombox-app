@@ -143,7 +143,8 @@ class SearchHandler {
             const nPerPage = PLAYLISTS_PER_PAGE;
 
             var cursor = await collection.find({
-                $text: { $search: query } 
+                $text: { $search: query },
+                isPrivate: false
             })
             .skip( pageNumber > 0 ? ( ( pageNumber ) * nPerPage ) : 0 )
             .limit( nPerPage )
