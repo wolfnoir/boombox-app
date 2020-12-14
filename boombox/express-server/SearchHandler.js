@@ -185,7 +185,7 @@ class SearchHandler {
 
     static async searchPlaylistsRoute(req, res){
         const keyword = req.params.keyword;
-        const page = req.params.page;
+        const page = req.body.page;
         const statusObject = await SearchHandler.searchPlaylists(keyword, page);
         res.send(statusObject);
     }
