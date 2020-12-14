@@ -224,7 +224,7 @@ class SearchResults extends React.Component {
     }
 
     render(){
-
+        console.log(this.state)
         var usersList = this.state.users.map((user, i) => {
             return (
                 <UserDisplay 

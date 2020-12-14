@@ -8,7 +8,7 @@ const mongoTagsCollection = 'tags';
 
 const TAGS_PER_PAGE = 10;
 const USERS_PER_PAGE = 9;
-const PLAYLISTS_PER_PAGE = 1;
+const PLAYLISTS_PER_PAGE = 8;
 
 class SearchHandler {
     static async searchTags(keyword, pageNumber) {
@@ -36,7 +36,7 @@ class SearchHandler {
                     $caseSensitive: false
                 }
             })
-            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .skip( pageNumber > 0 ? ( ( pageNumber ) * nPerPage ) : 0 )
             .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
@@ -91,7 +91,7 @@ class SearchHandler {
             var cursor = await collection.find({
                 $text: { $search: query } 
             })
-            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .skip( pageNumber > 0 ? ( ( pageNumber ) * nPerPage ) : 0 )
             .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
