@@ -16,11 +16,18 @@ class SearchResults extends React.Component {
             users: [],
             playlists: [],
             tags: [],
+            currentPage: 0,
         }
     }
 
     getResultingUsers() {
-        fetch(`/searchUsers/${this.state.queryString}`)
+        const body = JSON.stringify({page: this.state.currentPage});
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/searchUsers/${this.state.queryString}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             if(obj.status === 0)
@@ -29,7 +36,13 @@ class SearchResults extends React.Component {
     }
 
     getResultingPlaylists() {
-        fetch(`/searchPlaylists/${this.state.queryString}`)
+        const body = JSON.stringify({page: this.state.currentPage});
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/searchPlaylists/${this.state.queryString}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             if(obj.status == 0)
@@ -38,7 +51,13 @@ class SearchResults extends React.Component {
     }
 
     getResultingTags() {
-        fetch(`/searchTags/${this.state.queryString}`)
+        const body = JSON.stringify({page: this.state.currentPage});
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/searchTags/${this.state.queryString}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             if(obj.status == 0)

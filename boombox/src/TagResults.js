@@ -12,11 +12,18 @@ class TagResults extends React.Component {
         this.state = {
             tag: "",
             playlists: [],
+            currentPage: 0,
         }
     }
 
     getResultingPlaylists() {
-        fetch(`/getTagResults/${this.state.tag}`)
+        const body = JSON.stringify({page: this.state.currentPage});
+        const headers = {"Content-Type": "application/json"};
+        fetch(`/getTagResults/${this.state.tag}`, {
+            method: 'POST',
+            body: body,
+            headers: headers
+        })
         .then(res => res.json())
         .then(obj => {
             this.setState({playlists: obj.result});
