@@ -6,8 +6,12 @@ const mongoUserCollection = 'users';
 const mongoPlaylistsCollection = 'playlists';
 const mongoTagsCollection = 'tags';
 
+const TAGS_PER_PAGE = 10;
+const USERS_PER_PAGE = 9;
+const PLAYLISTS_PER_PAGE = 25;
+
 class SearchHandler {
-    static async searchTags(keyword) {
+    static async searchTags(keyword, pageNumber) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -24,10 +28,13 @@ class SearchHandler {
         try {
             const collection = client.db(mongoDbName).collection(mongoTagsCollection);
             const query = "\"" + keyword + "\"";
+            const nPerPage = TAGS_PER_PAGE;
 
             var cursor = await collection.find({
                 $text: { $search: query } 
             })
+            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
 
@@ -54,12 +61,12 @@ class SearchHandler {
 
     static async searchTagsRoute(req, res) {
         const keyword = req.params.keyword;
-        console.log(req);
-        const statusObject = await SearchHandler.searchTags(keyword);
+        const page = req.params.page;
+        const statusObject = await SearchHandler.searchTags(keyword, page);
         res.send(statusObject);
     }
 
-    static async searchUsers(keyword){
+    static async searchUsers(keyword, pageNumber){
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -75,12 +82,14 @@ class SearchHandler {
 
         try {
             const collection = client.db(mongoDbName).collection(mongoUserCollection);
-
             const query = "\"" + keyword + "\"";
+            const nPerPage = USERS_PER_PAGE;
 
             var cursor = await collection.find({
                 $text: { $search: query } 
             })
+            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
 
@@ -106,11 +115,12 @@ class SearchHandler {
 
     static async searchUsersRoute(req, res){
         const keyword = req.params.keyword;
-        const statusObject = await SearchHandler.searchUsers(keyword);
+        const page = req.params.page;
+        const statusObject = await SearchHandler.searchUsers(keyword, page);
         res.send(statusObject);
     }
 
-    static async searchPlaylists(keyword){
+    static async searchPlaylists(keyword, pageNumber){
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -127,10 +137,13 @@ class SearchHandler {
         try {
             const collection = client.db(mongoDbName).collection(mongoPlaylistsCollection);
             const query = "\"" + keyword + "\"";
+            const nPerPage = PLAYLISTS_PER_PAGE;
 
             var cursor = await collection.find({
                 $text: { $search: query } 
             })
+            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
 
@@ -172,7 +185,8 @@ class SearchHandler {
 
     static async searchPlaylistsRoute(req, res){
         const keyword = req.params.keyword;
-        const statusObject = await SearchHandler.searchPlaylists(keyword);
+        const page = req.params.page;
+        const statusObject = await SearchHandler.searchPlaylists(keyword, page);
         res.send(statusObject);
     }
 }
