@@ -14,6 +14,8 @@ const mongoUserCollection = 'users';
 const mongoPlaylistsCollection = 'playlists';
 const mongoTagsCollection = 'tags';
 
+const PLAYLISTS_PER_PAGE = 25;
+
 class TagHandler {
     static async getTags() {
         const client = await MongoClient.connect(mongoUrl, {
@@ -61,7 +63,7 @@ class TagHandler {
         res.send(statusObject);
     }
 
-    static async getTagResults(tag) {
+    static async getTagResults(tag, pageNumber) {
         const client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true,  
             useUnifiedTopology: true
@@ -79,8 +81,11 @@ class TagHandler {
             const userCollection = client.db(mongoDbName).collection(mongoUserCollection);
             const playlistCollection = client.db(mongoDbName).collection(mongoPlaylistsCollection);
             const taggedPlaylists = []
+            const nPerPage = PLAYLISTS_PER_PAGE;
 
-            const cursor = await playlistCollection.find({"tags": tag, "isPrivate": false});
+            const cursor = await playlistCollection.find({"tags": tag, "isPrivate": false})
+            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .limit( nPerPage );
             if (!cursor) {
                 console.log("playlists not found");
                 return {status: 1};
@@ -120,7 +125,8 @@ class TagHandler {
 
     static async getTagResultsRoute(req, res) {
         const tag = req.params.tag;
-        const statusObject = await TagHandler.getTagResults(tag);
+        const page = req.body.page;
+        const statusObject = await TagHandler.getTagResults(tag, page);
         res.send(statusObject);
     }
 }
