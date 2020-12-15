@@ -14,7 +14,7 @@ const mongoUserCollection = 'users';
 const mongoPlaylistsCollection = 'playlists';
 const mongoTagsCollection = 'tags';
 
-const PLAYLISTS_PER_PAGE = 1;
+const PLAYLISTS_PER_PAGE = 8;
 
 class TagHandler {
     static async getTags() {

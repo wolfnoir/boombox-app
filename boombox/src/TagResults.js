@@ -29,7 +29,8 @@ class TagResults extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            this.setState({playlists: obj.result});
+            if(obj.status === 0)
+                this.setState({playlists: obj.result});
         });
     }
 
@@ -115,14 +116,15 @@ class TagResults extends React.Component {
 
     render(){
         var playlistsList = this.state.playlists.map((playlist, i) => {
-            return (
+            console.log(this.state.playlists);
+            return (                
                 <PlaylistDisplay
                     title={playlist.name}
                     author={playlist.author}
                     likes={playlist.likes} 
                     url={playlist.url}
                     image_url={playlist.image_url}
-                    key={playlist.key}
+                    key={playlist._id}
                     id = {playlist._id}
                     isPrivate = {playlist.isPrivate}
                 />

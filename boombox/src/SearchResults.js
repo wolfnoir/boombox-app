@@ -52,7 +52,7 @@ class SearchResults extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            if(obj.status == 0)
+            if(obj.status === 0)
                 this.setState({playlists: obj.result});
         });
     }
@@ -67,7 +67,7 @@ class SearchResults extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            if(obj.status == 0)
+            if(obj.status === 0)
                 this.setState({tags: obj.result});
         });
     }
