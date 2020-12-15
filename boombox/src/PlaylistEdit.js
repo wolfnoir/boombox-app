@@ -327,11 +327,20 @@ class PlaylistTags extends React.Component {
     }
 
     addTags() {
-        this.props.onSubmit(this.state.selectedTags);
-        this.setState({
-            show: false,
-            selectedTags: []
-        });
+        if(this.state.selectedTags.length > 0 && this.state.selectedTags.length <= 10){
+            this.props.onSubmit(this.state.selectedTags);
+            this.setState({
+                show: false,
+                selectedTags: []
+            });
+        }
+        else if(this.state.selectedTags.length > 10){
+            alert("Playlists have a limit of ten tags. Please unselect some tags.");
+        }
+        else{
+            alert("Please select tags to be added!");
+        }
+        
     }
 
     render() {
