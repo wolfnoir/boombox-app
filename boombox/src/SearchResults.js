@@ -6,6 +6,7 @@ import './SearchResults.css';
 
 import UserDisplay from './UserDisplay';
 import PlaylistDisplay from './PlaylistDisplay';
+import { Button } from 'react-bootstrap';
 
 class SearchResults extends React.Component {
     constructor(props){
@@ -16,12 +17,18 @@ class SearchResults extends React.Component {
             users: [],
             playlists: [],
             tags: [],
-            currentPage: 0,
+            pageNum: 0,
+            nextUsers: [],
+            nextTags: [],
+            nextPlaylists: [],
+            prevUsers: [],
+            prevTags: [],
+            prevPlaylists: []
         }
     }
 
     getResultingUsers() {
-        const body = JSON.stringify({page: this.state.currentPage});
+        const body = JSON.stringify({page: this.state.pageNum});
         const headers = {"Content-Type": "application/json"};
         fetch(`/searchUsers/${this.state.queryString}`, {
             method: 'POST',
@@ -36,7 +43,7 @@ class SearchResults extends React.Component {
     }
 
     getResultingPlaylists() {
-        const body = JSON.stringify({page: this.state.currentPage});
+        const body = JSON.stringify({page: this.state.pageNum});
         const headers = {"Content-Type": "application/json"};
         fetch(`/searchPlaylists/${this.state.queryString}`, {
             method: 'POST',
@@ -45,13 +52,13 @@ class SearchResults extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            if(obj.status == 0)
+            if(obj.status === 0)
                 this.setState({playlists: obj.result});
         });
     }
 
     getResultingTags() {
-        const body = JSON.stringify({page: this.state.currentPage});
+        const body = JSON.stringify({page: this.state.pageNum});
         const headers = {"Content-Type": "application/json"};
         fetch(`/searchTags/${this.state.queryString}`, {
             method: 'POST',
@@ -60,9 +67,140 @@ class SearchResults extends React.Component {
         })
         .then(res => res.json())
         .then(obj => {
-            if(obj.status == 0)
+            if(obj.status === 0)
                 this.setState({tags: obj.result});
         });
+    }
+
+    getAdjacentEntires() {
+        //previous page
+        if(this.state.pageNum > 0){
+            //users
+            const body = JSON.stringify({page: this.state.pageNum - 1});
+            const headers = {"Content-Type": "application/json"};
+            fetch(`/searchUsers/${this.state.queryString}`, {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(res => res.json())
+            .then(obj => {
+                if(obj.status === 0)
+                    this.setState({prevUsers: obj.result});
+            });
+
+            //playlists
+            fetch(`/searchPlaylists/${this.state.queryString}`, {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(res => res.json())
+            .then(obj => {
+                if(obj.status === 0)
+                    this.setState({prevPlaylists: obj.result});
+            });
+
+            //tags
+            fetch(`/searchTags/${this.state.queryString}`, {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(res => res.json())
+            .then(obj => {
+                if(obj.status === 0)
+                    this.setState({prevTags: obj.result});
+            });
+        }
+        else {
+            this.setState({
+                prevTags: [],
+                prevPlaylists: [],
+                prevUsers: [],
+            });
+        }
+
+        //next page
+        const body = JSON.stringify({page: this.state.pageNum + 1});
+            const headers = {"Content-Type": "application/json"};
+            fetch(`/searchUsers/${this.state.queryString}`, {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(res => res.json())
+            .then(obj => {
+                if(obj.status === 0)
+                    this.setState({nextUsers: obj.result});
+            });
+
+            //playlists
+            fetch(`/searchPlaylists/${this.state.queryString}`, {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(res => res.json())
+            .then(obj => {
+                if(obj.status === 0)
+                    this.setState({nextPlaylists: obj.result});
+            });
+
+            //tags
+            fetch(`/searchTags/${this.state.queryString}`, {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(res => res.json())
+            .then(obj => {
+                if(obj.status === 0)
+                    this.setState({nextTags: obj.result});
+            });
+
+        this.getResultingUsers();
+        this.getResultingPlaylists();
+        this.getResultingTags();
+    }
+
+    handlePrevPage = () => {
+        this.setState({
+            pageNum: this.state.pageNum - 1,
+            users: this.state.prevUsers,
+            playlists: this.state.prevPlaylists,
+            tags: this.state.prevTags
+        }, this.getAdjacentEntires);
+    }
+
+    handleNextPage = () => {
+        this.setState({
+            pageNum: this.state.pageNum + 1,
+            users: this.state.nextUsers,
+            playlists: this.state.nextPlaylists,
+            tags: this.state.nextTags
+        }, this.getAdjacentEntires);
+    }
+
+    returnArrows(){
+        var prevArrow = <Button disabled variant="dark">🡄</Button>
+        var nextArrow = <Button disabled variant="dark">🡆</Button>
+
+        if(this.state.pageNum > 0){
+            prevArrow = <Button variant="dark" onClick = {this.handlePrevPage.bind(this)}>🡄</Button>
+        }
+        else {
+            prevArrow = <Button disabled variant="dark">🡄</Button>
+        }
+        if(this.state.nextUsers.length !== 0 || this.state.nextPlaylists.length !== 0 || this.state.nextTags.length !== 0){
+            nextArrow = <Button variant="dark" onClick = {this.handleNextPage.bind(this)}>🡆</Button>
+        }
+        else {
+            nextArrow = <Button disabled variant="dark">🡆</Button>
+        }
+        return (
+            <div>{prevArrow} {nextArrow}</div>
+        )
     }
 
     componentDidMount() {
@@ -72,6 +210,7 @@ class SearchResults extends React.Component {
             this.getResultingUsers();
             this.getResultingPlaylists();
             this.getResultingTags();
+            this.getAdjacentEntires();
         });
     }
 
@@ -79,16 +218,17 @@ class SearchResults extends React.Component {
         if(prevprops !== this.props){
             const query = this.props.match.params[0];
 
-            this.setState({queryString: query}, () => {
+            this.setState({queryString: query, pageNum: 0}, () => {
                 this.getResultingUsers();
                 this.getResultingPlaylists();
                 this.getResultingTags();
+                this.getAdjacentEntires();
             });
         }
     }
 
     render(){
-
+        console.log(this.state)
         var usersList = this.state.users.map((user, i) => {
             return (
                 <UserDisplay 
@@ -127,7 +267,7 @@ class SearchResults extends React.Component {
             <NavBarWrapper>
                 <div className = "search-results">
                     <div className="search-result-label">
-                        Search Results for "{this.state.queryString}"
+                        Search Results for "{this.state.queryString}" (page {this.state.pageNum + 1})
                     </div>
                     
                     <table>
@@ -165,7 +305,12 @@ class SearchResults extends React.Component {
                             <div className = "search-result-label">No playlists found!</div>
                         </div>
                     }
-                    
+
+                    <center>
+                        <div id = "search-pagination">
+                            {this.returnArrows()}
+                        </div>
+                    </center>
                 </div>
             </NavBarWrapper>
         );

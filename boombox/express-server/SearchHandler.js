@@ -8,7 +8,7 @@ const mongoTagsCollection = 'tags';
 
 const TAGS_PER_PAGE = 10;
 const USERS_PER_PAGE = 9;
-const PLAYLISTS_PER_PAGE = 25;
+const PLAYLISTS_PER_PAGE = 8;
 
 class SearchHandler {
     static async searchTags(keyword, pageNumber) {
@@ -31,9 +31,12 @@ class SearchHandler {
             const nPerPage = TAGS_PER_PAGE;
 
             var cursor = await collection.find({
-                $text: { $search: query } 
+                $text: {
+                    $search: query,
+                    $caseSensitive: false
+                }
             })
-            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .skip( pageNumber > 0 ? ( ( pageNumber ) * nPerPage ) : 0 )
             .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
@@ -61,7 +64,7 @@ class SearchHandler {
 
     static async searchTagsRoute(req, res) {
         const keyword = req.params.keyword;
-        const page = req.params.page;
+        const page = req.body.page;
         const statusObject = await SearchHandler.searchTags(keyword, page);
         res.send(statusObject);
     }
@@ -88,7 +91,7 @@ class SearchHandler {
             var cursor = await collection.find({
                 $text: { $search: query } 
             })
-            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .skip( pageNumber > 0 ? ( ( pageNumber ) * nPerPage ) : 0 )
             .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
@@ -115,7 +118,7 @@ class SearchHandler {
 
     static async searchUsersRoute(req, res){
         const keyword = req.params.keyword;
-        const page = req.params.page;
+        const page = req.body.page;
         const statusObject = await SearchHandler.searchUsers(keyword, page);
         res.send(statusObject);
     }
@@ -140,9 +143,10 @@ class SearchHandler {
             const nPerPage = PLAYLISTS_PER_PAGE;
 
             var cursor = await collection.find({
-                $text: { $search: query } 
+                $text: { $search: query },
+                isPrivate: false
             })
-            .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+            .skip( pageNumber > 0 ? ( ( pageNumber ) * nPerPage ) : 0 )
             .limit( nPerPage )
             .project({ score: { $meta: "textScore" } })
             .sort( { score: { $meta: "textScore" } } );
