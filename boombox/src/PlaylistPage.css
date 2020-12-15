@@ -184,6 +184,7 @@
 
 #playlist-page-container .comment-content-col {
     text-align: left;
+    word-wrap: break-word;
 }
 
 #playlist-page-container #play-track-container {

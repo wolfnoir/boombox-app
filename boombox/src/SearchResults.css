@@ -25,3 +25,7 @@
 .playlists-results {
     text-align: left;
 }
+
+#search-pagination {
+    margin-bottom: 10px;
+}
