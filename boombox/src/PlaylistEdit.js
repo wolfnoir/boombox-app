@@ -426,7 +426,7 @@ class PlaylistYoutubeSearch extends React.Component {
             })
             .then(
                 (response) => this.setState({results: response.result.items}),
-                function(err) { console.error("Execute error", err); }
+                function(err) { console.error("Execute error", err); alert("Sorry, Youtube Search API quota has been reached for the day. Please manually search for the video URL.")}
             );
         }
     }
